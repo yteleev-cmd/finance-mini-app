@@ -170,8 +170,13 @@
             font-weight: bold;
         }
 
+        .section-total span:first-child {
+            flex-shrink: 0;
+        }
+
         .section-total span:last-child {
             text-align: right;
+            line-height: 1.25;
         }
 
         .empty {
@@ -426,11 +431,15 @@
 
     </div>
 
-    <button class="add-button" onclick="openAddForm()">
+    <button
+        class="add-button"
+        onclick="openAddForm()"
+    >
         ＋ Добавить операцию
     </button>
 
 </div>
+
 
 <div id="modal-overlay" class="modal-overlay">
 
@@ -566,13 +575,16 @@
 
 </div>
 
+
 <script>
+
 
 const MAKE_WEBHOOK_URL =
 "https://hook.eu1.make.com/rbaqfgqxqlzyvb6s7imcpnhx3k2igjgo";
 
 
-let currentPeriod = "today";
+let currentPeriod =
+"today";
 
 
 function formatNumber(value) {
@@ -581,8 +593,11 @@ function formatNumber(value) {
         value === undefined ||
         value === null
     ) {
+
         return "";
+
     }
+
 
     const number =
         Number(
@@ -591,17 +606,26 @@ function formatNumber(value) {
                 .replace(",", ".")
         );
 
-    if (isNaN(number)) {
+
+    if (
+        isNaN(number)
+    ) {
+
         return value;
+
     }
 
-    return number.toLocaleString("ru-RU", {
 
-        minimumFractionDigits: 0,
+    return number.toLocaleString(
+        "ru-RU",
+        {
 
-        maximumFractionDigits: 2
+            minimumFractionDigits: 0,
 
-    });
+            maximumFractionDigits: 2
+
+        }
+    );
 
 }
 
@@ -609,53 +633,80 @@ function formatNumber(value) {
 function showToast(message) {
 
     const toast =
-        document.querySelector("#toast");
+        document.querySelector(
+            "#toast"
+        );
+
 
     toast.textContent =
         message;
 
-    toast.classList.add("show");
 
-    setTimeout(() => {
+    toast.classList.add(
+        "show"
+    );
 
-        toast.classList.remove("show");
 
-    }, 2500);
+    setTimeout(
+        () => {
+
+            toast.classList.remove(
+                "show"
+            );
+
+        },
+        2500
+    );
 
 }
 
 
-function getPeriodData(data, period) {
+function getPeriodData(
+    data,
+    period
+) {
 
-    if (period === "today") {
+    if (
+        period === "today"
+    ) {
 
         return {
 
-            expenses: data.today_expenses,
+            expenses:
+                data.today_expenses,
 
-            income: data.today_income
+            income:
+                data.today_income
 
         };
 
     }
 
-    if (period === "month") {
+
+    if (
+        period === "month"
+    ) {
 
         return {
 
-            expenses: data.month_expenses,
+            expenses:
+                data.month_expenses,
 
-            income: data.month_income
+            income:
+                data.month_income
 
         };
 
     }
+
 
     return {
 
-        expenses: data.all_expenses,
+        expenses:
+            data.all_expenses,
 
-        income: data.all_income
+        income:
+            data.all_income
 
     };
 
@@ -669,9 +720,14 @@ function parseAmounts(line) {
             /([\d\s]+(?:[,.]\d+)?)\s*(UZS|RUB|USD)/gi
         );
 
-    const amounts = [];
 
-    for (const match of matches) {
+    const amounts =
+        [];
+
+
+    for (
+        const match of matches
+    ) {
 
         const amount =
             Number(
@@ -680,18 +736,23 @@ function parseAmounts(line) {
                     .replace(",", ".")
             );
 
+
         const currency =
             match[2].toUpperCase();
 
+
         amounts.push({
 
-            amount: amount,
+            amount:
+                amount,
 
-            currency: currency
+            currency:
+                currency
 
         });
 
     }
+
 
     return amounts;
 
@@ -709,6 +770,7 @@ function renderText(
     type
 
 ) {
+
 
     const container =
         document.querySelector(
@@ -730,128 +792,178 @@ function renderText(
 
 
     const lines =
-        text.split("\n");
+        text
+            .split("\n")
+            .map(
+                line =>
+                    line.trim()
+            )
+            .filter(
+                line =>
+                    line !== ""
+            );
 
 
     container.innerHTML =
         "";
 
 
-    const totals = {};
+    const totals =
+        {};
 
 
-    lines.forEach(line => {
-
-        if (
-            line.trim() === ""
-        ) {
-
-            return;
-
-        }
+    lines.forEach(
+        line => {
 
 
-        const amounts =
-            parseAmounts(line);
-
-
-        amounts.forEach(amountData => {
-
-            if (
-                !totals[amountData.currency]
-            ) {
-
-                totals[amountData.currency] =
-                    0;
-
-            }
-
-            totals[amountData.currency] +=
-                amountData.amount;
-
-        });
-
-
-        const parts =
-            line.split("—");
-
-
-        const row =
-            document.createElement("div");
-
-
-        row.className =
-            "category";
-
-
-        if (parts.length >= 2) {
-
-            const name =
-                document.createElement("div");
-
-
-            name.className =
-                "category-name";
-
-
-            name.textContent =
-                parts[0].trim();
-
-
-            const amount =
-                document.createElement("div");
-
-
-            amount.className =
-                "category-amount";
-
-
-            if (type === "expense") {
-
-                amount.classList.add(
-                    "expense-amount"
+            const amounts =
+                parseAmounts(
+                    line
                 );
 
-                amount.textContent =
-                    "− " +
-                    parts.slice(1)
-                        .join("—")
+
+            amounts.forEach(
+                amountData => {
+
+
+                    if (
+                        !totals[
+                            amountData.currency
+                        ]
+                    ) {
+
+                        totals[
+                            amountData.currency
+                        ] =
+                            0;
+
+                    }
+
+
+                    totals[
+                        amountData.currency
+                    ] +=
+                        amountData.amount;
+
+                }
+            );
+
+
+            const separatorIndex =
+                line.indexOf(
+                    "—"
+                );
+
+
+            const row =
+                document.createElement(
+                    "div"
+                );
+
+
+            row.className =
+                "category";
+
+
+            if (
+                separatorIndex !== -1
+            ) {
+
+
+                const name =
+                    line
+                        .substring(
+                            0,
+                            separatorIndex
+                        )
                         .trim();
+
+
+                const amountText =
+                    line
+                        .substring(
+                            separatorIndex + 1
+                        )
+                        .trim();
+
+
+                const nameElement =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                nameElement.className =
+                    "category-name";
+
+
+                nameElement.textContent =
+                    name;
+
+
+                const amountElement =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                amountElement.className =
+                    "category-amount";
+
+
+                amountElement.classList.add(
+
+                    type === "expense"
+                        ? "expense-amount"
+                        : "income-amount"
+
+                );
+
+
+                amountElement.textContent =
+
+                    type === "expense"
+
+                        ? "− " +
+                          amountText
+
+                        : "+ " +
+                          amountText;
+
+
+                row.appendChild(
+                    nameElement
+                );
+
+
+                row.appendChild(
+                    amountElement
+                );
+
 
             } else {
 
-                amount.classList.add(
-                    "income-amount"
-                );
 
-                amount.textContent =
-                    "+ " +
-                    parts.slice(1)
-                        .join("—")
-                        .trim();
+                row.textContent =
+                    line;
+
 
             }
 
 
-            row.appendChild(name);
+            container.appendChild(
+                row
+            );
 
-            row.appendChild(amount);
-
-        } else {
-
-            row.textContent =
-                line;
 
         }
-
-
-        container.appendChild(row);
-
-    });
+    );
 
 
     const totalRow =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
 
     totalRow.className =
@@ -859,44 +971,73 @@ function renderText(
 
 
     const totalTitle =
-        document.createElement("span");
+        document.createElement(
+            "span"
+        );
 
 
     totalTitle.textContent =
+
         type === "expense"
+
             ? "Итого расходов"
+
             : "Итого доходов";
 
 
     const totalValue =
-        document.createElement("span");
+        document.createElement(
+            "span"
+        );
 
 
     const totalParts =
-        Object.entries(totals)
-            .map(
-                ([currency, amount]) => {
+        Object.entries(
+            totals
+        )
+        .map(
+            (
+                [
+                    currency,
+                    amount
+                ]
+            ) => {
 
-                    return (
-                        formatNumber(amount) +
-                        " " +
-                        currency
-                    );
+                return (
 
-                }
-            );
+                    formatNumber(
+                        amount
+                    ) +
+
+                    " " +
+
+                    currency
+
+                );
+
+            }
+        );
 
 
     totalValue.textContent =
-        totalParts.join(" · ");
+        totalParts.join(
+            " · "
+        );
 
 
-    totalRow.appendChild(totalTitle);
+    totalRow.appendChild(
+        totalTitle
+    );
 
-    totalRow.appendChild(totalValue);
+
+    totalRow.appendChild(
+        totalValue
+    );
 
 
-    container.appendChild(totalRow);
+    container.appendChild(
+        totalRow
+    );
 
 }
 
@@ -905,11 +1046,13 @@ async function loadData(
     period = "today"
 ) {
 
+
     currentPeriod =
         period;
 
 
     try {
+
 
         document.querySelector(
             "#error"
@@ -924,31 +1067,40 @@ async function loadData(
 
                 {
 
-                    method: "POST",
+                    method:
+                        "POST",
 
-                    headers: {
+                    headers:
+                        {
 
-                        "Content-Type":
-                            "application/json"
+                            "Content-Type":
+                                "application/json"
 
-                    },
+                        },
 
-                    body: JSON.stringify({
+                    body:
+                        JSON.stringify(
 
-                        action:
-                            "get_finance_data",
+                            {
 
-                        period:
-                            period
+                                action:
+                                    "get_finance_data",
 
-                    })
+                                period:
+                                    period
+
+                            }
+
+                        )
 
                 }
 
             );
 
 
-        if (!response.ok) {
+        if (
+            !response.ok
+        ) {
 
             throw new Error(
                 "Ошибка HTTP"
@@ -964,10 +1116,13 @@ async function loadData(
         document.querySelector(
             ".total"
         ).textContent =
+
             "≈ " +
+
             formatNumber(
                 data.total_usd
             ) +
+
             " USD";
 
 
@@ -1028,9 +1183,14 @@ async function loadData(
         );
 
 
-    } catch (error) {
+    } catch (
+        error
+    ) {
 
-        console.error(error);
+
+        console.error(
+            error
+        );
 
 
         document.querySelector(
@@ -1077,6 +1237,7 @@ function closeAddForm() {
 
 async function addOperation() {
 
+
     const type =
         document.querySelector(
             "#operation-type"
@@ -1109,7 +1270,9 @@ async function addOperation() {
 
     if (
         !amount ||
-        Number(amount) <= 0
+        Number(
+            amount
+        ) <= 0
     ) {
 
         showToast(
@@ -1137,6 +1300,7 @@ async function addOperation() {
 
     try {
 
+
         const response =
             await fetch(
 
@@ -1144,43 +1308,52 @@ async function addOperation() {
 
                 {
 
-                    method: "POST",
+                    method:
+                        "POST",
 
-                    headers: {
+                    headers:
+                        {
 
-                        "Content-Type":
-                            "application/json"
+                            "Content-Type":
+                                "application/json"
 
-                    },
+                        },
 
-                    body: JSON.stringify({
+                    body:
+                        JSON.stringify(
 
-                        action:
-                            "add_operation",
+                            {
 
-                        type:
-                            type,
+                                action:
+                                    "add_operation",
 
-                        amount:
-                            amount,
+                                type:
+                                    type,
 
-                        currency:
-                            currency,
+                                amount:
+                                    amount,
 
-                        category:
-                            category,
+                                currency:
+                                    currency,
 
-                        description:
-                            description
+                                category:
+                                    category,
 
-                    })
+                                description:
+                                    description
+
+                            }
+
+                        )
 
                 }
 
             );
 
 
-        if (!response.ok) {
+        if (
+            !response.ok
+        ) {
 
             throw new Error(
                 "Ошибка добавления операции"
@@ -1214,9 +1387,14 @@ async function addOperation() {
         );
 
 
-    } catch (error) {
+    } catch (
+        error
+    ) {
 
-        console.error(error);
+
+        console.error(
+            error
+        );
 
 
         showToast(
@@ -1225,6 +1403,7 @@ async function addOperation() {
 
 
     } finally {
+
 
         button.disabled =
             false;
@@ -1245,11 +1424,13 @@ document
     .forEach(
         button => {
 
+
             button.addEventListener(
 
                 "click",
 
                 () => {
+
 
                     document
                         .querySelectorAll(
@@ -1257,6 +1438,7 @@ document
                         )
                         .forEach(
                             btn => {
+
 
                                 btn.classList
                                     .remove(
@@ -1300,6 +1482,7 @@ document
         "click",
 
         event => {
+
 
             if (
                 event.target.id ===
