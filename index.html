@@ -1,349 +1,379 @@
 <!DOCTYPE html>
+
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Финансы</title>
 
-    <style>
-        * {
-            box-sizing: border-box;
-        }
+```
+<style>
+    * {
+        box-sizing: border-box;
+    }
 
-        body {
-            margin: 0;
-            padding: 16px;
-            font-family: Arial, sans-serif;
-            background: #f4f5f7;
-            color: #202124;
-        }
+    body {
+        margin: 0;
+        padding: 16px;
+        font-family: Arial, sans-serif;
+        background: #f4f5f7;
+        color: #202124;
+    }
 
-        .app {
-            max-width: 500px;
-            margin: 0 auto;
-        }
+    .app {
+        max-width: 500px;
+        margin: 0 auto;
+    }
 
-        h1 {
-            margin: 5px 0 20px;
-            font-size: 26px;
-        }
+    h1 {
+        margin: 5px 0 20px;
+        font-size: 26px;
+    }
 
-        .balance-card {
-            background: #202124;
-            color: white;
-            border-radius: 20px;
-            padding: 22px;
-            margin-bottom: 18px;
-        }
+    .balance-card {
+        background: #202124;
+        color: white;
+        border-radius: 20px;
+        padding: 22px;
+        margin-bottom: 18px;
+    }
 
-        .balance-title {
-            font-size: 14px;
-            opacity: 0.7;
-        }
+    .balance-title {
+        font-size: 14px;
+        opacity: 0.7;
+    }
 
-        .total {
-            font-size: 32px;
-            font-weight: bold;
-            margin: 8px 0 20px;
-        }
+    .total {
+        font-size: 32px;
+        font-weight: bold;
+        margin: 8px 0 20px;
+    }
 
-        .currencies {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-        }
+    .currencies {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+    }
 
-        .currency {
-            background: rgba(255,255,255,0.1);
-            border-radius: 12px;
-            padding: 10px;
-        }
+    .currency {
+        background: rgba(255,255,255,0.1);
+        border-radius: 12px;
+        padding: 10px;
+    }
 
-        .currency-name {
-            font-size: 13px;
-            opacity: 0.7;
-        }
+    .currency-name {
+        font-size: 13px;
+        opacity: 0.7;
+    }
 
-        .currency-value {
-            margin-top: 5px;
-            font-size: 15px;
-            font-weight: bold;
-        }
+    .currency-value {
+        margin-top: 5px;
+        font-size: 15px;
+        font-weight: bold;
+    }
 
-        .tabs {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            margin-bottom: 18px;
-        }
+    .tabs {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+        margin-bottom: 18px;
+    }
 
-        .tab {
-            border: none;
-            border-radius: 12px;
-            padding: 12px 5px;
-            background: white;
-            font-size: 14px;
-            cursor: pointer;
-        }
+    .tab {
+        border: none;
+        border-radius: 12px;
+        padding: 12px 5px;
+        background: white;
+        font-size: 14px;
+        cursor: pointer;
+    }
 
-        .tab.active {
-            background: #202124;
-            color: white;
-        }
+    .tab.active {
+        background: #202124;
+        color: white;
+    }
 
-        .section {
-            background: white;
-            border-radius: 18px;
-            padding: 18px;
-            margin-bottom: 16px;
-        }
+    .section {
+        background: white;
+        border-radius: 18px;
+        padding: 18px;
+        margin-bottom: 16px;
+    }
 
-        .section-title {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 14px;
-        }
+    .section-title {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 14px;
+    }
 
-        .category {
-            padding: 12px 0;
-            border-bottom: 1px solid #eee;
-            white-space: pre-line;
-        }
+    .category {
+        padding: 12px 0;
+        border-bottom: 1px solid #eee;
+        white-space: pre-line;
+    }
 
-        .category:last-child {
-            border-bottom: none;
-        }
+    .category:last-child {
+        border-bottom: none;
+    }
 
-        .empty {
-            color: #777;
-            padding: 10px 0;
-        }
+    .empty {
+        color: #777;
+        padding: 10px 0;
+    }
 
-        .add-button {
-            width: 100%;
-            border: none;
-            border-radius: 16px;
-            padding: 16px;
-            font-size: 17px;
-            font-weight: bold;
-            background: #202124;
-            color: white;
-            cursor: pointer;
-        }
+    .add-button {
+        width: 100%;
+        border: none;
+        border-radius: 16px;
+        padding: 16px;
+        font-size: 17px;
+        font-weight: bold;
+        background: #202124;
+        color: white;
+        cursor: pointer;
+    }
 
-        .add-form {
-            display: none;
-            background: white;
-            border-radius: 18px;
-            padding: 18px;
-            margin-top: 16px;
-        }
+    .add-form {
+        display: none;
+        background: white;
+        border-radius: 18px;
+        padding: 18px;
+        margin-top: 16px;
+    }
 
-        .form-title {
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 16px;
-        }
+    .form-title {
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 16px;
+    }
 
-        .add-form input,
-        .add-form select {
-            width: 100%;
-            padding: 14px;
-            margin-bottom: 10px;
-            border: 1px solid #ddd;
-            border-radius: 12px;
-            font-size: 16px;
-            background: white;
-        }
+    .add-form input,
+    .add-form select {
+        width: 100%;
+        padding: 14px;
+        margin-bottom: 10px;
+        border: 1px solid #ddd;
+        border-radius: 12px;
+        font-size: 16px;
+        background: white;
+    }
 
-        .submit-button,
-        .cancel-button {
-            width: 100%;
-            border: none;
-            border-radius: 12px;
-            padding: 14px;
-            font-size: 16px;
-            margin-top: 6px;
-            cursor: pointer;
-        }
+    .submit-button,
+    .cancel-button {
+        width: 100%;
+        border: none;
+        border-radius: 12px;
+        padding: 14px;
+        font-size: 16px;
+        margin-top: 6px;
+        cursor: pointer;
+    }
 
-        .submit-button {
-            background: #202124;
-            color: white;
-        }
+    .submit-button {
+        background: #202124;
+        color: white;
+    }
 
-        .cancel-button {
-            background: #f1f3f4;
-            color: #202124;
-        }
+    .cancel-button {
+        background: #f1f3f4;
+        color: #202124;
+    }
 
-        .submit-button:disabled {
-            opacity: 0.6;
-            cursor: wait;
-        }
+    .submit-button:disabled {
+        opacity: 0.6;
+        cursor: wait;
+    }
 
-        .error {
-            background: #ffe5e5;
-            color: #b00020;
-            padding: 15px;
-            border-radius: 12px;
-            margin-bottom: 16px;
-            display: none;
-        }
-    </style>
+    .error {
+        background: #ffe5e5;
+        color: #b00020;
+        padding: 15px;
+        border-radius: 12px;
+        margin-bottom: 16px;
+        display: none;
+    }
+
+    .toast {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%) translateY(-20px);
+        background: #202124;
+        color: white;
+        padding: 14px 20px;
+        border-radius: 14px;
+        font-size: 15px;
+        font-weight: bold;
+        opacity: 0;
+        pointer-events: none;
+        transition: all 0.25s ease;
+        z-index: 1000;
+        white-space: nowrap;
+    }
+
+    .toast.show {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+</style>
+```
+
 </head>
 
 <body>
 
+<div id="toast" class="toast"></div>
+
 <div class="app">
 
-    <h1>💰 Мои финансы</h1>
+```
+<h1>💰 Мои финансы</h1>
 
-    <div id="error" class="error">
-        Не удалось загрузить данные
+<div id="error" class="error">
+    Не удалось загрузить данные
+</div>
+
+<div class="balance-card">
+
+    <div class="balance-title">
+        Общий баланс
     </div>
 
-    <div class="balance-card">
-
-        <div class="balance-title">
-            Общий баланс
-        </div>
-
-        <div class="total">
-            Загрузка...
-        </div>
-
-        <div class="currencies">
-
-            <div class="currency">
-                <div class="currency-name">🇺🇸 USD</div>
-                <div class="currency-value usd">...</div>
-            </div>
-
-            <div class="currency">
-                <div class="currency-name">🇺🇿 UZS</div>
-                <div class="currency-value uzs">...</div>
-            </div>
-
-            <div class="currency">
-                <div class="currency-name">🇷🇺 RUB</div>
-                <div class="currency-value rub">...</div>
-            </div>
-
-        </div>
-
+    <div class="total">
+        Загрузка...
     </div>
 
-    <div class="tabs">
+    <div class="currencies">
 
-        <button class="tab active" data-period="today">
-            Сегодня
-        </button>
-
-        <button class="tab" data-period="month">
-            Месяц
-        </button>
-
-        <button class="tab" data-period="all">
-            Всё время
-        </button>
-
-    </div>
-
-    <div class="section">
-
-        <div class="section-title">
-            💸 Расходы
+        <div class="currency">
+            <div class="currency-name">🇺🇸 USD</div>
+            <div class="currency-value usd">...</div>
         </div>
 
-        <div id="expenses">
-            Загрузка...
+        <div class="currency">
+            <div class="currency-name">🇺🇿 UZS</div>
+            <div class="currency-value uzs">...</div>
         </div>
 
-    </div>
-
-    <div class="section">
-
-        <div class="section-title">
-            💰 Доходы
+        <div class="currency">
+            <div class="currency-name">🇷🇺 RUB</div>
+            <div class="currency-value rub">...</div>
         </div>
-
-        <div id="income">
-            Загрузка...
-        </div>
-
-    </div>
-
-    <button class="add-button" onclick="openAddForm()">
-        ＋ Добавить операцию
-    </button>
-
-    <div id="add-form" class="add-form">
-
-        <div class="form-title">
-            Новая операция
-        </div>
-
-        <select id="operation-type">
-            <option value="Расход">🔴 Расход</option>
-            <option value="Доход">🟢 Доход</option>
-        </select>
-
-        <input
-            id="amount"
-            type="number"
-            placeholder="Сумма"
-        >
-
-        <select id="currency">
-            <option value="UZS">🇺🇿 UZS</option>
-            <option value="RUB">🇷🇺 RUB</option>
-            <option value="USD">🇺🇸 USD</option>
-        </select>
-
-        <select id="category">
-
-            <option value="Продукты">🛒 Продукты</option>
-            <option value="Кафе">☕ Кафе</option>
-            <option value="Транспорт">🚕 Транспорт</option>
-            <option value="Дом">🏠 Дом</option>
-            <option value="Здоровье">💊 Здоровье</option>
-            <option value="Красота">💄 Красота</option>
-            <option value="Одежда">👕 Одежда</option>
-            <option value="Развлечения">🎮 Развлечения</option>
-            <option value="Подарки">🎁 Подарки</option>
-            <option value="Подписки">📺 Подписки</option>
-            <option value="Алкоголь">🍻 Алкоголь</option>
-            <option value="Хобби">🎨 Хобби</option>
-            <option value="Прочее">📦 Прочее</option>
-
-        </select>
-
-        <input
-            id="description"
-            type="text"
-            placeholder="Описание (необязательно)"
-        >
-
-        <button
-            id="submit-button"
-            class="submit-button"
-            onclick="addOperation()"
-        >
-            Добавить
-        </button>
-
-        <button
-            class="cancel-button"
-            onclick="closeAddForm()"
-        >
-            Отмена
-        </button>
 
     </div>
 
 </div>
 
+<div class="tabs">
+
+    <button class="tab active" data-period="today">
+        Сегодня
+    </button>
+
+    <button class="tab" data-period="month">
+        Месяц
+    </button>
+
+    <button class="tab" data-period="all">
+        Всё время
+    </button>
+
+</div>
+
+<div class="section">
+
+    <div class="section-title">
+        💸 Расходы
+    </div>
+
+    <div id="expenses">
+        Загрузка...
+    </div>
+
+</div>
+
+<div class="section">
+
+    <div class="section-title">
+        💰 Доходы
+    </div>
+
+    <div id="income">
+        Загрузка...
+    </div>
+
+</div>
+
+<button class="add-button" onclick="openAddForm()">
+    ＋ Добавить операцию
+</button>
+
+<div id="add-form" class="add-form">
+
+    <div class="form-title">
+        Новая операция
+    </div>
+
+    <select id="operation-type">
+        <option value="Расход">🔴 Расход</option>
+        <option value="Доход">🟢 Доход</option>
+    </select>
+
+    <input
+        id="amount"
+        type="number"
+        placeholder="Сумма"
+    >
+
+    <select id="currency">
+        <option value="UZS">🇺🇿 UZS</option>
+        <option value="RUB">🇷🇺 RUB</option>
+        <option value="USD">🇺🇸 USD</option>
+    </select>
+
+    <select id="category">
+
+        <option value="Продукты">🛒 Продукты</option>
+        <option value="Кафе">☕ Кафе</option>
+        <option value="Транспорт">🚕 Транспорт</option>
+        <option value="Дом">🏠 Дом</option>
+        <option value="Здоровье">💊 Здоровье</option>
+        <option value="Красота">💄 Красота</option>
+        <option value="Одежда">👕 Одежда</option>
+        <option value="Развлечения">🎮 Развлечения</option>
+        <option value="Подарки">🎁 Подарки</option>
+        <option value="Подписки">📺 Подписки</option>
+        <option value="Алкоголь">🍻 Алкоголь</option>
+        <option value="Хобби">🎨 Хобби</option>
+        <option value="Прочее">📦 Прочее</option>
+
+    </select>
+
+    <input
+        id="description"
+        type="text"
+        placeholder="Описание (необязательно)"
+    >
+
+    <button
+        id="submit-button"
+        class="submit-button"
+        onclick="addOperation()"
+    >
+        Добавить
+    </button>
+
+    <button
+        class="cancel-button"
+        onclick="closeAddForm()"
+    >
+        Отмена
+    </button>
+
+</div>
+```
+
+</div>
 
 <script>
 
@@ -374,6 +404,28 @@ function formatNumber(value) {
         minimumFractionDigits: 0,
         maximumFractionDigits: 2
     });
+
+}
+
+
+function showToast(message) {
+
+    const toast =
+        document.querySelector("#toast");
+
+
+    toast.textContent =
+        message;
+
+
+    toast.classList.add("show");
+
+
+    setTimeout(() => {
+
+        toast.classList.remove("show");
+
+    }, 2500);
 
 }
 
@@ -589,7 +641,7 @@ async function addOperation() {
 
     if (!amount || Number(amount) <= 0) {
 
-        alert("Введите сумму");
+        showToast("⚠️ Введите сумму");
 
         return;
 
@@ -605,7 +657,7 @@ async function addOperation() {
 
 
     button.textContent =
-        "Добавление...";
+        "⏳ Добавляем операцию...";
 
 
     try {
@@ -650,9 +702,6 @@ async function addOperation() {
         }
 
 
-        alert("✅ Операция добавлена");
-
-
         closeAddForm();
 
 
@@ -664,7 +713,10 @@ async function addOperation() {
             "";
 
 
-        loadData(currentPeriod);
+        showToast("✅ Операция добавлена");
+
+
+        await loadData(currentPeriod);
 
 
     } catch (error) {
@@ -672,7 +724,7 @@ async function addOperation() {
         console.error(error);
 
 
-        alert(
+        showToast(
             "❌ Не удалось добавить операцию"
         );
 
