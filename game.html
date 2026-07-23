@@ -1,0 +1,2772 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    >
+
+    <title>Котик против расходов</title>
+
+
+    <style>
+
+
+        * {
+
+            box-sizing:
+                border-box;
+
+        }
+
+
+        html,
+        body {
+
+            margin:
+                0;
+
+            width:
+                100%;
+
+            height:
+                100%;
+
+            overflow:
+                hidden;
+
+            font-family:
+                Arial,
+                sans-serif;
+
+            background:
+                #f4f5f7;
+
+        }
+
+
+        body {
+
+            display:
+                flex;
+
+            justify-content:
+                center;
+
+            align-items:
+                center;
+
+            padding:
+                8px;
+
+        }
+
+
+        .game {
+
+            width:
+                min(
+                    100%,
+                    520px
+                );
+
+            height:
+                min(
+                    calc(
+                        100svh - 16px
+                    ),
+                    850px
+                );
+
+            display:
+                flex;
+
+            flex-direction:
+                column;
+
+        }
+
+
+        /*
+            ВЕРХНЯЯ ПАНЕЛЬ
+        */
+
+        .header {
+
+            min-height:
+                44px;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                space-between;
+
+            gap:
+                8px;
+
+            padding:
+                0 4px;
+
+            font-size:
+                17px;
+
+            font-weight:
+                bold;
+
+            flex-shrink:
+                0;
+
+        }
+
+
+        .title {
+
+            white-space:
+                nowrap;
+
+            overflow:
+                hidden;
+
+            text-overflow:
+                ellipsis;
+
+        }
+
+
+        .header-right {
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            gap:
+                8px;
+
+            flex-shrink:
+                0;
+
+        }
+
+
+        .score {
+
+            color:
+                #555;
+
+            font-size:
+                16px;
+
+            white-space:
+                nowrap;
+
+        }
+
+
+        /*
+            КНОПКА ВЫХОДА
+        */
+
+        .exit-button {
+
+            border:
+                1px solid
+                #dcdfe3;
+
+            padding:
+                7px
+                10px;
+
+            border-radius:
+                10px;
+
+            background:
+                #ffffff;
+
+            color:
+                #555;
+
+            font-size:
+                13px;
+
+            cursor:
+                pointer;
+
+            white-space:
+                nowrap;
+
+            transition:
+                .15s
+                ease;
+
+        }
+
+
+        .exit-button:hover {
+
+            background:
+                #f0f1f3;
+
+        }
+
+
+        .exit-button:active {
+
+            transform:
+                scale(
+                    .96
+                );
+
+        }
+
+
+        /*
+            ПОДСКАЗКА
+        */
+
+        .legend {
+
+            position:
+                absolute;
+
+            top:
+                12px;
+
+            left:
+                50%;
+
+            transform:
+                translateX(
+                    -50%
+                );
+
+            z-index:
+                8;
+
+            padding:
+                5px
+                10px;
+
+            border-radius:
+                20px;
+
+            background:
+                rgba(
+                    255,
+                    255,
+                    255,
+                    .68
+                );
+
+            backdrop-filter:
+                blur(
+                    5px
+                );
+
+            color:
+                #777;
+
+            font-size:
+                12px;
+
+            white-space:
+                nowrap;
+
+            opacity:
+                .75;
+
+            pointer-events:
+                none;
+
+            transition:
+                opacity
+                .5s
+                ease;
+
+        }
+
+
+        .legend.hidden-hint {
+
+            opacity:
+                .18;
+
+        }
+
+
+        .legend-money {
+
+            color:
+                #b58b00;
+
+        }
+
+
+        .legend-expense {
+
+            color:
+                #a86666;
+
+        }
+
+
+        /*
+            ИГРОВАЯ ОБЛАСТЬ
+        */
+
+        .game-area {
+
+            position:
+                relative;
+
+            flex:
+                1;
+
+            min-height:
+                0;
+
+            overflow:
+                hidden;
+
+            border-radius:
+                20px;
+
+            background:
+
+                linear-gradient(
+                    #dff3ff,
+                    #ffffff
+                );
+
+            border:
+                2px solid
+                #e5e7eb;
+
+            cursor:
+                pointer;
+
+            user-select:
+                none;
+
+            touch-action:
+                manipulation;
+
+        }
+
+
+        /*
+            НЕБО
+        */
+
+        .sky {
+
+            position:
+                absolute;
+
+            inset:
+                0;
+
+            overflow:
+                hidden;
+
+            pointer-events:
+                none;
+
+        }
+
+
+        .cloud {
+
+            position:
+                absolute;
+
+            white-space:
+                nowrap;
+
+            opacity:
+                .55;
+
+        }
+
+
+        .cloud.one {
+
+            top:
+                12%;
+
+            left:
+                20%;
+
+            font-size:
+                38px;
+
+        }
+
+
+        .cloud.two {
+
+            top:
+                26%;
+
+            left:
+                70%;
+
+            font-size:
+                30px;
+
+        }
+
+
+        .cloud.three {
+
+            top:
+                40%;
+
+            left:
+                45%;
+
+            font-size:
+                24px;
+
+            opacity:
+                .35;
+
+        }
+
+
+        /*
+            ХОЛМЫ
+        */
+
+        .background-hill {
+
+            position:
+                absolute;
+
+            bottom:
+                65px;
+
+            left:
+                0;
+
+            width:
+                200%;
+
+            height:
+                100px;
+
+            opacity:
+                .35;
+
+            background:
+
+                radial-gradient(
+                    ellipse at 20% 100%,
+                    #a8d69b 0 45%,
+                    transparent 46%
+                ),
+
+                radial-gradient(
+                    ellipse at 55% 100%,
+                    #a8d69b 0 50%,
+                    transparent 51%
+                ),
+
+                radial-gradient(
+                    ellipse at 85% 100%,
+                    #a8d69b 0 45%,
+                    transparent 46%
+                );
+
+            background-size:
+                400px 100px;
+
+            animation:
+                hillsMove
+                16s
+                linear
+                infinite;
+
+            pointer-events:
+                none;
+
+        }
+
+
+        @keyframes hillsMove {
+
+
+            from {
+
+                transform:
+                    translateX(
+                        0
+                    );
+
+            }
+
+
+            to {
+
+                transform:
+                    translateX(
+                        -400px
+                    );
+
+            }
+
+        }
+
+
+        /*
+            ЗЕМЛЯ
+        */
+
+        .ground {
+
+            position:
+                absolute;
+
+            bottom:
+                0;
+
+            left:
+                0;
+
+            width:
+                100%;
+
+            height:
+                65px;
+
+            background:
+                #b9df9d;
+
+            border-top:
+                4px solid
+                #8fc276;
+
+            overflow:
+                hidden;
+
+            z-index:
+                2;
+
+        }
+
+
+        .ground-lines {
+
+            position:
+                absolute;
+
+            top:
+                18px;
+
+            left:
+                0;
+
+            width:
+                200%;
+
+            height:
+                6px;
+
+            background:
+
+                repeating-linear-gradient(
+                    90deg,
+
+                    transparent
+                    0,
+
+                    transparent
+                    35px,
+
+                    rgba(
+                        92,
+                        150,
+                        76,
+                        .25
+                    )
+                    35px,
+
+                    rgba(
+                        92,
+                        150,
+                        76,
+                        .25
+                    )
+                    75px,
+
+                    transparent
+                    75px,
+
+                    transparent
+                    120px
+                );
+
+            animation:
+                groundMove
+                1.2s
+                linear
+                infinite;
+
+        }
+
+
+        @keyframes groundMove {
+
+
+            from {
+
+                transform:
+                    translateX(
+                        0
+                    );
+
+            }
+
+
+            to {
+
+                transform:
+                    translateX(
+                        -120px
+                    );
+
+            }
+
+        }
+
+
+        /*
+            КОТИК
+        */
+
+        .cat {
+
+            position:
+                absolute;
+
+            left:
+                clamp(
+                    42px,
+                    14vw,
+                    70px
+                );
+
+            bottom:
+                65px;
+
+            width:
+                clamp(
+                    50px,
+                    14vw,
+                    62px
+                );
+
+            height:
+                clamp(
+                    50px,
+                    14vw,
+                    62px
+                );
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            font-size:
+                clamp(
+                    44px,
+                    13vw,
+                    54px
+                );
+
+            z-index:
+                5;
+
+            will-change:
+                transform;
+
+        }
+
+
+        /*
+            ПРЕПЯТСТВИЯ
+        */
+
+        .expense {
+
+            position:
+                absolute;
+
+            left:
+                100%;
+
+            bottom:
+                65px;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            line-height:
+                1;
+
+            white-space:
+                nowrap;
+
+            z-index:
+                4;
+
+            filter:
+
+                drop-shadow(
+                    0
+                    4px
+                    2px
+                    rgba(
+                        0,
+                        0,
+                        0,
+                        .15
+                    )
+                )
+
+                drop-shadow(
+                    0
+                    0
+                    5px
+                    rgba(
+                        170,
+                        70,
+                        70,
+                        .22
+                    )
+                );
+
+        }
+
+
+        .expense.small {
+
+            font-size:
+                clamp(
+                    42px,
+                    13vw,
+                    48px
+                );
+
+        }
+
+
+        .expense.normal {
+
+            font-size:
+                clamp(
+                    52px,
+                    16vw,
+                    62px
+                );
+
+        }
+
+
+        .expense.wide {
+
+            font-size:
+                clamp(
+                    65px,
+                    20vw,
+                    78px
+                );
+
+        }
+
+
+        /*
+            ДЕНЬГИ
+        */
+
+        .coin {
+
+            position:
+                absolute;
+
+            left:
+                100%;
+
+            width:
+                52px;
+
+            height:
+                52px;
+
+            display:
+                flex;
+
+            align-items:
+                center;
+
+            justify-content:
+                center;
+
+            font-size:
+                clamp(
+                    38px,
+                    12vw,
+                    46px
+                );
+
+            line-height:
+                1;
+
+            z-index:
+                3;
+
+            filter:
+
+                drop-shadow(
+                    0
+                    4px
+                    2px
+                    rgba(
+                        0,
+                        0,
+                        0,
+                        .15
+                    )
+                )
+
+                drop-shadow(
+                    0
+                    0
+                    8px
+                    rgba(
+                        218,
+                        170,
+                        0,
+                        .40
+                    )
+                );
+
+            animation:
+                moneyFloat
+                1.2s
+                ease-in-out
+                infinite
+                alternate;
+
+        }
+
+
+        @keyframes moneyFloat {
+
+
+            from {
+
+                transform:
+                    translateY(
+                        -5px
+                    )
+                    scale(
+                        1
+                    );
+
+            }
+
+
+            to {
+
+                transform:
+                    translateY(
+                        5px
+                    )
+                    scale(
+                        1.07
+                    );
+
+            }
+
+        }
+
+
+        /*
+            ЭКРАНЫ
+        */
+
+        .start-screen,
+        .game-over {
+
+            position:
+                absolute;
+
+            inset:
+                0;
+
+            z-index:
+                10;
+
+            display:
+                flex;
+
+            flex-direction:
+                column;
+
+            justify-content:
+                center;
+
+            align-items:
+                center;
+
+            padding:
+                20px;
+
+            background:
+
+                rgba(
+                    255,
+                    255,
+                    255,
+                    .88
+                );
+
+            text-align:
+                center;
+
+        }
+
+
+        .start-screen h2,
+        .game-over h2 {
+
+            margin:
+                0 0 10px;
+
+            font-size:
+                22px;
+
+        }
+
+
+        .start-screen p,
+        .game-over p {
+
+            margin:
+                0 0 18px;
+
+            color:
+                #666;
+
+        }
+
+
+        button {
+
+            border:
+                none;
+
+            padding:
+                12px
+                22px;
+
+            border-radius:
+                12px;
+
+            background:
+                #222;
+
+            color:
+                white;
+
+            font-size:
+                16px;
+
+            cursor:
+                pointer;
+
+        }
+
+
+        button:active {
+
+            transform:
+                scale(
+                    .97
+                );
+
+        }
+
+
+        .hidden {
+
+            display:
+                none;
+
+        }
+
+
+        /*
+            НИЖНЯЯ ПОДСКАЗКА
+        */
+
+        .hint {
+
+            min-height:
+                25px;
+
+            display:
+                flex;
+
+            justify-content:
+                center;
+
+            align-items:
+                center;
+
+            color:
+                #888;
+
+            font-size:
+                12px;
+
+            flex-shrink:
+                0;
+
+        }
+
+
+        @media (
+            max-height: 600px
+        ) {
+
+
+            .header {
+
+                min-height:
+                    36px;
+
+                font-size:
+                    15px;
+
+            }
+
+
+            .score {
+
+                font-size:
+                    14px;
+
+            }
+
+
+            .exit-button {
+
+                padding:
+                    5px
+                    8px;
+
+                font-size:
+                    12px;
+
+            }
+
+
+            .hint {
+
+                display:
+                    none;
+
+            }
+
+
+            .ground {
+
+                height:
+                    55px;
+
+            }
+
+
+            .cat {
+
+                bottom:
+                    55px;
+
+            }
+
+
+            .expense {
+
+                bottom:
+                    55px;
+
+            }
+
+        }
+
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="game">
+
+
+    <div class="header">
+
+
+        <div class="title">
+
+            🐱 Котик против расходов
+
+        </div>
+
+
+        <div class="header-right">
+
+
+            <div class="score">
+
+                Счёт:
+                <span id="score">
+                    0
+                </span>
+
+            </div>
+
+
+            <button
+                class="exit-button"
+                id="exitButton"
+            >
+
+                ← В меню
+
+            </button>
+
+
+        </div>
+
+
+    </div>
+
+
+    <div
+        class="game-area"
+        id="gameArea"
+    >
+
+
+        <div
+            class="legend"
+            id="legend"
+        >
+
+            <span class="legend-money">
+
+                💰 собирай
+
+            </span>
+
+
+            &nbsp;&nbsp;|&nbsp;&nbsp;
+
+
+            <span class="legend-expense">
+
+                🛒 избегай
+
+            </span>
+
+        </div>
+
+
+        <div class="sky">
+
+
+            <div class="cloud one">
+
+                ☁️
+
+            </div>
+
+
+            <div class="cloud two">
+
+                ☁️
+
+            </div>
+
+
+            <div class="cloud three">
+
+                ☁️
+
+            </div>
+
+
+            <div class="background-hill"></div>
+
+
+        </div>
+
+
+        <div
+            class="start-screen"
+            id="startScreen"
+        >
+
+
+            <h2>
+
+                🐱 Спаси котика
+                от расходов!
+
+            </h2>
+
+
+            <p>
+
+                Собирай деньги.
+                Избегай трат.
+
+            </p>
+
+
+            <button
+                id="startButton"
+            >
+
+                Начать игру
+
+            </button>
+
+
+        </div>
+
+
+        <div
+            class="game-over hidden"
+            id="gameOver"
+        >
+
+
+            <h2>
+
+                😿 Котик потратился
+
+            </h2>
+
+
+            <p>
+
+                Твой счёт:
+                <b id="finalScore">
+                    0
+                </b>
+
+            </p>
+
+
+            <button
+                id="restartButton"
+            >
+
+                Играть ещё
+
+            </button>
+
+
+        </div>
+
+
+        <div
+            class="cat"
+            id="cat"
+        >
+
+            🐱
+
+        </div>
+
+
+        <div class="ground">
+
+
+            <div
+                class="ground-lines"
+            ></div>
+
+
+        </div>
+
+
+    </div>
+
+
+    <div class="hint">
+
+        Тапни по экрану или нажми пробел,
+        чтобы прыгнуть 🐾
+
+    </div>
+
+
+</div>
+
+
+<script>
+
+
+    /*
+        ЭЛЕМЕНТЫ
+    */
+
+
+    const gameArea =
+        document.getElementById(
+            "gameArea"
+        );
+
+
+    const cat =
+        document.getElementById(
+            "cat"
+        );
+
+
+    const startScreen =
+        document.getElementById(
+            "startScreen"
+        );
+
+
+    const gameOverScreen =
+        document.getElementById(
+            "gameOver"
+        );
+
+
+    const startButton =
+        document.getElementById(
+            "startButton"
+        );
+
+
+    const restartButton =
+        document.getElementById(
+            "restartButton"
+        );
+
+
+    const exitButton =
+        document.getElementById(
+            "exitButton"
+        );
+
+
+    const scoreElement =
+        document.getElementById(
+            "score"
+        );
+
+
+    const finalScoreElement =
+        document.getElementById(
+            "finalScore"
+        );
+
+
+    const legend =
+        document.getElementById(
+            "legend"
+        );
+
+
+    /*
+        ОБЛАКА
+    */
+
+
+    const clouds = [
+
+        {
+
+            element:
+                document.querySelector(
+                    ".cloud.one"
+                ),
+
+            x:
+                120,
+
+            speed:
+                0.025
+
+        },
+
+
+        {
+
+            element:
+                document.querySelector(
+                    ".cloud.two"
+                ),
+
+            x:
+                480,
+
+            speed:
+                0.045
+
+        },
+
+
+        {
+
+            element:
+                document.querySelector(
+                    ".cloud.three"
+                ),
+
+            x:
+                300,
+
+            speed:
+                0.065
+
+        }
+
+    ];
+
+
+    /*
+        СОСТОЯНИЕ
+    */
+
+
+    let gameStarted =
+        false;
+
+
+    let gameOver =
+        false;
+
+
+    let score =
+        0;
+
+
+    let obstacles =
+        [];
+
+
+    let coins =
+        [];
+
+
+    /*
+        ПРЫЖОК
+    */
+
+
+    let isJumping =
+        false;
+
+
+    let jumpStartTime =
+        null;
+
+
+    const jumpDuration =
+        1800;
+
+
+    const jumpHeight =
+        155;
+
+
+    /*
+        ВРЕМЯ
+    */
+
+
+    let lastTime =
+        0;
+
+
+    let obstacleTimer =
+        0;
+
+
+    let coinTimer =
+        0;
+
+
+    let scoreTimer =
+        0;
+
+
+    let nextObstacleTime =
+        1600;
+
+
+    let nextCoinTime =
+        1200;
+
+
+    let lastObstacle =
+        null;
+
+
+    /*
+        ЭМОДЗИ
+    */
+
+
+    const expenses = [
+
+        "🛒",
+        "🍔",
+        "🚕",
+        "🧾",
+        "📦",
+        "🛍️"
+
+    ];
+
+
+    const money = [
+
+        "🪙",
+        "💵",
+        "💰",
+        "💸"
+
+    ];
+
+
+    /*
+        ВЫХОД В МЕНЮ
+    */
+
+    exitButton.addEventListener(
+
+        "click",
+
+        function (
+            event
+        ) {
+
+
+            event.stopPropagation();
+
+
+            window.location.href =
+                "index.html";
+
+        }
+
+    );
+
+
+    /*
+        ПРЫЖОК
+    */
+
+
+    function jump() {
+
+
+        if (
+
+            !gameStarted
+            ||
+            gameOver
+            ||
+            isJumping
+
+        ) {
+
+            return;
+
+        }
+
+
+        isJumping =
+            true;
+
+
+        jumpStartTime =
+            performance.now();
+
+    }
+
+
+    /*
+        ФИЗИКА ПРЫЖКА
+    */
+
+
+    function updateJump(
+        currentTime
+    ) {
+
+
+        if (
+
+            !isJumping
+
+        ) {
+
+            return 0;
+
+        }
+
+
+        const elapsed =
+
+            currentTime -
+            jumpStartTime;
+
+
+        const progress =
+
+            elapsed /
+            jumpDuration;
+
+
+        if (
+
+            progress >=
+            1
+
+        ) {
+
+
+            isJumping =
+                false;
+
+
+            jumpStartTime =
+                null;
+
+
+            return 0;
+
+        }
+
+
+        return (
+
+            Math.sin(
+                Math.PI *
+                progress
+            )
+
+            *
+
+            jumpHeight
+
+        );
+
+    }
+
+
+    /*
+        ОБЛАКА
+    */
+
+
+    function updateClouds(
+        deltaTime
+    ) {
+
+
+        clouds.forEach(
+
+            function (
+                cloud
+            ) {
+
+
+                cloud.x -=
+
+                    cloud.speed *
+                    deltaTime;
+
+
+                if (
+
+                    cloud.x <
+                    -120
+
+                ) {
+
+
+                    cloud.x =
+
+                        gameArea.offsetWidth
+                        +
+
+                        Math.random()
+                        *
+                        200;
+
+                }
+
+
+                cloud.element.style.left =
+
+                    cloud.x +
+                    "px";
+
+            }
+
+        );
+
+    }
+
+
+    /*
+        РАЗМЕР ПРЕПЯТСТВИЯ
+    */
+
+
+    function getRandomObstacleSize() {
+
+
+        const random =
+            Math.random();
+
+
+        if (
+
+            random <
+            .35
+
+        ) {
+
+            return "small";
+
+        }
+
+
+        if (
+
+            random <
+            .80
+
+        ) {
+
+            return "normal";
+
+        }
+
+
+        return "wide";
+
+    }
+
+
+    /*
+        СОЗДАНИЕ ТРАТЫ
+    */
+
+
+    function createExpense() {
+
+
+        const expense =
+            document.createElement(
+                "div"
+            );
+
+
+        const size =
+            getRandomObstacleSize();
+
+
+        expense.className =
+
+            "expense "
+            +
+            size;
+
+
+        expense.textContent =
+
+            expenses[
+
+                Math.floor(
+
+                    Math.random()
+                    *
+                    expenses.length
+
+                )
+
+            ];
+
+
+        gameArea.appendChild(
+            expense
+        );
+
+
+        const obstacle = {
+
+            element:
+                expense,
+
+            x:
+                gameArea.offsetWidth,
+
+            size:
+                size
+
+        };
+
+
+        obstacles.push(
+            obstacle
+        );
+
+
+        lastObstacle =
+            obstacle;
+
+    }
+
+
+    /*
+        СОЗДАНИЕ ДЕНЕГ
+    */
+
+
+    function createCoin() {
+
+
+        const coin =
+            document.createElement(
+                "div"
+            );
+
+
+        coin.className =
+            "coin";
+
+
+        coin.textContent =
+
+            money[
+
+                Math.floor(
+
+                    Math.random()
+                    *
+                    money.length
+
+                )
+
+            ];
+
+
+        coin.style.bottom =
+
+            (
+
+                100
+
+                +
+
+                Math.random()
+                *
+                140
+
+            )
+
+            +
+
+            "px";
+
+
+        gameArea.appendChild(
+            coin
+        );
+
+
+        coins.push({
+
+            element:
+                coin,
+
+            x:
+                gameArea.offsetWidth,
+
+            collected:
+                false
+
+        });
+
+    }
+
+
+    /*
+        СТОЛКНОВЕНИЕ
+    */
+
+
+    function checkObstacleCollision(
+        obstacle
+    ) {
+
+
+        const catRect =
+            cat.getBoundingClientRect();
+
+
+        const obstacleRect =
+
+            obstacle.element
+                .getBoundingClientRect();
+
+
+        const horizontal =
+
+            catRect.right >
+
+            obstacleRect.left
+            +
+            12
+
+            &&
+
+            catRect.left <
+
+            obstacleRect.right
+            -
+            12;
+
+
+        const vertical =
+
+            catRect.bottom >
+
+            obstacleRect.top
+            +
+            10;
+
+
+        return (
+
+            horizontal
+            &&
+            vertical
+
+        );
+
+    }
+
+
+    /*
+        СБОР ДЕНЕГ
+    */
+
+
+    function checkCoinCollision(
+        coin
+    ) {
+
+
+        const catRect =
+            cat.getBoundingClientRect();
+
+
+        const coinRect =
+
+            coin.element
+                .getBoundingClientRect();
+
+
+        return (
+
+            catRect.right >
+            coinRect.left
+
+            &&
+
+            catRect.left <
+            coinRect.right
+
+            &&
+
+            catRect.bottom >
+            coinRect.top
+
+            &&
+
+            catRect.top <
+            coinRect.bottom
+
+        );
+
+    }
+
+
+    /*
+        БЕЗОПАСНОЕ РАССТОЯНИЕ
+    */
+
+
+    function canCreateObstacle() {
+
+
+        if (
+
+            lastObstacle ===
+            null
+
+        ) {
+
+            return true;
+
+        }
+
+
+        const lastObstacleRect =
+
+            lastObstacle.element
+                .getBoundingClientRect();
+
+
+        const rightEdge =
+
+            lastObstacleRect.right;
+
+
+        const safeDistance =
+            360;
+
+
+        const gameRight =
+
+            gameArea
+                .getBoundingClientRect()
+                .right;
+
+
+        return (
+
+            rightEdge <
+
+            gameRight
+            -
+            safeDistance
+
+        );
+
+    }
+
+
+    /*
+        ИГРОВОЙ ЦИКЛ
+    */
+
+
+    function gameLoop(
+        currentTime
+    ) {
+
+
+        if (
+
+            !gameStarted
+            ||
+            gameOver
+
+        ) {
+
+            return;
+
+        }
+
+
+        const deltaTime =
+
+            currentTime -
+            lastTime;
+
+
+        lastTime =
+            currentTime;
+
+
+        updateClouds(
+            deltaTime
+        );
+
+
+        const catY =
+
+            updateJump(
+                currentTime
+            );
+
+
+        cat.style.transform =
+
+            `translateY(
+                ${-catY}px
+            )`;
+
+
+        const speed =
+
+            (
+
+                .20
+
+                +
+
+                Math.min(
+
+                    score
+                    *
+                    .001,
+
+                    .10
+
+                )
+
+            )
+
+            *
+
+            deltaTime;
+
+
+        /*
+            ПРЕПЯТСТВИЯ
+        */
+
+
+        obstacles.forEach(
+
+            function (
+                obstacle
+            ) {
+
+
+                obstacle.x -=
+                    speed;
+
+
+                obstacle.element.style.left =
+
+                    obstacle.x +
+                    "px";
+
+
+                if (
+
+                    checkObstacleCollision(
+                        obstacle
+                    )
+
+                ) {
+
+
+                    endGame();
+
+                }
+
+            }
+
+        );
+
+
+        /*
+            ДЕНЬГИ
+        */
+
+
+        coins.forEach(
+
+            function (
+                coin
+            ) {
+
+
+                coin.x -=
+                    speed;
+
+
+                coin.element.style.left =
+
+                    coin.x +
+                    "px";
+
+
+                if (
+
+                    !coin.collected
+
+                    &&
+
+                    checkCoinCollision(
+                        coin
+                    )
+
+                ) {
+
+
+                    coin.collected =
+                        true;
+
+
+                    score +=
+                        10;
+
+
+                    scoreElement.textContent =
+                        score;
+
+
+                    coin.element.remove();
+
+                }
+
+            }
+
+        );
+
+
+        /*
+            УДАЛЕНИЕ ПРЕПЯТСТВИЙ
+        */
+
+
+        obstacles =
+
+            obstacles.filter(
+
+                function (
+                    obstacle
+                ) {
+
+
+                    if (
+
+                        obstacle.x <
+                        -160
+
+                    ) {
+
+
+                        obstacle.element.remove();
+
+
+                        if (
+
+                            lastObstacle ===
+                            obstacle
+
+                        ) {
+
+
+                            lastObstacle =
+                                null;
+
+                        }
+
+
+                        return false;
+
+                    }
+
+
+                    return true;
+
+                }
+
+            );
+
+
+        /*
+            УДАЛЕНИЕ ДЕНЕГ
+        */
+
+
+        coins =
+
+            coins.filter(
+
+                function (
+                    coin
+                ) {
+
+
+                    if (
+
+                        coin.collected
+
+                        ||
+
+                        coin.x <
+                        -100
+
+                    ) {
+
+
+                        if (
+
+                            coin.element
+                                .parentElement
+
+                        ) {
+
+
+                            coin.element.remove();
+
+                        }
+
+
+                        return false;
+
+                    }
+
+
+                    return true;
+
+                }
+
+            );
+
+
+        /*
+            НОВОЕ ПРЕПЯТСТВИЕ
+        */
+
+
+        obstacleTimer +=
+            deltaTime;
+
+
+        if (
+
+            obstacleTimer >=
+            nextObstacleTime
+
+            &&
+
+            canCreateObstacle()
+
+        ) {
+
+
+            createExpense();
+
+
+            obstacleTimer =
+                0;
+
+
+            nextObstacleTime =
+
+                1300
+
+                +
+
+                Math.random()
+                *
+                1800;
+
+        }
+
+
+        /*
+            НОВЫЕ ДЕНЬГИ
+        */
+
+
+        coinTimer +=
+            deltaTime;
+
+
+        if (
+
+            coinTimer >=
+            nextCoinTime
+
+        ) {
+
+
+            createCoin();
+
+
+            coinTimer =
+                0;
+
+
+            nextCoinTime =
+
+                900
+
+                +
+
+                Math.random()
+                *
+                2400;
+
+        }
+
+
+        /*
+            ОЧКИ
+        */
+
+
+        scoreTimer +=
+            deltaTime;
+
+
+        if (
+
+            scoreTimer >=
+            1000
+
+        ) {
+
+
+            score++;
+
+
+            scoreElement.textContent =
+                score;
+
+
+            scoreTimer =
+                0;
+
+        }
+
+
+        requestAnimationFrame(
+            gameLoop
+        );
+
+    }
+
+
+    /*
+        СТАРТ ИГРЫ
+    */
+
+
+    function startGame() {
+
+
+        score =
+            0;
+
+
+        gameStarted =
+            true;
+
+
+        gameOver =
+            false;
+
+
+        isJumping =
+            false;
+
+
+        jumpStartTime =
+            null;
+
+
+        lastObstacle =
+            null;
+
+
+        cat.style.transform =
+            "translateY(0)";
+
+
+        scoreElement.textContent =
+            "0";
+
+
+        startScreen.classList.add(
+            "hidden"
+        );
+
+
+        gameOverScreen.classList.add(
+            "hidden"
+        );
+
+
+        legend.classList.remove(
+            "hidden-hint"
+        );
+
+
+        setTimeout(
+
+            function () {
+
+                legend.classList.add(
+                    "hidden-hint"
+                );
+
+            },
+
+            5000
+
+        );
+
+
+        obstacles.forEach(
+
+            function (
+                obstacle
+            ) {
+
+
+                obstacle.element.remove();
+
+            }
+
+        );
+
+
+        coins.forEach(
+
+            function (
+                coin
+            ) {
+
+
+                coin.element.remove();
+
+            }
+
+        );
+
+
+        obstacles =
+            [];
+
+
+        coins =
+            [];
+
+
+        obstacleTimer =
+            0;
+
+
+        coinTimer =
+            0;
+
+
+        scoreTimer =
+            0;
+
+
+        nextObstacleTime =
+            1600;
+
+
+        nextCoinTime =
+            1200;
+
+
+        lastTime =
+            performance.now();
+
+
+        requestAnimationFrame(
+            gameLoop
+        );
+
+    }
+
+
+    /*
+        КОНЕЦ ИГРЫ
+    */
+
+
+    function endGame() {
+
+
+        gameOver =
+            true;
+
+
+        gameStarted =
+            false;
+
+
+        finalScoreElement.textContent =
+            score;
+
+
+        gameOverScreen.classList.remove(
+            "hidden"
+        );
+
+    }
+
+
+    /*
+        КНОПКИ
+    */
+
+
+    startButton.addEventListener(
+
+        "click",
+
+        function (
+            event
+        ) {
+
+
+            event.stopPropagation();
+
+
+            startGame();
+
+        }
+
+    );
+
+
+    restartButton.addEventListener(
+
+        "click",
+
+        function (
+            event
+        ) {
+
+
+            event.stopPropagation();
+
+
+            startGame();
+
+        }
+
+    );
+
+
+    /*
+        ТАП / КЛИК
+    */
+
+
+    gameArea.addEventListener(
+
+        "pointerdown",
+
+        function (
+            event
+        ) {
+
+
+            if (
+
+                event.target ===
+                startButton
+
+                ||
+
+                event.target ===
+                restartButton
+
+            ) {
+
+                return;
+
+            }
+
+
+            jump();
+
+        }
+
+    );
+
+
+    /*
+        ПРОБЕЛ
+    */
+
+
+    document.addEventListener(
+
+        "keydown",
+
+        function (
+            event
+        ) {
+
+
+            if (
+
+                event.code ===
+                "Space"
+
+            ) {
+
+
+                event.preventDefault();
+
+
+                jump();
+
+            }
+
+        }
+
+    );
+
+
+</script>
+
+
+</body>
+
+</html>
