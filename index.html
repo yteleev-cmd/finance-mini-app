@@ -89,7 +89,7 @@
 
         .tabs {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(2, 1fr);
             gap: 8px;
             margin-bottom: 18px;
         }
@@ -123,9 +123,9 @@
         }
 
         .category {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
+            display: grid;
+            grid-template-columns: minmax(90px, 1fr) minmax(0, 2fr);
+            align-items: start;
             gap: 12px;
             padding: 13px 0;
             border-bottom: 1px solid #eee;
@@ -138,20 +138,20 @@
 
         .category-name {
             font-size: 15px;
-            flex: 0 1 auto;
             min-width: 0;
             overflow: hidden;
             text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         .category-amount {
             font-weight: bold;
-            white-space: normal;
             text-align: right;
-            flex: 1 1 auto;
             min-width: 0;
             font-size: 15px;
-            line-height: 1.35;
+            line-height: 1.4;
+            overflow-wrap: anywhere;
+            word-break: normal;
         }
 
         .expense-amount {
@@ -163,9 +163,9 @@
         }
 
         .section-total {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
+            display: grid;
+            grid-template-columns: minmax(120px, 1fr) minmax(0, 2fr);
+            align-items: start;
             gap: 12px;
             border-top: 1px solid #eee;
             margin-top: 8px;
@@ -174,12 +174,14 @@
         }
 
         .section-total span:first-child {
-            flex-shrink: 0;
+            min-width: 0;
         }
 
         .section-total span:last-child {
+            min-width: 0;
             text-align: right;
-            line-height: 1.35;
+            line-height: 1.4;
+            overflow-wrap: anywhere;
         }
 
         .empty {
@@ -321,6 +323,7 @@
         @media (max-width: 420px) {
 
             .category {
+                grid-template-columns: minmax(75px, 0.8fr) minmax(0, 2fr);
                 gap: 8px;
             }
 
@@ -333,6 +336,7 @@
             }
 
             .section-total {
+                grid-template-columns: minmax(115px, 0.9fr) minmax(0, 2fr);
                 font-size: 14px;
             }
 
@@ -402,10 +406,6 @@
 
         <button class="tab" data-period="month">
             Месяц
-        </button>
-
-        <button class="tab" data-period="all">
-            Всё время
         </button>
 
     </div>
@@ -581,7 +581,6 @@
 
 <script>
 
-
 const MAKE_WEBHOOK_URL =
 "https://hook.eu1.make.com/rbaqfgqxqlzyvb6s7imcpnhx3k2igjgo";
 
@@ -601,14 +600,12 @@ function formatNumber(value) {
 
     }
 
-
     const number =
         Number(
             String(value)
                 .replace(/\s/g, "")
                 .replace(",", ".")
         );
-
 
     if (
         isNaN(number)
@@ -617,7 +614,6 @@ function formatNumber(value) {
         return value;
 
     }
-
 
     return number.toLocaleString(
         "ru-RU",
@@ -640,15 +636,12 @@ function showToast(message) {
             "#toast"
         );
 
-
     toast.textContent =
         message;
-
 
     toast.classList.add(
         "show"
     );
-
 
     setTimeout(
         () => {
@@ -706,10 +699,10 @@ function getPeriodData(
     return {
 
         expenses:
-            data.all_expenses,
+            "",
 
         income:
-            data.all_income
+            ""
 
     };
 
@@ -773,7 +766,6 @@ function renderText(
     type
 
 ) {
-
 
     const container =
         document.querySelector(
@@ -851,16 +843,6 @@ function renderText(
                 }
             );
 
-
-            /*
-             * ИСПРАВЛЕНИЕ:
-             * теперь понимаем:
-             *
-             * Зарплата — + 100 USD
-             * Зарплата – + 100 USD
-             * Зарплата - + 100 USD
-             * Зарплата • + 100 USD
-             */
 
             const separatorMatch =
                 line.match(
@@ -1021,6 +1003,7 @@ function renderText(
                 ]
             ) => {
 
+
                 return (
 
                     formatNumber(
@@ -1063,7 +1046,6 @@ function renderText(
 async function loadData(
     period = "today"
 ) {
-
 
     currentPeriod =
         period;
@@ -1254,7 +1236,6 @@ function closeAddForm() {
 
 
 async function addOperation() {
-
 
     const type =
         document.querySelector(
