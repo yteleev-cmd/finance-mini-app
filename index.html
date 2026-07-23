@@ -13,7 +13,7 @@
 
         body {
             margin: 0;
-            padding: 16px;
+            padding: 16px 16px 105px;
             font-family: Arial, sans-serif;
             background: #f4f5f7;
             color: #202124;
@@ -24,19 +24,49 @@
             margin: 0 auto;
         }
 
+        /* =========================
+           ШАПКА
+        ========================= */
+
         .app-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin: 5px 4px 20px;
+            margin: 4px 2px 18px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 13px;
+            background: #202124;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
         }
 
         .app-header h1 {
             margin: 0;
-            font-size: 26px;
+            font-size: 24px;
+            line-height: 1.1;
         }
 
-        /* КОТИК */
+        .header-subtitle {
+            color: #888;
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        /* =========================
+           КОТИК
+        ========================= */
 
         .cat-wrapper {
             position: relative;
@@ -46,7 +76,7 @@
             width: 58px;
             height: 58px;
             object-fit: cover;
-            border-radius: 16px;
+            border-radius: 17px;
             flex-shrink: 0;
             cursor: pointer;
             transition: transform 0.15s ease;
@@ -91,19 +121,22 @@
             transform: translateY(0) scale(1);
         }
 
-        /* БАЛАНС */
+        /* =========================
+           БАЛАНС
+        ========================= */
 
         .balance-card {
             background: #202124;
             color: white;
-            border-radius: 20px;
+            border-radius: 22px;
             padding: 22px;
-            margin-bottom: 18px;
+            margin-bottom: 16px;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.08);
         }
 
         .balance-title {
-            font-size: 14px;
-            opacity: 0.7;
+            font-size: 13px;
+            opacity: 0.65;
         }
 
         .total {
@@ -115,18 +148,18 @@
         .currencies {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
+            gap: 8px;
         }
 
         .currency {
-            background: rgba(255,255,255,0.1);
-            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 13px;
             padding: 10px;
         }
 
         .currency-name {
-            font-size: 13px;
-            opacity: 0.7;
+            font-size: 12px;
+            opacity: 0.65;
         }
 
         .currency-value {
@@ -135,13 +168,15 @@
             font-weight: bold;
         }
 
-        /* ВКЛАДКИ */
+        /* =========================
+           ВКЛАДКИ
+        ========================= */
 
         .tabs {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 8px;
-            margin-bottom: 18px;
+            margin-bottom: 16px;
         }
 
         .tab {
@@ -158,13 +193,15 @@
             color: white;
         }
 
-        /* СЕКЦИИ */
+        /* =========================
+           СЕКЦИИ
+        ========================= */
 
         .section {
             background: white;
             border-radius: 18px;
             padding: 18px;
-            margin-bottom: 16px;
+            margin-bottom: 14px;
             overflow: hidden;
         }
 
@@ -174,7 +211,9 @@
             margin-bottom: 14px;
         }
 
-        /* КАТЕГОРИИ */
+        /* =========================
+           КАТЕГОРИИ
+        ========================= */
 
         .category {
             display: grid;
@@ -237,7 +276,59 @@
             padding: 10px 0;
         }
 
-        /* ПОСЛЕДНИЕ ОПЕРАЦИИ */
+        /* =========================
+           НИЖНЯЯ ПАНЕЛЬ
+        ========================= */
+
+        .bottom-bar {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 500;
+            padding: 10px 16px 14px;
+            background: rgba(244, 245, 247, 0.94);
+            backdrop-filter: blur(12px);
+        }
+
+        .bottom-bar-inner {
+            max-width: 500px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1.25fr;
+            gap: 8px;
+        }
+
+        .bottom-button {
+            border: none;
+            border-radius: 15px;
+            padding: 14px 8px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .operations-button {
+            background: white;
+            color: #202124;
+        }
+
+        .add-button {
+            background: #202124;
+            color: white;
+        }
+
+        /* =========================
+           ПОСЛЕДНИЕ ОПЕРАЦИИ
+        ========================= */
+
+        .last10-section {
+            display: none;
+        }
+
+        .last10-section.open {
+            display: block;
+        }
 
         .last10-header {
             display: flex;
@@ -257,12 +348,7 @@
         }
 
         .last10-content {
-            display: none;
             margin-top: 12px;
-        }
-
-        .last10-section.open .last10-content {
-            display: block;
         }
 
         .operation-card {
@@ -329,21 +415,9 @@
             font-size: 11px;
         }
 
-        /* КНОПКА */
-
-        .add-button {
-            width: 100%;
-            border: none;
-            border-radius: 16px;
-            padding: 16px;
-            font-size: 17px;
-            font-weight: bold;
-            background: #202124;
-            color: white;
-            cursor: pointer;
-        }
-
-        /* ОШИБКА */
+        /* =========================
+           ОШИБКА
+        ========================= */
 
         .error {
             background: #ffe5e5;
@@ -354,7 +428,9 @@
             display: none;
         }
 
-        /* TOAST */
+        /* =========================
+           TOAST
+        ========================= */
 
         .toast {
             position: fixed;
@@ -379,7 +455,9 @@
             transform: translateX(-50%) translateY(0);
         }
 
-        /* МОДАЛЬНЫЕ ОКНА */
+        /* =========================
+           МОДАЛЬНЫЕ ОКНА
+        ========================= */
 
         .modal-overlay {
             display: none;
@@ -395,17 +473,19 @@
             display: flex;
         }
 
-        .modal-box {
+        .add-form,
+        .delete-modal {
             width: 100%;
             max-width: 500px;
             background: white;
             border-radius: 22px 22px 0 0;
-            padding: 24px 18px;
+            padding: 22px 18px 24px;
             transform: translateY(100%);
             transition: transform 0.25s ease;
         }
 
-        .modal-overlay.show .modal-box {
+        .modal-overlay.show .add-form,
+        .modal-overlay.show .delete-modal {
             transform: translateY(0);
         }
 
@@ -416,7 +496,8 @@
             margin-bottom: 18px;
         }
 
-        .form-title {
+        .form-title,
+        .delete-title {
             font-size: 20px;
             font-weight: bold;
         }
@@ -430,8 +511,6 @@
             font-size: 20px;
             cursor: pointer;
         }
-
-        /* ФОРМА ДОБАВЛЕНИЯ */
 
         .add-form input,
         .add-form select {
@@ -472,39 +551,10 @@
             cursor: wait;
         }
 
-        /* ПРОСМОТР ОПЕРАЦИИ */
-
-        .operation-details {
-            margin-bottom: 18px;
-        }
-
-        .detail-row {
-            display: flex;
-            justify-content: space-between;
-            gap: 15px;
-            padding: 13px 0;
-            border-bottom: 1px solid #eee;
-        }
-
-        .detail-row:last-child {
-            border-bottom: none;
-        }
-
-        .detail-label {
-            color: #777;
-        }
-
-        .detail-value {
-            font-weight: bold;
-            text-align: right;
-        }
-
-        .detail-value.expense {
-            color: #d93025;
-        }
-
-        .detail-value.income {
-            color: #188038;
+        .delete-text {
+            color: #666;
+            line-height: 1.4;
+            margin: 10px 0 20px;
         }
 
         .delete-button {
@@ -512,25 +562,30 @@
             color: white;
         }
 
-        .delete-button:active {
-            background: #b3261e;
-        }
-
-        /* ПОДТВЕРЖДЕНИЕ */
-
-        .confirm-title {
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        .confirm-text {
-            color: #666;
-            line-height: 1.4;
-            margin-bottom: 20px;
-        }
+        /* =========================
+           МОБИЛЬНАЯ ВЕРСИЯ
+        ========================= */
 
         @media (max-width: 420px) {
+
+            .app-header h1 {
+                font-size: 22px;
+            }
+
+            .header-icon {
+                width: 38px;
+                height: 38px;
+                font-size: 20px;
+            }
+
+            .cat {
+                width: 54px;
+                height: 54px;
+            }
+
+            .total {
+                font-size: 29px;
+            }
 
             .category {
                 grid-template-columns: minmax(75px, 0.8fr) minmax(0, 2fr);
@@ -571,9 +626,27 @@
 
 <div class="app">
 
+    <!-- ШАПКА -->
+
     <div class="app-header">
 
-        <h1>💰 Мои финансы</h1>
+        <div class="header-left">
+
+            <div class="header-icon">
+                💰
+            </div>
+
+            <div>
+
+                <h1>Мои финансы</h1>
+
+                <div class="header-subtitle">
+                    Контроль денег без лишних сложностей
+                </div>
+
+            </div>
+
+        </div>
 
         <div class="cat-wrapper">
 
@@ -590,9 +663,13 @@
 
     </div>
 
+
     <div id="error" class="error">
         Не удалось загрузить данные
     </div>
+
+
+    <!-- БАЛАНС -->
 
     <div class="balance-card">
 
@@ -625,6 +702,9 @@
 
     </div>
 
+
+    <!-- ПЕРИОДЫ -->
+
     <div class="tabs">
 
         <button class="tab active" data-period="today">
@@ -636,6 +716,9 @@
         </button>
 
     </div>
+
+
+    <!-- РАСХОДЫ -->
 
     <div class="section">
 
@@ -649,6 +732,9 @@
 
     </div>
 
+
+    <!-- ДОХОДЫ -->
+
     <div class="section">
 
         <div class="section-title">
@@ -660,6 +746,9 @@
         </div>
 
     </div>
+
+
+    <!-- ПОСЛЕДНИЕ ОПЕРАЦИИ -->
 
     <div class="section last10-section">
 
@@ -687,12 +776,30 @@
 
     </div>
 
-    <button
-        class="add-button"
-        onclick="openAddForm()"
-    >
-        ＋ Добавить операцию
-    </button>
+</div>
+
+
+<!-- НИЖНЯЯ ПАНЕЛЬ -->
+
+<div class="bottom-bar">
+
+    <div class="bottom-bar-inner">
+
+        <button
+            class="bottom-button operations-button"
+            onclick="toggleLast10()"
+        >
+            📋 Операции
+        </button>
+
+        <button
+            class="bottom-button add-button"
+            onclick="openAddForm()"
+        >
+            ＋ Добавить
+        </button>
+
+    </div>
 
 </div>
 
@@ -701,7 +808,7 @@
 
 <div id="add-modal-overlay" class="modal-overlay">
 
-    <div class="modal-box add-form">
+    <div class="add-form">
 
         <div class="form-header">
 
@@ -718,6 +825,7 @@
 
         </div>
 
+
         <select id="operation-type">
 
             <option value="Расход">
@@ -730,11 +838,13 @@
 
         </select>
 
+
         <input
             id="amount"
             type="number"
             placeholder="Сумма"
         >
+
 
         <select id="currency">
 
@@ -752,29 +862,18 @@
 
         </select>
 
-        <select id="category">
 
-            <option value="Продукты">🛒 Продукты</option>
-            <option value="Кафе">☕ Кафе</option>
-            <option value="Транспорт">🚕 Транспорт</option>
-            <option value="Дом">🏠 Дом</option>
-            <option value="Здоровье">💊 Здоровье</option>
-            <option value="Красота">💄 Красота</option>
-            <option value="Одежда">👕 Одежда</option>
-            <option value="Развлечения">🎮 Развлечения</option>
-            <option value="Подарки">🎁 Подарки</option>
-            <option value="Подписки">📺 Подписки</option>
-            <option value="Алкоголь">🍻 Алкоголь</option>
-            <option value="Хобби">🎨 Хобби</option>
-            <option value="Прочее">📦 Прочее</option>
+        <!-- КАТЕГОРИЯ -->
 
-        </select>
+        <select id="category"></select>
+
 
         <input
             id="description"
             type="text"
             placeholder="Описание (необязательно)"
         >
+
 
         <button
             id="submit-button"
@@ -783,6 +882,7 @@
         >
             Добавить
         </button>
+
 
         <button
             class="cancel-button"
@@ -796,119 +896,19 @@
 </div>
 
 
-<!-- ПРОСМОТР ОПЕРАЦИИ -->
-
-<div id="operation-modal-overlay" class="modal-overlay">
-
-    <div class="modal-box">
-
-        <div class="form-header">
-
-            <div class="form-title">
-                Операция
-            </div>
-
-            <button
-                class="close-button"
-                onclick="closeOperationModal()"
-            >
-                ×
-            </button>
-
-        </div>
-
-        <div class="operation-details">
-
-            <div class="detail-row">
-
-                <div class="detail-label">
-                    Категория
-                </div>
-
-                <div
-                    id="detail-category"
-                    class="detail-value"
-                >
-                </div>
-
-            </div>
-
-            <div class="detail-row">
-
-                <div class="detail-label">
-                    Сумма
-                </div>
-
-                <div
-                    id="detail-amount"
-                    class="detail-value"
-                >
-                </div>
-
-            </div>
-
-            <div class="detail-row">
-
-                <div class="detail-label">
-                    Дата
-                </div>
-
-                <div
-                    id="detail-date"
-                    class="detail-value"
-                >
-                </div>
-
-            </div>
-
-            <div class="detail-row">
-
-                <div class="detail-label">
-                    ID
-                </div>
-
-                <div
-                    id="detail-id"
-                    class="detail-value"
-                >
-                </div>
-
-            </div>
-
-        </div>
-
-        <button
-            class="delete-button"
-            onclick="openDeleteConfirm()"
-        >
-            🗑 Удалить операцию
-        </button>
-
-        <button
-            class="cancel-button"
-            onclick="closeOperationModal()"
-        >
-            Закрыть
-        </button>
-
-    </div>
-
-</div>
-
-
-<!-- ПОДТВЕРЖДЕНИЕ УДАЛЕНИЯ -->
+<!-- МОДАЛЬНОЕ ОКНО УДАЛЕНИЯ -->
 
 <div id="delete-modal-overlay" class="modal-overlay">
 
-    <div class="modal-box">
+    <div class="delete-modal">
 
-        <div class="confirm-title">
+        <div class="delete-title">
             🗑 Удалить операцию?
         </div>
 
         <div
             id="delete-text"
-            class="confirm-text"
+            class="delete-text"
         >
             Вы уверены, что хотите удалить эту операцию?
         </div>
@@ -918,12 +918,12 @@
             class="delete-button"
             onclick="deleteOperation()"
         >
-            🗑 Да, удалить
+            🗑 Удалить
         </button>
 
         <button
             class="cancel-button"
-            onclick="closeDeleteConfirm()"
+            onclick="closeDeleteModal()"
         >
             Отмена
         </button>
@@ -943,8 +943,152 @@ let currentPeriod =
 "today";
 
 
-let selectedOperation =
+let selectedOperationId =
 null;
+
+
+/* =========================
+   КАТЕГОРИИ
+========================= */
+
+const expenseCategories = [
+
+    {
+        value: "Продукты",
+        text: "🛒 Продукты"
+    },
+
+    {
+        value: "Кафе",
+        text: "☕ Кафе"
+    },
+
+    {
+        value: "Транспорт",
+        text: "🚕 Транспорт"
+    },
+
+    {
+        value: "Дом",
+        text: "🏠 Дом"
+    },
+
+    {
+        value: "Здоровье",
+        text: "💊 Здоровье"
+    },
+
+    {
+        value: "Красота",
+        text: "💄 Красота"
+    },
+
+    {
+        value: "Одежда",
+        text: "👕 Одежда"
+    },
+
+    {
+        value: "Развлечения",
+        text: "🎮 Развлечения"
+    },
+
+    {
+        value: "Подарки",
+        text: "🎁 Подарки"
+    },
+
+    {
+        value: "Подписки",
+        text: "📺 Подписки"
+    },
+
+    {
+        value: "Алкоголь",
+        text: "🍻 Алкоголь"
+    },
+
+    {
+        value: "Хобби",
+        text: "🎨 Хобби"
+    },
+
+    {
+        value: "Прочее",
+        text: "📦 Прочее"
+    }
+
+];
+
+
+const incomeCategories = [
+
+    {
+        value: "Зарплата",
+        text: "💼 Зарплата"
+    },
+
+    {
+        value: "Прочее",
+        text: "📦 Прочее"
+    }
+
+];
+
+
+function updateCategories() {
+
+    const type =
+        document.querySelector(
+            "#operation-type"
+        ).value;
+
+
+    const category =
+        document.querySelector(
+            "#category"
+        );
+
+
+    const categories =
+        type === "Доход"
+
+            ? incomeCategories
+
+            : expenseCategories;
+
+
+    category.innerHTML =
+        "";
+
+
+    categories.forEach(
+
+        item => {
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+
+            option.value =
+                item.value;
+
+
+            option.textContent =
+                item.text;
+
+
+            category.appendChild(
+                option
+            );
+
+        }
+
+    );
+
+}
 
 
 /* =========================
@@ -987,10 +1131,14 @@ function catSpeak() {
 
     const randomPhrase =
         catPhrases[
+
             Math.floor(
+
                 Math.random() *
                 catPhrases.length
+
             )
+
         ];
 
 
@@ -1033,8 +1181,11 @@ function catSpeak() {
 function formatNumber(value) {
 
     if (
+
         value === undefined ||
+
         value === null
+
     ) {
 
         return "";
@@ -1044,14 +1195,20 @@ function formatNumber(value) {
 
     const number =
         Number(
+
             String(value)
+
                 .replace(/\s/g, "")
+
                 .replace(",", ".")
+
         );
 
 
     if (
+
         isNaN(number)
+
     ) {
 
         return value;
@@ -1060,7 +1217,9 @@ function formatNumber(value) {
 
 
     return number.toLocaleString(
+
         "ru-RU",
+
         {
 
             minimumFractionDigits: 0,
@@ -1125,7 +1284,9 @@ function getPeriodData(
 ) {
 
     if (
+
         period === "today"
+
     ) {
 
         return {
@@ -1142,7 +1303,9 @@ function getPeriodData(
 
 
     if (
+
         period === "month"
+
     ) {
 
         return {
@@ -1313,13 +1476,17 @@ function renderText(
                     if (
 
                         !totals[
+
                             amountData.currency
+
                         ]
 
                     ) {
 
                         totals[
+
                             amountData.currency
+
                         ] =
                             0;
 
@@ -1327,8 +1494,11 @@ function renderText(
 
 
                     totals[
+
                         amountData.currency
+
                     ] +=
+
                         amountData.amount;
 
                 }
@@ -1431,13 +1601,9 @@ function renderText(
 
                     type === "expense"
 
-                        ? "− " +
+                        ? "− " + amountText
 
-                          amountText
-
-                        : "+ " +
-
-                          amountText;
+                        : "+ " + amountText;
 
 
                 row.appendChild(
@@ -1448,13 +1614,6 @@ function renderText(
                 row.appendChild(
                     amountElement
                 );
-
-            }
-
-            else {
-
-                row.textContent =
-                    line;
 
             }
 
@@ -1504,23 +1663,23 @@ function renderText(
             totals
         )
 
-        .map(
+            .map(
 
-            ([currency, amount]) =>
+                ([currency, amount]) =>
 
-                formatNumber(
-                    amount
-                )
+                    formatNumber(
+                        amount
+                    )
 
-                +
+                    +
 
-                " "
+                    " "
 
-                +
+                    +
 
-                currency
+                    currency
 
-        );
+            );
 
 
     totalValue.textContent =
@@ -1562,6 +1721,37 @@ function toggleLast10() {
         "open"
     );
 
+
+    if (
+
+        section.classList.contains(
+            "open"
+        )
+
+    ) {
+
+        setTimeout(
+
+            () => {
+
+                section.scrollIntoView({
+
+                    behavior:
+                        "smooth",
+
+                    block:
+                        "start"
+
+                });
+
+            },
+
+            100
+
+        );
+
+    }
+
 }
 
 
@@ -1582,6 +1772,7 @@ function renderLast10(text) {
     ) {
 
         container.innerHTML =
+
             `<div class="empty">Операций нет</div>`;
 
         return;
@@ -1639,6 +1830,17 @@ function renderLast10(text) {
                     );
 
 
+            if (
+
+                lines.length < 4
+
+            ) {
+
+                return;
+
+            }
+
+
             const dateLine =
                 lines.find(
 
@@ -1666,13 +1868,21 @@ function renderLast10(text) {
 
                     line =>
 
-                        !line.startsWith("👤") &&
+                        !line.startsWith(
+                            "👤"
+                        ) &&
 
-                        !line.startsWith("📅") &&
+                        !line.startsWith(
+                            "📅"
+                        ) &&
 
-                        !line.startsWith("💵") &&
+                        !line.startsWith(
+                            "💵"
+                        ) &&
 
-                        !line.startsWith("🆔")
+                        !line.startsWith(
+                            "🆔"
+                        )
 
                 );
 
@@ -1766,24 +1976,15 @@ function renderLast10(text) {
             card.onclick =
                 () => {
 
-                    openOperationModal({
+                    openDeleteModal(
 
-                        id:
-                            operationId,
+                        operationId,
 
-                        category:
-                            categoryLine || "Операция",
+                        categoryLine,
 
-                        amount:
-                            amountText,
+                        amountText
 
-                        date:
-                            dateLine || "",
-
-                        isIncome:
-                            isIncome
-
-                    });
+                    );
 
                 };
 
@@ -1820,7 +2021,7 @@ function renderLast10(text) {
 
                 <div class="operation-hint">
 
-                    Нажмите, чтобы открыть операцию
+                    Нажмите, чтобы удалить
 
                 </div>
 
@@ -1993,9 +2194,7 @@ async function loadData(
         );
 
 
-    }
-
-    catch (
+    } catch (
 
         error
 
@@ -2028,6 +2227,9 @@ async function loadData(
 ========================= */
 
 function openAddForm() {
+
+    updateCategories();
+
 
     document
 
@@ -2208,9 +2410,7 @@ async function addOperation() {
         );
 
 
-    }
-
-    catch (
+    } catch (
 
         error
 
@@ -2225,9 +2425,8 @@ async function addOperation() {
             "❌ Не удалось добавить операцию"
         );
 
-    }
 
-    finally {
+    } finally {
 
         button.disabled =
             false;
@@ -2242,114 +2441,28 @@ async function addOperation() {
 
 
 /* =========================
-   ПРОСМОТР ОПЕРАЦИИ
+   УДАЛЕНИЕ
 ========================= */
 
-function openOperationModal(operation) {
+function openDeleteModal(
 
-    selectedOperation =
-        operation;
+    operationId,
 
+    category,
 
-    document.querySelector(
-        "#detail-category"
-    ).textContent =
-        operation.category;
+    amount
 
+) {
 
-    document.querySelector(
-        "#detail-amount"
-    ).textContent =
-        operation.amount;
-
-
-    document.querySelector(
-        "#detail-date"
-    ).textContent =
-        operation.date;
-
-
-    document.querySelector(
-        "#detail-id"
-    ).textContent =
-        operation.id;
-
-
-    const amountElement =
-        document.querySelector(
-            "#detail-amount"
-        );
-
-
-    amountElement.classList.remove(
-        "expense",
-
-        "income"
-
-    );
-
-
-    amountElement.classList.add(
-
-        operation.isIncome
-
-            ? "income"
-
-            : "expense"
-
-    );
-
-
-    document
-
-        .querySelector(
-            "#operation-modal-overlay"
-        )
-
-        .classList.add(
-            "show"
-        );
-
-}
-
-
-function closeOperationModal() {
-
-    document
-
-        .querySelector(
-            "#operation-modal-overlay"
-        )
-
-        .classList.remove(
-            "show"
-        );
-
-}
-
-
-/* =========================
-   ПОДТВЕРЖДЕНИЕ УДАЛЕНИЯ
-========================= */
-
-function openDeleteConfirm() {
-
-    if (
-
-        !selectedOperation
-
-    ) {
-
-        return;
-
-    }
+    selectedOperationId =
+        operationId;
 
 
     document.querySelector(
         "#delete-text"
     ).textContent =
 
-        `Удалить операцию «${selectedOperation.category}» на сумму ${selectedOperation.amount}?`;
+        `Удалить операцию «${category}» на сумму ${amount}?`;
 
 
     document
@@ -2365,7 +2478,11 @@ function openDeleteConfirm() {
 }
 
 
-function closeDeleteConfirm() {
+function closeDeleteModal() {
+
+    selectedOperationId =
+        null;
+
 
     document
 
@@ -2380,17 +2497,11 @@ function closeDeleteConfirm() {
 }
 
 
-/* =========================
-   УДАЛЕНИЕ
-========================= */
-
 async function deleteOperation() {
 
     if (
 
-        !selectedOperation ||
-
-        !selectedOperation.id
+        !selectedOperationId
 
     ) {
 
@@ -2440,7 +2551,7 @@ async function deleteOperation() {
                                 "delete_operation",
 
                             id:
-                                selectedOperation.id
+                                selectedOperationId
 
                         })
 
@@ -2462,10 +2573,7 @@ async function deleteOperation() {
         }
 
 
-        closeDeleteConfirm();
-
-
-        closeOperationModal();
+        closeDeleteModal();
 
 
         showToast(
@@ -2478,9 +2586,7 @@ async function deleteOperation() {
         );
 
 
-    }
-
-    catch (
+    } catch (
 
         error
 
@@ -2495,20 +2601,37 @@ async function deleteOperation() {
             "❌ Не удалось удалить операцию"
         );
 
-    }
-
-    finally {
+    } finally {
 
         button.disabled =
             false;
 
 
         button.textContent =
-            "🗑 Да, удалить";
+            "🗑 Удалить";
 
     }
 
 }
+
+
+/* =========================
+   ПЕРЕКЛЮЧЕНИЕ КАТЕГОРИЙ
+========================= */
+
+document
+
+    .querySelector(
+        "#operation-type"
+    )
+
+    .addEventListener(
+
+        "change",
+
+        updateCategories
+
+    );
 
 
 /* =========================
@@ -2578,7 +2701,7 @@ document
 
 
 /* =========================
-   ЗАКРЫТИЕ МОДАЛЬНЫХ ОКОН
+   ЗАКРЫТИЕ МОДАЛОК
 ========================= */
 
 document
@@ -2612,34 +2735,6 @@ document
 document
 
     .querySelector(
-        "#operation-modal-overlay"
-    )
-
-    .addEventListener(
-
-        "click",
-
-        event => {
-
-            if (
-
-                event.target.id ===
-                "operation-modal-overlay"
-
-            ) {
-
-                closeOperationModal();
-
-            }
-
-        }
-
-    );
-
-
-document
-
-    .querySelector(
         "#delete-modal-overlay"
     )
 
@@ -2656,7 +2751,7 @@ document
 
             ) {
 
-                closeDeleteConfirm();
+                closeDeleteModal();
 
             }
 
@@ -2668,6 +2763,8 @@ document
 /* =========================
    ЗАПУСК
 ========================= */
+
+updateCategories();
 
 loadData(
     "today"
