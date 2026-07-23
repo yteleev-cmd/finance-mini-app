@@ -14,7 +14,6 @@ content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable
 
 * {
     box-sizing: border-box;
-
     -webkit-tap-highlight-color: transparent;
     -webkit-touch-callout: none;
 }
@@ -175,10 +174,6 @@ button:active,
 
     cursor: pointer;
 
-    user-select: none;
-
-    -webkit-user-select: none;
-
     touch-action: none;
 
     transition:
@@ -324,12 +319,6 @@ button:active,
     pointer-events: none;
 
     z-index: 0;
-
-}
-
-.cloud {
-
-    display: none;
 
 }
 
@@ -689,7 +678,9 @@ button:active,
 
 }
 
+/* ========================= */
 /* CAT */
+/* ========================= */
 
 .cat {
 
@@ -697,23 +688,55 @@ button:active,
 
     left: clamp(42px, 14vw, 70px);
 
-    bottom: 65px;
+    bottom: 52px;
 
-    width: clamp(50px, 14vw, 62px);
+    width: clamp(58px, 17vw, 78px);
 
-    height: clamp(50px, 14vw, 62px);
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    font-size: clamp(44px, 13vw, 54px);
+    height: clamp(58px, 17vw, 78px);
 
     z-index: 5;
 
     will-change: transform;
+
+    background-repeat: no-repeat;
+
+    background-position: 0 0;
+
+    background-size: 400% 100%;
+
+}
+
+/* HIT */
+
+.cat-hit {
+
+    animation: catHit .35s ease-out !important;
+
+}
+
+@keyframes catHit {
+
+    0% {
+
+        transform: translateX(0);
+
+    }
+
+    40% {
+
+        transform:
+
+            translateX(18px)
+
+            rotate(8deg);
+
+    }
+
+    100% {
+
+        transform: translateX(0);
+
+    }
 
 }
 
@@ -941,40 +964,6 @@ button:active,
 
 }
 
-.cat-hit {
-
-    animation:
-
-        catHit .35s ease-out;
-
-}
-
-@keyframes catHit {
-
-    0% {
-
-        transform: translateX(0);
-
-    }
-
-    40% {
-
-        transform:
-
-            translateX(18px)
-
-            rotate(8deg);
-
-    }
-
-    100% {
-
-        transform: translateX(0);
-
-    }
-
-}
-
 /* MODE MESSAGE */
 
 .mode-message {
@@ -1185,12 +1174,6 @@ button {
 
 }
 
-button:active {
-
-    transform: none;
-
-}
-
 .hidden {
 
     display: none;
@@ -1309,12 +1292,6 @@ id="activeBonuses"></div>
 
 <div class="sky">
 
-<div class="cloud">☁️</div>
-
-<div class="cloud">☁️</div>
-
-<div class="cloud">☁️</div>
-
 <div class="background-hill"></div>
 
 <div
@@ -1389,8 +1366,6 @@ id="gameOver">
 class="cat"
 id="cat">
 
-🐱
-
 </div>
 
 <div class="ground">
@@ -1447,6 +1422,7 @@ document.getElementById("modeMessage");
 const activeBonuses =
 document.getElementById("activeBonuses");
 
+
 let gameStarted = false;
 let gameOver = false;
 let score = 0;
@@ -1482,148 +1458,270 @@ let salaryTimer = 0;
 
 let crashInProgress = false;
 
+
+/* JUMP SETTINGS */
+
 const jumpDuration = 1800;
 const jumpHeight = 155;
 
-const MAGNET_DURATION = 20000;
-const MAGNET_RADIUS = 260;
-const MAGNET_PULL_SPEED = 8;
 
-const normalExpenses = [
-    "🛒",
-    "🍔",
-    "🚕",
-    "🧾",
-    "📦",
-    "🛍️"
-];
+/* SPRITE SETTINGS */
 
-const demonExpenses = [
-    "👹",
-    "💀",
-    "🔥",
-    "☠️",
-    "👿",
-    "🩸"
-];
+const SPRITE_FRAMES = 4;
 
-const normalMoney = [
-    "🪙",
-    "💵",
-    "💰",
-    "💸"
-];
 
-const demonMoney = [
-    "✨",
-    "🌟",
-    "🪽",
-    "✝️"
-];
+/* SPRITE FRAME */
 
-const normalBonuses = [
-    "🧲",
-    "🛡️",
-    "⚡"
-];
+function setSpriteFrame(
+    image,
+    frame
+) {
 
-const demonBonuses = [
-    "🧲",
-    "🛡️",
-    "⚡"
-];
+    frame =
+        Math.max(
+            0,
 
-function updateBonusUI() {
+            Math.min(
+                SPRITE_FRAMES - 1,
+                frame
+            )
 
-    activeBonuses.innerHTML = "";
+        );
 
-    if (magnetActive) {
+    cat.style.backgroundImage =
+        `url("${image}")`;
 
-        const item = document.createElement("div");
+    cat.style.backgroundSize =
+        `${SPRITE_FRAMES * 100}% 100%`;
 
-        item.className = "active-bonus";
-        item.id = "activeMagnet";
-        item.innerHTML = "🧲 <span></span>";
+    if (
+        frame === 0
+    ) {
 
-        activeBonuses.appendChild(item);
+        cat.style.backgroundPosition =
+            "0% 0%";
 
-    }
+    } else {
 
-    if (shieldActive) {
+        const position =
 
-        const item = document.createElement("div");
+            (
 
-        item.className = "active-bonus";
-        item.id = "activeShield";
-        item.innerHTML = "🛡️";
+                frame /
+                (SPRITE_FRAMES - 1)
 
-        activeBonuses.appendChild(item);
+            ) * 100;
 
-    }
-
-    if (salaryActive) {
-
-        const item = document.createElement("div");
-
-        item.className = "active-bonus";
-        item.id = "activeSalary";
-        item.innerHTML = "⚡ <span></span>";
-
-        activeBonuses.appendChild(item);
+        cat.style.backgroundPosition =
+            `${position}% 0%`;
 
     }
 
 }
 
+
+/* CAT ANIMATION */
+
+let runFrameTimer = 0;
+
+const runFrameDuration = 105;
+
+function updateRunAnimation(
+    deltaTime
+) {
+
+    if (
+        isJumping ||
+        !gameStarted ||
+        gameOver
+    ) {
+
+        return;
+
+    }
+
+    runFrameTimer +=
+        deltaTime;
+
+    if (
+
+        runFrameTimer >=
+        runFrameDuration
+
+    ) {
+
+        runFrameTimer =
+            0;
+
+        const currentFrame =
+            Number(
+                cat.dataset.frame || 0
+            );
+
+        const nextFrame =
+            (
+
+                currentFrame + 1
+
+            ) %
+            SPRITE_FRAMES;
+
+        cat.dataset.frame =
+            nextFrame;
+
+        setSpriteFrame(
+            "cat_run.png",
+            nextFrame
+        );
+
+    }
+
+}
+
+
+/* BONUS UI */
+
+function updateBonusUI() {
+
+    activeBonuses.innerHTML = "";
+
+    if (
+        magnetActive
+    ) {
+
+        const item =
+            document.createElement("div");
+
+        item.className =
+            "active-bonus";
+
+        item.id =
+            "activeMagnet";
+
+        item.innerHTML =
+            "🧲 <span></span>";
+
+        activeBonuses.appendChild(
+            item
+        );
+
+    }
+
+    if (
+        shieldActive
+    ) {
+
+        const item =
+            document.createElement("div");
+
+        item.className =
+            "active-bonus";
+
+        item.id =
+            "activeShield";
+
+        item.innerHTML =
+            "🛡️";
+
+        activeBonuses.appendChild(
+            item
+        );
+
+    }
+
+    if (
+        salaryActive
+    ) {
+
+        const item =
+            document.createElement("div");
+
+        item.className =
+            "active-bonus";
+
+        item.id =
+            "activeSalary";
+
+        item.innerHTML =
+            "⚡ <span></span>";
+
+        activeBonuses.appendChild(
+            item
+        );
+
+    }
+
+}
+
+
 function updateBonusUIState() {
 
     const magnetUI =
-        document.getElementById("activeMagnet");
+        document.getElementById(
+            "activeMagnet"
+        );
 
-    if (magnetUI) {
+    if (
+        magnetUI
+    ) {
 
         const span =
-            magnetUI.querySelector("span");
+            magnetUI.querySelector(
+                "span"
+            );
 
         span.textContent =
-            Math.ceil(magnetTimer / 1000) + "с";
+            Math.ceil(
+                magnetTimer / 1000
+            ) + "с";
 
-        if (magnetTimer <= 3000) {
+        if (
+            magnetTimer <= 3000
+        ) {
 
-            magnetUI.classList.add("expiring");
-
-        } else {
-
-            magnetUI.classList.remove("expiring");
+            magnetUI.classList.add(
+                "expiring"
+            );
 
         }
 
     }
 
     const salaryUI =
-        document.getElementById("activeSalary");
+        document.getElementById(
+            "activeSalary"
+        );
 
-    if (salaryUI) {
+    if (
+        salaryUI
+    ) {
 
         const span =
-            salaryUI.querySelector("span");
+            salaryUI.querySelector(
+                "span"
+            );
 
         span.textContent =
-            Math.ceil(salaryTimer / 1000) + "с";
+            Math.ceil(
+                salaryTimer / 1000
+            ) + "с";
 
-        if (salaryTimer <= 3000) {
+        if (
+            salaryTimer <= 3000
+        ) {
 
-            salaryUI.classList.add("expiring");
-
-        } else {
-
-            salaryUI.classList.remove("expiring");
+            salaryUI.classList.add(
+                "expiring"
+            );
 
         }
 
     }
 
 }
+
+
+/* EXIT */
 
 exitButton.addEventListener(
 
@@ -1632,6 +1730,7 @@ exitButton.addEventListener(
     function(event) {
 
         event.preventDefault();
+
         event.stopPropagation();
 
         window.location.href =
@@ -1640,6 +1739,9 @@ exitButton.addEventListener(
     }
 
 );
+
+
+/* JUMP */
 
 function jump() {
 
@@ -1656,61 +1758,149 @@ function jump() {
 
     }
 
-    isJumping = true;
+    isJumping =
+        true;
 
     jumpStartTime =
         performance.now();
 
+    cat.dataset.frame =
+        "0";
+
+    setSpriteFrame(
+        "cat_jump.png",
+        0
+    );
+
 }
 
-function updateJump(currentTime) {
 
-    if (!isJumping) {
+function updateJump(
+    currentTime
+) {
+
+    if (
+        !isJumping
+    ) {
 
         return 0;
 
     }
 
     const elapsed =
-        currentTime - jumpStartTime;
+        currentTime -
+        jumpStartTime;
 
     const progress =
-        elapsed / jumpDuration;
+        elapsed /
+        jumpDuration;
 
-    if (progress >= 1) {
 
-        isJumping = false;
+    if (
+        progress >= 1
+    ) {
 
-        jumpStartTime = null;
+        isJumping =
+            false;
+
+        jumpStartTime =
+            null;
+
+        cat.dataset.frame =
+            "0";
+
+        setSpriteFrame(
+            "cat_run.png",
+            0
+        );
+
+        runFrameTimer =
+            0;
 
         return 0;
 
     }
 
+
+    /*
+        АНИМАЦИЯ ПРЫЖКА
+
+        Первый кадр очень быстрый.
+        Дальше кадры держатся дольше.
+    */
+
+    let jumpFrame =
+        0;
+
+    if (
+        elapsed < 90
+    ) {
+
+        jumpFrame =
+            0;
+
+    } else if (
+        elapsed < 310
+    ) {
+
+        jumpFrame =
+            1;
+
+    } else if (
+        elapsed < 670
+    ) {
+
+        jumpFrame =
+            2;
+
+    } else {
+
+        jumpFrame =
+            3;
+
+    }
+
+
+    cat.dataset.frame =
+        jumpFrame;
+
+    setSpriteFrame(
+        "cat_jump.png",
+        jumpFrame
+    );
+
+
     return (
 
         Math.sin(
-
-            Math.PI * progress
-
-        ) * jumpHeight
+            Math.PI *
+            progress
+        ) *
+        jumpHeight
 
     );
 
 }
+
+
+/* RANDOM */
 
 function getRandomObstacleSize() {
 
     const random =
         Math.random();
 
-    if (random < .35) {
+    if (
+        random < .35
+    ) {
 
         return "small";
 
     }
 
-    if (random < .80) {
+    if (
+        random < .80
+    ) {
 
         return "normal";
 
@@ -1719,6 +1909,9 @@ function getRandomObstacleSize() {
     return "wide";
 
 }
+
+
+/* CREATE EXPENSE */
 
 function createExpense() {
 
@@ -1729,7 +1922,8 @@ function createExpense() {
         getRandomObstacleSize();
 
     expense.className =
-        "expense " + size;
+        "expense " +
+        size;
 
     const list =
         demonMode
@@ -1744,7 +1938,9 @@ function createExpense() {
             )
         ];
 
-    gameArea.appendChild(expense);
+    gameArea.appendChild(
+        expense
+    );
 
     const obstacle = {
 
@@ -1756,12 +1952,17 @@ function createExpense() {
 
     };
 
-    obstacles.push(obstacle);
+    obstacles.push(
+        obstacle
+    );
 
     lastObstacle =
         obstacle;
 
 }
+
+
+/* CREATE COIN */
 
 function createCoin() {
 
@@ -1786,12 +1987,16 @@ function createCoin() {
 
     const bottom =
         100 +
-        Math.random() * 140;
+        Math.random() *
+        140;
 
     coin.style.bottom =
-        bottom + "px";
+        bottom +
+        "px";
 
-    gameArea.appendChild(coin);
+    gameArea.appendChild(
+        coin
+    );
 
     coins.push({
 
@@ -1806,6 +2011,9 @@ function createCoin() {
     });
 
 }
+
+
+/* CREATE BONUS */
 
 function createBonus() {
 
@@ -1838,11 +2046,15 @@ function createBonus() {
         (
 
             130 +
-            Math.random() * 150
+            Math.random() *
+            150
 
-        ) + "px";
+        ) +
+        "px";
 
-    gameArea.appendChild(bonus);
+    gameArea.appendChild(
+        bonus
+    );
 
     bonuses.push({
 
@@ -1858,38 +2070,52 @@ function createBonus() {
 
 }
 
-function checkObstacleCollision(obstacle) {
+
+/* COLLISIONS */
+
+function checkObstacleCollision(
+    obstacle
+) {
 
     const catRect =
         cat.getBoundingClientRect();
 
     const obstacleRect =
-        obstacle.element.getBoundingClientRect();
+        obstacle.element
+        .getBoundingClientRect();
 
     const horizontal =
 
         catRect.right >
-        obstacleRect.left + 12 &&
+        obstacleRect.left +
+        12 &&
 
         catRect.left <
-        obstacleRect.right - 12;
+        obstacleRect.right -
+        12;
 
     const vertical =
 
         catRect.bottom >
-        obstacleRect.top + 10;
+        obstacleRect.top +
+        10;
 
-    return horizontal && vertical;
+    return horizontal &&
+           vertical;
 
 }
 
-function checkCoinCollision(coin) {
+
+function checkCoinCollision(
+    coin
+) {
 
     const catRect =
         cat.getBoundingClientRect();
 
     const coinRect =
-        coin.element.getBoundingClientRect();
+        coin.element
+        .getBoundingClientRect();
 
     return (
 
@@ -1909,13 +2135,17 @@ function checkCoinCollision(coin) {
 
 }
 
-function checkBonusCollision(bonus) {
+
+function checkBonusCollision(
+    bonus
+) {
 
     const catRect =
         cat.getBoundingClientRect();
 
     const bonusRect =
-        bonus.element.getBoundingClientRect();
+        bonus.element
+        .getBoundingClientRect();
 
     return (
 
@@ -1935,9 +2165,14 @@ function checkBonusCollision(bonus) {
 
 }
 
+
+/* OBSTACLE SPACING */
+
 function canCreateObstacle() {
 
-    if (lastObstacle === null) {
+    if (
+        lastObstacle === null
+    ) {
 
         return true;
 
@@ -1953,11 +2188,15 @@ function canCreateObstacle() {
     return (
 
         rect.right <
-        gameRect.right - 360
+        gameRect.right -
+        360
 
     );
 
 }
+
+
+/* BONUSES */
 
 function applyMagnet() {
 
@@ -1971,6 +2210,7 @@ function applyMagnet() {
 
 }
 
+
 function applyShield() {
 
     shieldActive =
@@ -1979,6 +2219,7 @@ function applyShield() {
     updateBonusUI();
 
 }
+
 
 function applySalary() {
 
@@ -1992,21 +2233,30 @@ function applySalary() {
 
 }
 
-function activateBonus(type) {
 
-    if (type === "🧲") {
+function activateBonus(
+    type
+) {
+
+    if (
+        type === "🧲"
+    ) {
 
         applyMagnet();
 
     }
 
-    if (type === "🛡️") {
+    if (
+        type === "🛡️"
+    ) {
 
         applyShield();
 
     }
 
-    if (type === "⚡") {
+    if (
+        type === "⚡"
+    ) {
 
         applySalary();
 
@@ -2014,7 +2264,13 @@ function activateBonus(type) {
 
 }
 
-function showModeMessage(text, className) {
+
+/* MODES */
+
+function showModeMessage(
+    text,
+    className
+) {
 
     modeMessage.textContent =
         text;
@@ -2025,13 +2281,18 @@ function showModeMessage(text, className) {
 
     void modeMessage.offsetWidth;
 
-    modeMessage.classList.add("show");
+    modeMessage.classList.add(
+        "show"
+    );
 
 }
 
+
 function activateNight() {
 
-    if (nightMode) {
+    if (
+        nightMode
+    ) {
 
         return;
 
@@ -2040,11 +2301,17 @@ function activateNight() {
     nightMode =
         true;
 
-    gameArea.classList.add("night");
+    gameArea.classList.add(
+        "night"
+    );
 
-    moon.classList.remove("leave");
+    moon.classList.remove(
+        "leave"
+    );
 
-    moon.classList.add("enter");
+    moon.classList.add(
+        "enter"
+    );
 
     showModeMessage(
 
@@ -2056,9 +2323,12 @@ function activateNight() {
 
 }
 
+
 function activateDemon() {
 
-    if (demonMode) {
+    if (
+        demonMode
+    ) {
 
         return;
 
@@ -2067,13 +2337,21 @@ function activateDemon() {
     demonMode =
         true;
 
-    moon.classList.remove("enter");
+    moon.classList.remove(
+        "enter"
+    );
 
-    moon.classList.add("leave");
+    moon.classList.add(
+        "leave"
+    );
 
-    gameArea.classList.remove("night");
+    gameArea.classList.remove(
+        "night"
+    );
 
-    gameArea.classList.add("demon");
+    gameArea.classList.add(
+        "demon"
+    );
 
     showModeMessage(
 
@@ -2084,6 +2362,7 @@ function activateDemon() {
     );
 
 }
+
 
 function checkMode() {
 
@@ -2111,7 +2390,12 @@ function checkMode() {
 
 }
 
-function shieldCrash(obstacle) {
+
+/* SHIELD CRASH */
+
+function shieldCrash(
+    obstacle
+) {
 
     crashInProgress =
         true;
@@ -2148,6 +2432,9 @@ function shieldCrash(obstacle) {
 
 }
 
+
+/* END GAME */
+
 function endGame() {
 
     gameOver =
@@ -2155,6 +2442,21 @@ function endGame() {
 
     gameStarted =
         false;
+
+    isJumping =
+        false;
+
+    jumpStartTime =
+        null;
+
+    cat.classList.remove(
+        "cat-hit"
+    );
+
+    setSpriteFrame(
+        "cat_jump.png",
+        0
+    );
 
     finalScoreElement.textContent =
         score;
@@ -2165,32 +2467,40 @@ function endGame() {
 
 }
 
-function applyMagnetForce(coin, deltaTime) {
+
+/* MAGNET */
+
+function applyMagnetForce(
+    coin,
+    deltaTime
+) {
 
     const catRect =
         cat.getBoundingClientRect();
 
     const coinRect =
-        coin.element.getBoundingClientRect();
-
-    const gameRect =
-        gameArea.getBoundingClientRect();
+        coin.element
+        .getBoundingClientRect();
 
     const catCenterX =
         catRect.left +
-        catRect.width / 2;
+        catRect.width /
+        2;
 
     const catCenterY =
         catRect.top +
-        catRect.height / 2;
+        catRect.height /
+        2;
 
     const coinCenterX =
         coinRect.left +
-        coinRect.width / 2;
+        coinRect.width /
+        2;
 
     const coinCenterY =
         coinRect.top +
-        coinRect.height / 2;
+        coinRect.height /
+        2;
 
     const dx =
         catCenterX -
@@ -2227,44 +2537,39 @@ function applyMagnetForce(coin, deltaTime) {
 
     const deltaSeconds =
         Math.min(
-            deltaTime / 1000,
-            0.05
+
+            deltaTime /
+            1000,
+
+            .05
+
         );
 
     const factor =
         1 -
         Math.exp(
+
             -MAGNET_PULL_SPEED *
             deltaSeconds
+
         );
 
     coin.x +=
-        dx * factor;
+        dx *
+        factor;
 
     coin.y -=
-        dy * factor;
-
-    const minY =
-        70;
-
-    const maxY =
-        Math.max(
-            minY,
-            gameArea.clientHeight - 80
-        );
-
-    coin.y =
-        Math.max(
-            minY,
-            Math.min(
-                coin.y,
-                maxY
-            )
-        );
+        dy *
+        factor;
 
 }
 
-function gameLoop(currentTime) {
+
+/* GAME LOOP */
+
+function gameLoop(
+    currentTime
+) {
 
     if (
 
@@ -2284,51 +2589,68 @@ function gameLoop(currentTime) {
     lastTime =
         currentTime;
 
+
     const catY =
-        updateJump(currentTime);
+        updateJump(
+            currentTime
+        );
+
+
+    updateRunAnimation(
+        deltaTime
+    );
+
 
     cat.style.transform =
         `translateY(${-catY}px)`;
 
+
     let speed =
+
         (
 
             .20 +
+
             Math.min(
-                score * .001,
+
+                score *
+                .001,
+
                 .10
+
             )
 
         ) *
+
         deltaTime;
 
-    if (salaryActive) {
 
-        speed *= .55;
+    if (
+        salaryActive
+    ) {
+
+        speed *=
+            .55;
 
     }
 
-    if (magnetActive) {
+
+    if (
+        magnetActive
+    ) {
 
         magnetTimer -=
             deltaTime;
 
-        if (magnetTimer <= 0) {
+        if (
+
+            magnetTimer <=
+            0
+
+        ) {
 
             magnetActive =
                 false;
-
-            coins.forEach(
-
-                function(coin) {
-
-                    coin.element.classList.remove(
-                        "magnet-active"
-                    );
-
-                }
-
-            );
 
             updateBonusUI();
 
@@ -2336,12 +2658,20 @@ function gameLoop(currentTime) {
 
     }
 
-    if (salaryActive) {
+
+    if (
+        salaryActive
+    ) {
 
         salaryTimer -=
             deltaTime;
 
-        if (salaryTimer <= 0) {
+        if (
+
+            salaryTimer <=
+            0
+
+        ) {
 
             salaryActive =
                 false;
@@ -2352,28 +2682,43 @@ function gameLoop(currentTime) {
 
     }
 
+
     updateBonusUIState();
+
+
+    /* OBSTACLES */
 
     obstacles.forEach(
 
-        function(obstacle) {
+        function(
+            obstacle
+        ) {
 
             obstacle.x -=
                 speed;
 
             obstacle.element.style.left =
-                obstacle.x + "px";
+                obstacle.x +
+                "px";
+
 
             if (
 
                 !crashInProgress &&
-                checkObstacleCollision(obstacle)
+
+                checkObstacleCollision(
+                    obstacle
+                )
 
             ) {
 
-                if (shieldActive) {
+                if (
+                    shieldActive
+                ) {
 
-                    shieldCrash(obstacle);
+                    shieldCrash(
+                        obstacle
+                    );
 
                 } else {
 
@@ -2387,38 +2732,47 @@ function gameLoop(currentTime) {
 
     );
 
+
+    /* COINS */
+
     coins.forEach(
 
-        function(coin) {
+        function(
+            coin
+        ) {
 
             coin.x -=
                 speed;
 
-            if (magnetActive) {
+
+            if (
+                magnetActive
+            ) {
 
                 applyMagnetForce(
                     coin,
                     deltaTime
                 );
 
-            } else {
-
-                coin.element.classList.remove(
-                    "magnet-active"
-                );
-
             }
 
+
             coin.element.style.left =
-                coin.x + "px";
+                coin.x +
+                "px";
 
             coin.element.style.bottom =
-                coin.y + "px";
+                coin.y +
+                "px";
+
 
             if (
 
                 !coin.collected &&
-                checkCoinCollision(coin)
+
+                checkCoinCollision(
+                    coin
+                )
 
             ) {
 
@@ -2444,20 +2798,30 @@ function gameLoop(currentTime) {
 
     );
 
+
+    /* BONUSES */
+
     bonuses.forEach(
 
-        function(bonus) {
+        function(
+            bonus
+        ) {
 
             bonus.x -=
                 speed;
 
             bonus.element.style.left =
-                bonus.x + "px";
+                bonus.x +
+                "px";
+
 
             if (
 
                 !bonus.collected &&
-                checkBonusCollision(bonus)
+
+                checkBonusCollision(
+                    bonus
+                )
 
             ) {
 
@@ -2476,10 +2840,15 @@ function gameLoop(currentTime) {
 
     );
 
+
+    /* REMOVE OBSTACLES */
+
     obstacles =
         obstacles.filter(
 
-            function(obstacle) {
+            function(
+                obstacle
+            ) {
 
                 if (
 
@@ -2489,6 +2858,7 @@ function gameLoop(currentTime) {
                 ) {
 
                     obstacle.element.remove();
+
 
                     if (
 
@@ -2502,6 +2872,7 @@ function gameLoop(currentTime) {
 
                     }
 
+
                     return false;
 
                 }
@@ -2512,15 +2883,19 @@ function gameLoop(currentTime) {
 
         );
 
+
     coins =
         coins.filter(
 
-            function(coin) {
+            function(
+                coin
+            ) {
 
                 if (
 
                     coin.collected ||
-                    coin.x < -100
+                    coin.x <
+                    -100
 
                 ) {
 
@@ -2544,15 +2919,19 @@ function gameLoop(currentTime) {
 
         );
 
+
     bonuses =
         bonuses.filter(
 
-            function(bonus) {
+            function(
+                bonus
+            ) {
 
                 if (
 
                     bonus.collected ||
-                    bonus.x < -100
+                    bonus.x <
+                    -100
 
                 ) {
 
@@ -2576,13 +2955,18 @@ function gameLoop(currentTime) {
 
         );
 
+
+    /* SPAWN EXPENSE */
+
     obstacleTimer +=
         deltaTime;
+
 
     if (
 
         obstacleTimer >=
         nextObstacleTime &&
+
         canCreateObstacle()
 
     ) {
@@ -2593,14 +2977,20 @@ function gameLoop(currentTime) {
             0;
 
         nextObstacleTime =
+
             1300 +
+
             Math.random() *
             1800;
 
     }
 
+
+    /* SPAWN COIN */
+
     coinTimer +=
         deltaTime;
+
 
     if (
 
@@ -2615,14 +3005,20 @@ function gameLoop(currentTime) {
             0;
 
         nextCoinTime =
+
             900 +
+
             Math.random() *
             2400;
 
     }
 
+
+    /* SPAWN BONUS */
+
     bonusTimer +=
         deltaTime;
+
 
     if (
 
@@ -2637,14 +3033,20 @@ function gameLoop(currentTime) {
             0;
 
         nextBonusTime =
+
             7000 +
+
             Math.random() *
             9000;
 
     }
 
+
+    /* SCORE */
+
     scoreTimer +=
         deltaTime;
+
 
     if (
 
@@ -2669,11 +3071,15 @@ function gameLoop(currentTime) {
 
     }
 
+
     requestAnimationFrame(
         gameLoop
     );
 
 }
+
+
+/* START */
 
 function startGame() {
 
@@ -2719,10 +3125,15 @@ function startGame() {
     crashInProgress =
         false;
 
+    runFrameTimer =
+        0;
+
+
     gameArea.classList.remove(
         "night",
         "demon"
     );
+
 
     moon.classList.remove(
         "enter",
@@ -2732,14 +3143,32 @@ function startGame() {
     moon.style.opacity =
         "0";
 
+
     activeBonuses.innerHTML =
         "";
+
 
     scoreElement.textContent =
         "0";
 
+
+    /* КОТ — ПЕРВЫЙ КАДР БЕГА */
+
     cat.style.transform =
         "translateY(0)";
+
+    cat.dataset.frame =
+        "0";
+
+    cat.classList.remove(
+        "cat-hit"
+    );
+
+    setSpriteFrame(
+        "cat_run.png",
+        0
+    );
+
 
     startScreen.classList.add(
         "hidden"
@@ -2749,23 +3178,45 @@ function startGame() {
         "hidden"
     );
 
+
     obstacles.forEach(
-        function(obstacle) {
+
+        function(
+            obstacle
+        ) {
+
             obstacle.element.remove();
+
         }
+
     );
+
 
     coins.forEach(
-        function(coin) {
+
+        function(
+            coin
+        ) {
+
             coin.element.remove();
+
         }
+
     );
 
+
     bonuses.forEach(
-        function(bonus) {
+
+        function(
+            bonus
+        ) {
+
             bonus.element.remove();
+
         }
+
     );
+
 
     obstacles =
         [];
@@ -2775,6 +3226,7 @@ function startGame() {
 
     bonuses =
         [];
+
 
     obstacleTimer =
         0;
@@ -2788,6 +3240,7 @@ function startGame() {
     scoreTimer =
         0;
 
+
     nextObstacleTime =
         1600;
 
@@ -2797,14 +3250,19 @@ function startGame() {
     nextBonusTime =
         8000;
 
+
     lastTime =
         performance.now();
+
 
     requestAnimationFrame(
         gameLoop
     );
 
 }
+
+
+/* BUTTONS */
 
 startButton.addEventListener(
 
@@ -2813,6 +3271,7 @@ startButton.addEventListener(
     function(event) {
 
         event.preventDefault();
+
         event.stopPropagation();
 
         startGame();
@@ -2820,6 +3279,7 @@ startButton.addEventListener(
     }
 
 );
+
 
 restartButton.addEventListener(
 
@@ -2828,6 +3288,7 @@ restartButton.addEventListener(
     function(event) {
 
         event.preventDefault();
+
         event.stopPropagation();
 
         startGame();
@@ -2835,6 +3296,9 @@ restartButton.addEventListener(
     }
 
 );
+
+
+/* TOUCH / MOUSE */
 
 gameArea.addEventListener(
 
@@ -2863,10 +3327,15 @@ gameArea.addEventListener(
     },
 
     {
+
         passive: false
+
     }
 
 );
+
+
+/* KEYBOARD */
 
 document.addEventListener(
 
@@ -2890,6 +3359,80 @@ document.addEventListener(
     }
 
 );
+
+
+/* ARRAYS */
+
+const normalExpenses = [
+
+    "🛒",
+    "🍔",
+    "🚕",
+    "🧾",
+    "📦",
+    "🛍️"
+
+];
+
+
+const demonExpenses = [
+
+    "👹",
+    "💀",
+    "🔥",
+    "☠️",
+    "👿",
+    "🩸"
+
+];
+
+
+const normalMoney = [
+
+    "🪙",
+    "💵",
+    "💰",
+    "💸"
+
+];
+
+
+const demonMoney = [
+
+    "✨",
+    "🌟",
+    "🪽",
+    "✝️"
+
+];
+
+
+const normalBonuses = [
+
+    "🧲",
+    "🛡️",
+    "⚡"
+
+];
+
+
+const demonBonuses = [
+
+    "🧲",
+    "🛡️",
+    "⚡"
+
+];
+
+
+const MAGNET_DURATION =
+    20000;
+
+const MAGNET_RADIUS =
+    260;
+
+const MAGNET_PULL_SPEED =
+    8;
 
 </script>
 
