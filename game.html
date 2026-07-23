@@ -14,6 +14,9 @@ content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable
 
 * {
     box-sizing: border-box;
+
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
 }
 
 html,
@@ -30,6 +33,9 @@ body {
 
     background: #f4f5f7;
 
+    user-select: none;
+    -webkit-user-select: none;
+
 }
 
 body {
@@ -40,6 +46,24 @@ body {
     align-items: center;
 
     padding: 8px;
+
+}
+
+button,
+.game-area {
+
+    -webkit-tap-highlight-color: transparent;
+
+    outline: none;
+
+}
+
+button:focus,
+button:active,
+.game-area:focus,
+.game-area:active {
+
+    outline: none;
 
 }
 
@@ -127,6 +151,8 @@ body {
 
     cursor: pointer;
 
+    touch-action: manipulation;
+
 }
 
 /* GAME AREA */
@@ -151,7 +177,9 @@ body {
 
     user-select: none;
 
-    touch-action: manipulation;
+    -webkit-user-select: none;
+
+    touch-action: none;
 
     transition:
 
@@ -777,18 +805,6 @@ body {
 
 }
 
-/*
-
-    Во время работы магнита убираем
-
-    визуальное покачивание.
-
-    Так движение к котику не смешивается
-
-    с transform-анимацией.
-
-*/
-
 .coin.magnet-active {
 
     animation: none;
@@ -1165,11 +1181,13 @@ button {
 
     cursor: pointer;
 
+    touch-action: manipulation;
+
 }
 
 button:active {
 
-    transform: scale(.97);
+    transform: none;
 
 }
 
@@ -1430,154 +1448,90 @@ const activeBonuses =
 document.getElementById("activeBonuses");
 
 let gameStarted = false;
-
 let gameOver = false;
-
 let score = 0;
 
 let obstacles = [];
-
 let coins = [];
-
 let bonuses = [];
 
 let isJumping = false;
-
 let jumpStartTime = null;
-
 let lastTime = 0;
 
 let obstacleTimer = 0;
-
 let coinTimer = 0;
-
 let bonusTimer = 0;
-
 let scoreTimer = 0;
 
 let nextObstacleTime = 1600;
-
 let nextCoinTime = 1200;
-
 let nextBonusTime = 8000;
 
 let lastObstacle = null;
 
 let nightMode = false;
-
 let demonMode = false;
 
 let shieldActive = false;
-
 let magnetActive = false;
-
 let salaryActive = false;
 
 let magnetTimer = 0;
-
 let salaryTimer = 0;
 
 let crashInProgress = false;
 
 const jumpDuration = 1800;
-
 const jumpHeight = 155;
 
 const MAGNET_DURATION = 20000;
-
-/*
-
-    Настройки нового магнита.
-
-    Магнит действует на достаточно большом
-
-    расстоянии и плавно приближает монетку
-
-    к котику без перелётов.
-
-*/
-
 const MAGNET_RADIUS = 260;
-
 const MAGNET_PULL_SPEED = 8;
 
 const normalExpenses = [
-
     "🛒",
-
     "🍔",
-
     "🚕",
-
     "🧾",
-
     "📦",
-
     "🛍️"
-
 ];
 
 const demonExpenses = [
-
     "👹",
-
     "💀",
-
     "🔥",
-
     "☠️",
-
     "👿",
-
     "🩸"
-
 ];
 
 const normalMoney = [
-
     "🪙",
-
     "💵",
-
     "💰",
-
     "💸"
-
 ];
 
 const demonMoney = [
-
     "✨",
-
     "🌟",
-
     "🪽",
-
     "✝️"
-
 ];
 
 const normalBonuses = [
-
     "🧲",
-
     "🛡️",
-
     "⚡"
-
 ];
 
 const demonBonuses = [
-
     "🧲",
-
     "🛡️",
-
     "⚡"
-
 ];
-
-/* BONUS UI */
 
 function updateBonusUI() {
 
@@ -1585,17 +1539,11 @@ function updateBonusUI() {
 
     if (magnetActive) {
 
-        const item =
-            document.createElement("div");
+        const item = document.createElement("div");
 
-        item.className =
-            "active-bonus";
-
-        item.id =
-            "activeMagnet";
-
-        item.innerHTML =
-            "🧲 <span></span>";
+        item.className = "active-bonus";
+        item.id = "activeMagnet";
+        item.innerHTML = "🧲 <span></span>";
 
         activeBonuses.appendChild(item);
 
@@ -1603,17 +1551,11 @@ function updateBonusUI() {
 
     if (shieldActive) {
 
-        const item =
-            document.createElement("div");
+        const item = document.createElement("div");
 
-        item.className =
-            "active-bonus";
-
-        item.id =
-            "activeShield";
-
-        item.innerHTML =
-            "🛡️";
+        item.className = "active-bonus";
+        item.id = "activeShield";
+        item.innerHTML = "🛡️";
 
         activeBonuses.appendChild(item);
 
@@ -1621,17 +1563,11 @@ function updateBonusUI() {
 
     if (salaryActive) {
 
-        const item =
-            document.createElement("div");
+        const item = document.createElement("div");
 
-        item.className =
-            "active-bonus";
-
-        item.id =
-            "activeSalary";
-
-        item.innerHTML =
-            "⚡ <span></span>";
+        item.className = "active-bonus";
+        item.id = "activeSalary";
+        item.innerHTML = "⚡ <span></span>";
 
         activeBonuses.appendChild(item);
 
@@ -1689,14 +1625,13 @@ function updateBonusUIState() {
 
 }
 
-/* EXIT */
-
 exitButton.addEventListener(
 
     "click",
 
     function(event) {
 
+        event.preventDefault();
         event.stopPropagation();
 
         window.location.href =
@@ -1706,18 +1641,13 @@ exitButton.addEventListener(
 
 );
 
-/* JUMP */
-
 function jump() {
 
     if (
 
         !gameStarted ||
-
         gameOver ||
-
         isJumping ||
-
         crashInProgress
 
     ) {
@@ -1769,8 +1699,6 @@ function updateJump(currentTime) {
 
 }
 
-/* OBSTACLE SIZE */
-
 function getRandomObstacleSize() {
 
     const random =
@@ -1792,8 +1720,6 @@ function getRandomObstacleSize() {
 
 }
 
-/* CREATE EXPENSE */
-
 function createExpense() {
 
     const expense =
@@ -1811,16 +1737,11 @@ function createExpense() {
             : normalExpenses;
 
     expense.textContent =
-
         list[
-
             Math.floor(
-
                 Math.random() *
                 list.length
-
             )
-
         ];
 
     gameArea.appendChild(expense);
@@ -1842,8 +1763,6 @@ function createExpense() {
 
 }
 
-/* CREATE MONEY */
-
 function createCoin() {
 
     const coin =
@@ -1858,20 +1777,14 @@ function createCoin() {
             : normalMoney;
 
     coin.textContent =
-
         list[
-
             Math.floor(
-
                 Math.random() *
                 list.length
-
             )
-
         ];
 
     const bottom =
-
         100 +
         Math.random() * 140;
 
@@ -1894,8 +1807,6 @@ function createCoin() {
 
 }
 
-/* CREATE BONUS */
-
 function createBonus() {
 
     const bonus =
@@ -1910,16 +1821,11 @@ function createBonus() {
             : normalBonuses;
 
     const type =
-
         list[
-
             Math.floor(
-
                 Math.random() *
                 list.length
-
             )
-
         ];
 
     bonus.textContent =
@@ -1929,7 +1835,6 @@ function createBonus() {
         type;
 
     bonus.style.bottom =
-
         (
 
             130 +
@@ -1952,8 +1857,6 @@ function createBonus() {
     });
 
 }
-
-/* COLLISIONS */
 
 function checkObstacleCollision(obstacle) {
 
@@ -2032,8 +1935,6 @@ function checkBonusCollision(bonus) {
 
 }
 
-/* SAFE DISTANCE */
-
 function canCreateObstacle() {
 
     if (lastObstacle === null) {
@@ -2057,8 +1958,6 @@ function canCreateObstacle() {
     );
 
 }
-
-/* BONUSES */
 
 function applyMagnet() {
 
@@ -2115,8 +2014,6 @@ function activateBonus(type) {
 
 }
 
-/* MODE MESSAGE */
-
 function showModeMessage(text, className) {
 
     modeMessage.textContent =
@@ -2131,8 +2028,6 @@ function showModeMessage(text, className) {
     modeMessage.classList.add("show");
 
 }
-
-/* NIGHT */
 
 function activateNight() {
 
@@ -2160,8 +2055,6 @@ function activateNight() {
     );
 
 }
-
-/* DEMON */
 
 function activateDemon() {
 
@@ -2192,14 +2085,11 @@ function activateDemon() {
 
 }
 
-/* MODE */
-
 function checkMode() {
 
     if (
 
         score >= 100 &&
-
         !nightMode
 
     ) {
@@ -2211,7 +2101,6 @@ function checkMode() {
     if (
 
         score >= 200 &&
-
         !demonMode
 
     ) {
@@ -2221,8 +2110,6 @@ function checkMode() {
     }
 
 }
-
-/* SHIELD CRASH */
 
 function shieldCrash(obstacle) {
 
@@ -2235,15 +2122,11 @@ function shieldCrash(obstacle) {
     updateBonusUI();
 
     cat.classList.add(
-
         "cat-hit"
-
     );
 
     obstacle.element.classList.add(
-
         "crash-fall"
-
     );
 
     setTimeout(
@@ -2251,9 +2134,7 @@ function shieldCrash(obstacle) {
         function() {
 
             cat.classList.remove(
-
                 "cat-hit"
-
             );
 
             crashInProgress =
@@ -2267,8 +2148,6 @@ function shieldCrash(obstacle) {
 
 }
 
-/* GAME OVER */
-
 function endGame() {
 
     gameOver =
@@ -2281,48 +2160,10 @@ function endGame() {
         score;
 
     gameOverScreen.classList.remove(
-
         "hidden"
-
     );
 
 }
-
-/*
-
-    НОВЫЙ МАГНИТ
-
-    --------------------------------
-
-    Монетка продолжает лететь влево
-
-    вместе с игровым миром.
-
-    Магнит дополнительно плавно
-
-    приближает её к центру котика.
-
-    Используется экспоненциальное
-
-    приближение:
-
-        factor = 1 - e^(-speed * time)
-
-    Поэтому:
-
-    - нет рывков;
-
-    - нет перелётов;
-
-    - нет зависимости от FPS;
-
-    - нет странных гипербол;
-
-    - монетка всегда постепенно
-
-      приближается к котику.
-
-*/
 
 function applyMagnetForce(coin, deltaTime) {
 
@@ -2336,54 +2177,44 @@ function applyMagnetForce(coin, deltaTime) {
         gameArea.getBoundingClientRect();
 
     const catCenterX =
-
         catRect.left +
         catRect.width / 2;
 
     const catCenterY =
-
         catRect.top +
         catRect.height / 2;
 
     const coinCenterX =
-
         coinRect.left +
         coinRect.width / 2;
 
     const coinCenterY =
-
         coinRect.top +
         coinRect.height / 2;
 
     const dx =
-
         catCenterX -
         coinCenterX;
 
     const dy =
-
         catCenterY -
         coinCenterY;
 
     const distance =
-
         Math.sqrt(
-
             dx * dx +
             dy * dy
-
         );
 
     if (
 
-        distance > MAGNET_RADIUS
+        distance >
+        MAGNET_RADIUS
 
     ) {
 
         coin.element.classList.remove(
-
             "magnet-active"
-
         );
 
         return;
@@ -2391,113 +2222,53 @@ function applyMagnetForce(coin, deltaTime) {
     }
 
     coin.element.classList.add(
-
         "magnet-active"
-
     );
 
     const deltaSeconds =
-
         Math.min(
-
             deltaTime / 1000,
-
             0.05
-
         );
 
     const factor =
-
         1 -
-
         Math.exp(
-
             -MAGNET_PULL_SPEED *
             deltaSeconds
-
         );
-
-    /*
-
-        X:
-
-        обычное движение монетки
-
-        уже произошло выше.
-
-        Здесь добавляем только
-
-        плавное притяжение.
-
-    */
 
     coin.x +=
         dx * factor;
 
-    /*
-
-        Y:
-
-        экранная координата растёт вниз,
-
-        а CSS bottom растёт вверх.
-
-        Поэтому знак инвертируем.
-
-    */
-
     coin.y -=
         dy * factor;
-
-    /*
-
-        Ограничиваем высоту,
-
-        чтобы магнит не мог утащить
-
-        монетку за пределы игровой зоны.
-
-    */
 
     const minY =
         70;
 
     const maxY =
-
         Math.max(
-
             minY,
-
             gameArea.clientHeight - 80
-
         );
 
     coin.y =
-
         Math.max(
-
             minY,
-
             Math.min(
-
                 coin.y,
-
                 maxY
-
             )
-
         );
 
 }
-
-/* GAME LOOP */
 
 function gameLoop(currentTime) {
 
     if (
 
         !gameStarted ||
-
         gameOver
 
     ) {
@@ -2507,7 +2278,6 @@ function gameLoop(currentTime) {
     }
 
     const deltaTime =
-
         currentTime -
         lastTime;
 
@@ -2518,25 +2288,18 @@ function gameLoop(currentTime) {
         updateJump(currentTime);
 
     cat.style.transform =
-
         `translateY(${-catY}px)`;
 
     let speed =
-
         (
 
             .20 +
-
             Math.min(
-
                 score * .001,
-
                 .10
-
             )
 
         ) *
-
         deltaTime;
 
     if (salaryActive) {
@@ -2544,8 +2307,6 @@ function gameLoop(currentTime) {
         speed *= .55;
 
     }
-
-    /* MAGNET TIMER */
 
     if (magnetActive) {
 
@@ -2562,9 +2323,7 @@ function gameLoop(currentTime) {
                 function(coin) {
 
                     coin.element.classList.remove(
-
                         "magnet-active"
-
                     );
 
                 }
@@ -2576,8 +2335,6 @@ function gameLoop(currentTime) {
         }
 
     }
-
-    /* SALARY TIMER */
 
     if (salaryActive) {
 
@@ -2597,8 +2354,6 @@ function gameLoop(currentTime) {
 
     updateBonusUIState();
 
-    /* OBSTACLES */
-
     obstacles.forEach(
 
         function(obstacle) {
@@ -2612,7 +2367,6 @@ function gameLoop(currentTime) {
             if (
 
                 !crashInProgress &&
-
                 checkObstacleCollision(obstacle)
 
             ) {
@@ -2633,63 +2387,37 @@ function gameLoop(currentTime) {
 
     );
 
-    /* COINS */
-
     coins.forEach(
 
         function(coin) {
 
-            /*
-
-                Сначала монетка движется
-
-                вместе с игровым миром.
-
-            */
-
             coin.x -=
                 speed;
-
-            /*
-
-                Затем магнит плавно
-
-                корректирует её положение.
-
-            */
 
             if (magnetActive) {
 
                 applyMagnetForce(
-
                     coin,
-
                     deltaTime
-
                 );
 
             } else {
 
                 coin.element.classList.remove(
-
                     "magnet-active"
-
                 );
 
             }
 
             coin.element.style.left =
-
                 coin.x + "px";
 
             coin.element.style.bottom =
-
                 coin.y + "px";
 
             if (
 
                 !coin.collected &&
-
                 checkCoinCollision(coin)
 
             ) {
@@ -2700,9 +2428,7 @@ function gameLoop(currentTime) {
                 score +=
 
                     salaryActive
-
                         ? 20
-
                         : 10;
 
                 scoreElement.textContent =
@@ -2718,8 +2444,6 @@ function gameLoop(currentTime) {
 
     );
 
-    /* BONUSES */
-
     bonuses.forEach(
 
         function(bonus) {
@@ -2733,7 +2457,6 @@ function gameLoop(currentTime) {
             if (
 
                 !bonus.collected &&
-
                 checkBonusCollision(bonus)
 
             ) {
@@ -2742,9 +2465,7 @@ function gameLoop(currentTime) {
                     true;
 
                 activateBonus(
-
                     bonus.type
-
                 );
 
                 bonus.element.remove();
@@ -2755,10 +2476,7 @@ function gameLoop(currentTime) {
 
     );
 
-    /* REMOVE OBSTACLES */
-
     obstacles =
-
         obstacles.filter(
 
             function(obstacle) {
@@ -2766,7 +2484,6 @@ function gameLoop(currentTime) {
                 if (
 
                     obstacle.x <
-
                     -160
 
                 ) {
@@ -2776,7 +2493,6 @@ function gameLoop(currentTime) {
                     if (
 
                         lastObstacle ===
-
                         obstacle
 
                     ) {
@@ -2796,10 +2512,7 @@ function gameLoop(currentTime) {
 
         );
 
-    /* REMOVE COINS */
-
     coins =
-
         coins.filter(
 
             function(coin) {
@@ -2807,7 +2520,6 @@ function gameLoop(currentTime) {
                 if (
 
                     coin.collected ||
-
                     coin.x < -100
 
                 ) {
@@ -2832,10 +2544,7 @@ function gameLoop(currentTime) {
 
         );
 
-    /* REMOVE BONUSES */
-
     bonuses =
-
         bonuses.filter(
 
             function(bonus) {
@@ -2843,7 +2552,6 @@ function gameLoop(currentTime) {
                 if (
 
                     bonus.collected ||
-
                     bonus.x < -100
 
                 ) {
@@ -2868,17 +2576,13 @@ function gameLoop(currentTime) {
 
         );
 
-    /* NEW OBSTACLE */
-
     obstacleTimer +=
         deltaTime;
 
     if (
 
         obstacleTimer >=
-
         nextObstacleTime &&
-
         canCreateObstacle()
 
     ) {
@@ -2889,16 +2593,11 @@ function gameLoop(currentTime) {
             0;
 
         nextObstacleTime =
-
             1300 +
-
             Math.random() *
-
             1800;
 
     }
-
-    /* NEW COIN */
 
     coinTimer +=
         deltaTime;
@@ -2906,7 +2605,6 @@ function gameLoop(currentTime) {
     if (
 
         coinTimer >=
-
         nextCoinTime
 
     ) {
@@ -2917,16 +2615,11 @@ function gameLoop(currentTime) {
             0;
 
         nextCoinTime =
-
             900 +
-
             Math.random() *
-
             2400;
 
     }
-
-    /* NEW BONUS */
 
     bonusTimer +=
         deltaTime;
@@ -2934,7 +2627,6 @@ function gameLoop(currentTime) {
     if (
 
         bonusTimer >=
-
         nextBonusTime
 
     ) {
@@ -2945,16 +2637,11 @@ function gameLoop(currentTime) {
             0;
 
         nextBonusTime =
-
             7000 +
-
             Math.random() *
-
             9000;
 
     }
-
-    /* SCORE */
 
     scoreTimer +=
         deltaTime;
@@ -2962,7 +2649,6 @@ function gameLoop(currentTime) {
     if (
 
         scoreTimer >=
-
         1000
 
     ) {
@@ -2970,9 +2656,7 @@ function gameLoop(currentTime) {
         score +=
 
             salaryActive
-
                 ? 2
-
                 : 1;
 
         scoreElement.textContent =
@@ -2986,14 +2670,10 @@ function gameLoop(currentTime) {
     }
 
     requestAnimationFrame(
-
         gameLoop
-
     );
 
 }
-
-/* START */
 
 function startGame() {
 
@@ -3040,19 +2720,13 @@ function startGame() {
         false;
 
     gameArea.classList.remove(
-
         "night",
-
         "demon"
-
     );
 
     moon.classList.remove(
-
         "enter",
-
         "leave"
-
     );
 
     moon.style.opacity =
@@ -3068,45 +2742,29 @@ function startGame() {
         "translateY(0)";
 
     startScreen.classList.add(
-
         "hidden"
-
     );
 
     gameOverScreen.classList.add(
-
         "hidden"
-
     );
 
     obstacles.forEach(
-
         function(obstacle) {
-
             obstacle.element.remove();
-
         }
-
     );
 
     coins.forEach(
-
         function(coin) {
-
             coin.element.remove();
-
         }
-
     );
 
     bonuses.forEach(
-
         function(bonus) {
-
             bonus.element.remove();
-
         }
-
     );
 
     obstacles =
@@ -3143,14 +2801,10 @@ function startGame() {
         performance.now();
 
     requestAnimationFrame(
-
         gameLoop
-
     );
 
 }
-
-/* BUTTONS */
 
 startButton.addEventListener(
 
@@ -3158,6 +2812,7 @@ startButton.addEventListener(
 
     function(event) {
 
+        event.preventDefault();
         event.stopPropagation();
 
         startGame();
@@ -3172,6 +2827,7 @@ restartButton.addEventListener(
 
     function(event) {
 
+        event.preventDefault();
         event.stopPropagation();
 
         startGame();
@@ -3180,22 +2836,20 @@ restartButton.addEventListener(
 
 );
 
-/* TAP */
-
 gameArea.addEventListener(
 
     "pointerdown",
 
     function(event) {
 
+        event.preventDefault();
+
         if (
 
             event.target ===
-
             startButton ||
 
             event.target ===
-
             restartButton
 
         ) {
@@ -3206,11 +2860,13 @@ gameArea.addEventListener(
 
         jump();
 
+    },
+
+    {
+        passive: false
     }
 
 );
-
-/* SPACE */
 
 document.addEventListener(
 
@@ -3221,7 +2877,6 @@ document.addEventListener(
         if (
 
             event.code ===
-
             "Space"
 
         ) {
