@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Финансы</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Финансы</title>
 
 <style>
 
@@ -33,7 +33,7 @@ body {
     background: #202124;
     color: white;
     border-radius: 22px;
-    padding: 18px;
+    padding: 26px 20px 18px;
     margin-bottom: 18px;
 }
 
@@ -41,13 +41,25 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 12px;
-    margin-bottom: 18px;
+    gap: 14px;
+    margin-bottom: 24px;
+}
+
+.header-title-block {
+    min-width: 0;
 }
 
 .app-header h1 {
     margin: 0;
-    font-size: 25px;
+    font-size: 28px;
+    line-height: 1.15;
+    letter-spacing: -0.5px;
+}
+
+.header-subtitle {
+    margin-top: 7px;
+    color: rgba(255,255,255,0.58);
+    font-size: 13px;
 }
 
 .cat-wrapper {
@@ -58,7 +70,7 @@ body {
     border-radius: 50%;
     background: white;
     padding: 4px;
-    overflow: hidden;
+    overflow: visible;
 }
 
 .cat {
@@ -86,7 +98,7 @@ body {
     border-radius: 14px;
     font-size: 14px;
     line-height: 1.3;
-    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 4px 18px rgba(0,0,0,0.15);
     opacity: 0;
     transform: translateY(-8px) scale(0.95);
     pointer-events: none;
@@ -272,7 +284,7 @@ body {
     font-size: 14px;
     font-weight: bold;
     cursor: pointer;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.18);
+    box-shadow: 0 5px 20px rgba(0,0,0,0.18);
 }
 
 .operations-button {
@@ -297,7 +309,7 @@ body {
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.45);
+    background: rgba(0,0,0,0.45);
     z-index: 900;
     align-items: flex-end;
     justify-content: center;
@@ -456,7 +468,7 @@ body {
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(0, 0, 0, 0.45);
+    background: rgba(0,0,0,0.45);
     z-index: 1000;
     align-items: flex-end;
     justify-content: center;
@@ -533,7 +545,7 @@ body {
 }
 
 /* =========================
-   ОКНО УДАЛЕНИЯ
+   УДАЛЕНИЕ
 ========================= */
 
 .delete-title {
@@ -609,7 +621,11 @@ body {
     }
 
     .app-header h1 {
-        font-size: 23px;
+        font-size: 24px;
+    }
+
+    .header-subtitle {
+        font-size: 12px;
     }
 
     .category {
@@ -652,11 +668,9 @@ body {
         font-size: 13px;
         padding: 14px 5px;
     }
-
 }
 
 </style>
-
 </head>
 
 <body>
@@ -665,275 +679,283 @@ body {
 
 <div class="app">
 
-<div class="app-header">
+    <div class="app-header">
 
-    <div class="header-top">
+        <div class="header-top">
 
-        <h1>Мои финансы</h1>
+            <div class="header-title-block">
 
-        <div class="cat-wrapper">
+                <h1>Мои финансы</h1>
 
-            <div id="cat-speech" class="cat-speech"></div>
+                <div class="header-subtitle">
+                    Учет доходов и расходов
+                </div>
 
-            <img
-                class="cat"
-                src="https://raw.githubusercontent.com/yteleev-cmd/qwerty/main/photo_2026-07-09_15-28-02.jpg"
-                alt="Котик"
-                onclick="catSpeak()"
-            >
+            </div>
+
+            <div class="cat-wrapper">
+
+                <div id="cat-speech" class="cat-speech"></div>
+
+                <img
+                    class="cat"
+                    src="https://raw.githubusercontent.com/yteleev-cmd/qwerty/main/photo_2026-07-09_15-28-02.jpg"
+                    alt="Котик"
+                    onclick="catSpeak()"
+                >
+
+            </div>
+
+        </div>
+
+        <div class="balance-title">
+            Мой баланс
+        </div>
+
+        <div class="total">
+            Загрузка...
+        </div>
+
+        <div class="currencies">
+
+            <div class="currency">
+                <div class="currency-name">🇺🇸 USD</div>
+                <div class="currency-value usd">...</div>
+            </div>
+
+            <div class="currency">
+                <div class="currency-name">🇺🇿 UZS</div>
+                <div class="currency-value uzs">...</div>
+            </div>
+
+            <div class="currency">
+                <div class="currency-name">🇷🇺 RUB</div>
+                <div class="currency-value rub">...</div>
+            </div>
 
         </div>
 
     </div>
 
-    <div class="balance-title">
-        Мой баланс
+    <div id="error" class="error">
+        Не удалось загрузить данные
     </div>
 
-    <div class="total">
-        Загрузка...
+    <div class="tabs">
+
+        <button class="tab active" data-period="today">
+            Сегодня
+        </button>
+
+        <button class="tab" data-period="month">
+            Месяц
+        </button>
+
     </div>
 
-    <div class="currencies">
+    <div class="section">
 
-        <div class="currency">
-            <div class="currency-name">🇺🇸 USD</div>
-            <div class="currency-value usd">...</div>
+        <div class="section-title">
+            💸 Расходы
         </div>
 
-        <div class="currency">
-            <div class="currency-name">🇺🇿 UZS</div>
-            <div class="currency-value uzs">...</div>
-        </div>
-
-        <div class="currency">
-            <div class="currency-name">🇷🇺 RUB</div>
-            <div class="currency-value rub">...</div>
+        <div id="expenses">
+            Загрузка...
         </div>
 
     </div>
 
-</div>
+    <div class="section">
 
-<div id="error" class="error">
-    Не удалось загрузить данные
-</div>
+        <div class="section-title">
+            💰 Доходы
+        </div>
 
-<div class="tabs">
+        <div id="income">
+            Загрузка...
+        </div>
 
-    <button class="tab active" data-period="today">
-        Сегодня
-    </button>
-
-    <button class="tab" data-period="month">
-        Месяц
-    </button>
-
-</div>
-
-<div class="section">
-
-    <div class="section-title">
-        💸 Расходы
     </div>
-
-    <div id="expenses">
-        Загрузка...
-    </div>
-
-</div>
-
-<div class="section">
-
-    <div class="section-title">
-        💰 Доходы
-    </div>
-
-    <div id="income">
-        Загрузка...
-    </div>
-
-</div>
 
 </div>
 
 <div class="floating-actions">
 
-<button
-    class="floating-button operations-button"
-    onclick="openOperations()"
->
-    📋 Последние операции
-</button>
+    <button
+        class="floating-button operations-button"
+        onclick="openOperations()"
+    >
+        📋 Последние операции
+    </button>
 
-<button
-    class="floating-button add-button"
-    onclick="openAddForm()"
->
-    ＋ Добавить
-</button>
+    <button
+        class="floating-button add-button"
+        onclick="openAddForm()"
+    >
+        ＋ Добавить
+    </button>
 
 </div>
 
 <div id="operations-overlay" class="operations-overlay">
 
-<div class="operations-panel">
+    <div class="operations-panel">
 
-    <div class="operations-header">
+        <div class="operations-header">
 
-        <div class="operations-title">
-            📋 Последние операции
+            <div class="operations-title">
+                📋 Последние операции
+            </div>
+
+            <button
+                class="close-operations"
+                onclick="closeOperations()"
+            >
+                ×
+            </button>
+
         </div>
 
-        <button
-            class="close-operations"
-            onclick="closeOperations()"
-        >
-            ×
-        </button>
+        <div id="last10">
+            Загрузка...
+        </div>
 
     </div>
-
-    <div id="last10">
-        Загрузка...
-    </div>
-
-</div>
 
 </div>
 
 <div id="add-modal-overlay" class="modal-overlay">
 
-<div class="add-form">
+    <div class="add-form">
 
-    <div class="form-header">
+        <div class="form-header">
 
-        <div class="form-title">
-            Новая операция
+            <div class="form-title">
+                Новая операция
+            </div>
+
+            <button
+                class="close-button"
+                onclick="closeAddForm()"
+            >
+                ×
+            </button>
+
         </div>
 
+        <select id="operation-type" onchange="updateCategories()">
+
+            <option value="Расход">
+                🔴 Расход
+            </option>
+
+            <option value="Доход">
+                🟢 Доход
+            </option>
+
+        </select>
+
+        <input
+            id="amount"
+            type="number"
+            placeholder="Сумма"
+        >
+
+        <select id="currency">
+
+            <option value="UZS">
+                🇺🇿 UZS
+            </option>
+
+            <option value="RUB">
+                🇷🇺 RUB
+            </option>
+
+            <option value="USD">
+                🇺🇸 USD
+            </option>
+
+        </select>
+
+        <select id="category"></select>
+
+        <input
+            id="description"
+            type="text"
+            placeholder="Описание (необязательно)"
+        >
+
         <button
-            class="close-button"
+            id="submit-button"
+            class="submit-button"
+            onclick="addOperation()"
+        >
+            Добавить
+        </button>
+
+        <button
+            class="cancel-button"
             onclick="closeAddForm()"
         >
-            ×
+            Отмена
         </button>
 
     </div>
-
-    <select id="operation-type" onchange="updateCategories()">
-
-        <option value="Расход">
-            🔴 Расход
-        </option>
-
-        <option value="Доход">
-            🟢 Доход
-        </option>
-
-    </select>
-
-    <input
-        id="amount"
-        type="number"
-        placeholder="Сумма"
-    >
-
-    <select id="currency">
-
-        <option value="UZS">
-            🇺🇿 UZS
-        </option>
-
-        <option value="RUB">
-            🇷🇺 RUB
-        </option>
-
-        <option value="USD">
-            🇺🇸 USD
-        </option>
-
-    </select>
-
-    <select id="category"></select>
-
-    <input
-        id="description"
-        type="text"
-        placeholder="Описание (необязательно)"
-    >
-
-    <button
-        id="submit-button"
-        class="submit-button"
-        onclick="addOperation()"
-    >
-        Добавить
-    </button>
-
-    <button
-        class="cancel-button"
-        onclick="closeAddForm()"
-    >
-        Отмена
-    </button>
-
-</div>
 
 </div>
 
 <div id="delete-modal-overlay" class="modal-overlay">
 
-<div class="delete-modal">
+    <div class="delete-modal">
 
-    <div class="delete-title">
-        🗑 Удалить операцию?
-    </div>
-
-    <div class="delete-operation-card">
-
-        <div
-            id="delete-category"
-            class="delete-operation-category"
-        >
-            Операция
+        <div class="delete-title">
+            🗑 Удалить операцию?
         </div>
 
-        <div
-            id="delete-amount"
-            class="delete-operation-amount"
-        >
-            0
+        <div class="delete-operation-card">
+
+            <div
+                id="delete-category"
+                class="delete-operation-category"
+            >
+                Операция
+            </div>
+
+            <div
+                id="delete-amount"
+                class="delete-operation-amount"
+            >
+                0
+            </div>
+
+            <div
+                id="delete-info"
+                class="delete-operation-info"
+            >
+            </div>
+
         </div>
 
-        <div
-            id="delete-info"
-            class="delete-operation-info"
-        >
+        <div class="delete-question">
+            Вы действительно хотите удалить эту операцию?
         </div>
 
+        <button
+            id="delete-button"
+            class="delete-button"
+            onclick="deleteOperation()"
+        >
+            🗑 Удалить операцию
+        </button>
+
+        <button
+            class="cancel-button"
+            onclick="closeDeleteModal()"
+        >
+            Отмена
+        </button>
+
     </div>
-
-    <div class="delete-question">
-        Вы действительно хотите удалить эту операцию?
-    </div>
-
-    <button
-        id="delete-button"
-        class="delete-button"
-        onclick="deleteOperation()"
-    >
-        🗑 Удалить операцию
-    </button>
-
-    <button
-        class="cancel-button"
-        onclick="closeDeleteModal()"
-    >
-        Отмена
-    </button>
-
-</div>
 
 </div>
 
@@ -943,7 +965,6 @@ const MAKE_WEBHOOK_URL =
 "https://hook.eu1.make.com/rbaqfgqxqlzyvb6s7imcpnhx3k2igjgo";
 
 let currentPeriod = "today";
-
 let selectedOperationId = null;
 
 const expenseCategories = [
@@ -1002,6 +1023,10 @@ function updateCategories() {
     });
 
 }
+
+/* =========================
+   РЕПЛИКИ КОТИКА
+========================= */
 
 const catPhrases = [
 
@@ -1112,11 +1137,8 @@ function getPeriodData(data, period) {
 
         return {
 
-            expenses:
-                data.today_expenses,
-
-            income:
-                data.today_income
+            expenses: data.today_expenses,
+            income: data.today_income
 
         };
 
@@ -1126,11 +1148,8 @@ function getPeriodData(data, period) {
 
         return {
 
-            expenses:
-                data.month_expenses,
-
-            income:
-                data.month_income
+            expenses: data.month_expenses,
+            income: data.month_income
 
         };
 
@@ -1255,24 +1274,16 @@ function renderText(
                 separatorMatch.index;
 
             const name =
-                line
-
-                    .substring(
-                        0,
-                        separatorIndex
-                    )
-
-                    .trim();
+                line.substring(
+                    0,
+                    separatorIndex
+                ).trim();
 
             const amountText =
-                line
-
-                    .substring(
-                        separatorIndex +
-                        separatorMatch[0].length
-                    )
-
-                    .trim();
+                line.substring(
+                    separatorIndex +
+                    separatorMatch[0].length
+                ).trim();
 
             const nameElement =
                 document.createElement("div");
@@ -1304,7 +1315,6 @@ function renderText(
                     : "+ " + amountText;
 
             row.appendChild(nameElement);
-
             row.appendChild(amountElement);
 
         } else {
@@ -1353,7 +1363,6 @@ function renderText(
         totalParts.join(" · ");
 
     totalRow.appendChild(totalTitle);
-
     totalRow.appendChild(totalValue);
 
     container.appendChild(totalRow);
@@ -1597,21 +1606,17 @@ async function loadData(period = "today") {
             getPeriodData(data, period);
 
         renderText(
-
             "expenses",
             periodData.expenses,
             "Расходов нет",
             "expense"
-
         );
 
         renderText(
-
             "income",
             periodData.income,
             "Доходов нет",
             "income"
-
         );
 
         renderLast10(data.last10);
