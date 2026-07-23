@@ -1,623 +1,572 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Финансы</title>
-
-    <style>
-
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            padding: 16px 16px 105px;
-            font-family: Arial, sans-serif;
-            background: #f4f5f7;
-            color: #202124;
-        }
-
-        .app {
-            max-width: 500px;
-            margin: 0 auto;
-        }
-
-        /* =========================
-           ШАПКА
-        ========================= */
-
-        .app-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin: 4px 2px 18px;
-        }
-
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .header-icon {
-            width: 42px;
-            height: 42px;
-            border-radius: 13px;
-            background: #202124;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 22px;
-        }
-
-        .app-header h1 {
-            margin: 0;
-            font-size: 24px;
-            line-height: 1.1;
-        }
-
-        .header-subtitle {
-            color: #888;
-            font-size: 12px;
-            margin-top: 4px;
-        }
-
-        /* =========================
-           КОТИК
-        ========================= */
-
-        .cat-wrapper {
-            position: relative;
-        }
-
-        .cat {
-            width: 58px;
-            height: 58px;
-            object-fit: cover;
-            border-radius: 17px;
-            flex-shrink: 0;
-            cursor: pointer;
-            transition: transform 0.15s ease;
-        }
-
-        .cat:active {
-            transform: scale(0.9) rotate(-5deg);
-        }
-
-        .cat-speech {
-            position: absolute;
-            right: 0;
-            top: 68px;
-            width: 230px;
-            background: white;
-            color: #202124;
-            padding: 12px 14px;
-            border-radius: 14px;
-            font-size: 14px;
-            line-height: 1.3;
-            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.15);
-            opacity: 0;
-            transform: translateY(-8px) scale(0.95);
-            pointer-events: none;
-            transition: all 0.2s ease;
-            z-index: 100;
-        }
-
-        .cat-speech::before {
-            content: "";
-            position: absolute;
-            top: -8px;
-            right: 20px;
-            width: 16px;
-            height: 16px;
-            background: white;
-            transform: rotate(45deg);
-        }
-
-        .cat-speech.show {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-        }
-
-        /* =========================
-           БАЛАНС
-        ========================= */
-
-        .balance-card {
-            background: #202124;
-            color: white;
-            border-radius: 22px;
-            padding: 22px;
-            margin-bottom: 16px;
-            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.08);
-        }
-
-        .balance-title {
-            font-size: 13px;
-            opacity: 0.65;
-        }
-
-        .total {
-            font-size: 32px;
-            font-weight: bold;
-            margin: 8px 0 20px;
-        }
-
-        .currencies {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-        }
-
-        .currency {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 13px;
-            padding: 10px;
-        }
-
-        .currency-name {
-            font-size: 12px;
-            opacity: 0.65;
-        }
-
-        .currency-value {
-            margin-top: 5px;
-            font-size: 15px;
-            font-weight: bold;
-        }
-
-        /* =========================
-           ВКЛАДКИ
-        ========================= */
-
-        .tabs {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 8px;
-            margin-bottom: 16px;
-        }
-
-        .tab {
-            border: none;
-            border-radius: 12px;
-            padding: 12px 5px;
-            background: white;
-            font-size: 14px;
-            cursor: pointer;
-        }
-
-        .tab.active {
-            background: #202124;
-            color: white;
-        }
-
-        /* =========================
-           СЕКЦИИ
-        ========================= */
-
-        .section {
-            background: white;
-            border-radius: 18px;
-            padding: 18px;
-            margin-bottom: 14px;
-            overflow: hidden;
-        }
-
-        .section-title {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 14px;
-        }
-
-        /* =========================
-           КАТЕГОРИИ
-        ========================= */
-
-        .category {
-            display: grid;
-            grid-template-columns: minmax(90px, 1fr) minmax(0, 2fr);
-            align-items: start;
-            gap: 12px;
-            padding: 13px 0;
-            border-bottom: 1px solid #eee;
-            min-width: 0;
-        }
-
-        .category:last-child {
-            border-bottom: none;
-        }
-
-        .category-name {
-            font-size: 15px;
-            min-width: 0;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .category-amount {
-            font-weight: bold;
-            text-align: right;
-            min-width: 0;
-            font-size: 15px;
-            line-height: 1.4;
-            overflow-wrap: anywhere;
-        }
-
-        .expense-amount {
-            color: #d93025;
-        }
-
-        .income-amount {
-            color: #188038;
-        }
-
-        .section-total {
-            display: grid;
-            grid-template-columns: minmax(120px, 1fr) minmax(0, 2fr);
-            align-items: start;
-            gap: 12px;
-            border-top: 1px solid #eee;
-            margin-top: 8px;
-            padding-top: 14px;
-            font-weight: bold;
-        }
-
-        .section-total span:last-child {
-            text-align: right;
-            line-height: 1.4;
-            overflow-wrap: anywhere;
-        }
-
-        .empty {
-            color: #777;
-            padding: 10px 0;
-        }
-
-        /* =========================
-           НИЖНЯЯ ПАНЕЛЬ
-        ========================= */
-
-        .bottom-bar {
-            position: fixed;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            z-index: 500;
-            padding: 10px 16px 14px;
-            background: rgba(244, 245, 247, 0.94);
-            backdrop-filter: blur(12px);
-        }
-
-        .bottom-bar-inner {
-            max-width: 500px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr 1.25fr;
-            gap: 8px;
-        }
-
-        .bottom-button {
-            border: none;
-            border-radius: 15px;
-            padding: 14px 8px;
-            font-size: 14px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .operations-button {
-            background: white;
-            color: #202124;
-        }
-
-        .add-button {
-            background: #202124;
-            color: white;
-        }
-
-        /* =========================
-           ПОСЛЕДНИЕ ОПЕРАЦИИ
-        ========================= */
-
-        .last10-section {
-            display: none;
-        }
-
-        .last10-section.open {
-            display: block;
-        }
-
-        .last10-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-            user-select: none;
-        }
-
-        .last10-arrow {
-            font-size: 20px;
-            transition: transform 0.2s ease;
-        }
-
-        .last10-section.open .last10-arrow {
-            transform: rotate(180deg);
-        }
-
-        .last10-content {
-            margin-top: 12px;
-        }
-
-        .operation-card {
-            padding: 13px 0;
-            border-bottom: 1px solid #eee;
-            cursor: pointer;
-            transition: background 0.15s ease;
-        }
-
-        .operation-card:last-child {
-            border-bottom: none;
-        }
-
-        .operation-card:active {
-            background: #f5f5f5;
-        }
-
-        .operation-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            gap: 10px;
-        }
-
-        .operation-category {
-            font-size: 15px;
-            font-weight: bold;
-            min-width: 0;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .operation-amount {
-            font-size: 15px;
-            font-weight: bold;
-            text-align: right;
-            white-space: nowrap;
-        }
-
-        .operation-amount.expense {
-            color: #d93025;
-        }
-
-        .operation-amount.income {
-            color: #188038;
-        }
-
-        .operation-info {
-            margin-top: 5px;
-            color: #777;
-            font-size: 13px;
-        }
-
-        .operation-id {
-            margin-top: 3px;
-            color: #999;
-            font-size: 12px;
-        }
-
-        .operation-hint {
-            margin-top: 5px;
-            color: #aaa;
-            font-size: 11px;
-        }
-
-        /* =========================
-           ОШИБКА
-        ========================= */
-
-        .error {
-            background: #ffe5e5;
-            color: #b00020;
-            padding: 15px;
-            border-radius: 12px;
-            margin-bottom: 16px;
-            display: none;
-        }
-
-        /* =========================
-           TOAST
-        ========================= */
-
-        .toast {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%) translateY(-20px);
-            background: #202124;
-            color: white;
-            padding: 14px 20px;
-            border-radius: 14px;
-            font-size: 15px;
-            font-weight: bold;
-            opacity: 0;
-            pointer-events: none;
-            transition: all 0.25s ease;
-            z-index: 2000;
-            white-space: nowrap;
-        }
-
-        .toast.show {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0);
-        }
-
-        /* =========================
-           МОДАЛЬНЫЕ ОКНА
-        ========================= */
-
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.45);
-            z-index: 1000;
-            align-items: flex-end;
-            justify-content: center;
-        }
-
-        .modal-overlay.show {
-            display: flex;
-        }
-
-        .add-form,
-        .delete-modal {
-            width: 100%;
-            max-width: 500px;
-            background: white;
-            border-radius: 22px 22px 0 0;
-            padding: 22px 18px 24px;
-            transform: translateY(100%);
-            transition: transform 0.25s ease;
-        }
-
-        .modal-overlay.show .add-form,
-        .modal-overlay.show .delete-modal {
-            transform: translateY(0);
-        }
-
-        .form-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 18px;
-        }
-
-        .form-title,
-        .delete-title {
-            font-size: 20px;
-            font-weight: bold;
-        }
-
-        .close-button {
-            width: 34px;
-            height: 34px;
-            border: none;
-            border-radius: 50%;
-            background: #f1f3f4;
-            font-size: 20px;
-            cursor: pointer;
-        }
-
-        .add-form input,
-        .add-form select {
-            width: 100%;
-            padding: 14px;
-            margin-bottom: 10px;
-            border: 1px solid #ddd;
-            border-radius: 12px;
-            font-size: 16px;
-            background: white;
-        }
-
-        .submit-button,
-        .cancel-button,
-        .delete-button {
-            width: 100%;
-            border: none;
-            border-radius: 12px;
-            padding: 14px;
-            font-size: 16px;
-            margin-top: 6px;
-            cursor: pointer;
-        }
-
-        .submit-button {
-            background: #202124;
-            color: white;
-        }
-
-        .cancel-button {
-            background: #f1f3f4;
-            color: #202124;
-        }
-
-        .submit-button:disabled,
-        .delete-button:disabled {
-            opacity: 0.6;
-            cursor: wait;
-        }
-
-        .delete-text {
-            color: #666;
-            line-height: 1.4;
-            margin: 10px 0 20px;
-        }
-
-        .delete-button {
-            background: #d93025;
-            color: white;
-        }
-
-        /* =========================
-           МОБИЛЬНАЯ ВЕРСИЯ
-        ========================= */
-
-        @media (max-width: 420px) {
-
-            .app-header h1 {
-                font-size: 22px;
-            }
-
-            .header-icon {
-                width: 38px;
-                height: 38px;
-                font-size: 20px;
-            }
-
-            .cat {
-                width: 54px;
-                height: 54px;
-            }
-
-            .total {
-                font-size: 29px;
-            }
-
-            .category {
-                grid-template-columns: minmax(75px, 0.8fr) minmax(0, 2fr);
-                gap: 8px;
-            }
-
-            .category-name {
-                font-size: 14px;
-            }
-
-            .category-amount {
-                font-size: 14px;
-            }
-
-            .section-total {
-                grid-template-columns: minmax(115px, 0.9fr) minmax(0, 2fr);
-                font-size: 14px;
-            }
-
-            .cat-speech {
-                right: -5px;
-                width: 210px;
-            }
-
-            .operation-category,
-            .operation-amount {
-                font-size: 14px;
-            }
-
-        }
-
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Финансы</title>
+
+<style>
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 16px;
+    font-family: Arial, sans-serif;
+    background: #f4f5f7;
+    color: #202124;
+}
+
+.app {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+/* =========================
+   ШАПКА
+========================= */
+
+.app-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 5px 4px 18px;
+}
+
+.app-header h1 {
+    margin: 0;
+    font-size: 25px;
+}
+
+.cat-wrapper {
+    position: relative;
+}
+
+.cat {
+    width: 58px;
+    height: 58px;
+    object-fit: cover;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: transform 0.15s ease;
+}
+
+.cat:active {
+    transform: scale(0.9) rotate(-5deg);
+}
+
+.cat-speech {
+    position: absolute;
+    right: 0;
+    top: 68px;
+    width: 230px;
+    background: white;
+    color: #202124;
+    padding: 12px 14px;
+    border-radius: 14px;
+    font-size: 14px;
+    line-height: 1.3;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.15);
+    opacity: 0;
+    transform: translateY(-8px) scale(0.95);
+    pointer-events: none;
+    transition: all 0.2s ease;
+    z-index: 100;
+}
+
+.cat-speech.show {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+/* =========================
+   БАЛАНС
+========================= */
+
+.balance-card {
+    background: #202124;
+    color: white;
+    border-radius: 20px;
+    padding: 22px;
+    margin-bottom: 16px;
+}
+
+.balance-title {
+    font-size: 14px;
+    opacity: 0.7;
+}
+
+.total {
+    font-size: 32px;
+    font-weight: bold;
+    margin: 8px 0 20px;
+}
+
+.currencies {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.currency {
+    background: rgba(255,255,255,0.1);
+    border-radius: 12px;
+    padding: 10px;
+}
+
+.currency-name {
+    font-size: 13px;
+    opacity: 0.7;
+}
+
+.currency-value {
+    margin-top: 5px;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+/* =========================
+   ВКЛАДКИ
+========================= */
+
+.tabs {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.tab {
+    border: none;
+    border-radius: 12px;
+    padding: 12px 5px;
+    background: white;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.tab.active {
+    background: #202124;
+    color: white;
+}
+
+/* =========================
+   СЕКЦИИ
+========================= */
+
+.section {
+    background: white;
+    border-radius: 18px;
+    padding: 18px;
+    margin-bottom: 16px;
+    overflow: hidden;
+}
+
+.section-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 14px;
+}
+
+/* =========================
+   КАТЕГОРИИ
+========================= */
+
+.category {
+    display: grid;
+    grid-template-columns: minmax(90px, 1fr) minmax(0, 2fr);
+    gap: 12px;
+    padding: 13px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.category:last-child {
+    border-bottom: none;
+}
+
+.category-name {
+    font-size: 15px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.category-amount {
+    font-weight: bold;
+    text-align: right;
+    font-size: 15px;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+}
+
+.expense-amount {
+    color: #d93025;
+}
+
+.income-amount {
+    color: #188038;
+}
+
+.section-total {
+    display: grid;
+    grid-template-columns: minmax(120px, 1fr) minmax(0, 2fr);
+    gap: 12px;
+    border-top: 1px solid #eee;
+    margin-top: 8px;
+    padding-top: 14px;
+    font-weight: bold;
+}
+
+.section-total span:last-child {
+    text-align: right;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+}
+
+.empty {
+    color: #777;
+    padding: 10px 0;
+}
+
+/* =========================
+   ПОСЛЕДНИЕ ОПЕРАЦИИ
+========================= */
+
+.last10-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
+
+.last10-arrow {
+    font-size: 20px;
+    transition: transform 0.2s ease;
+}
+
+.last10-section.open .last10-arrow {
+    transform: rotate(180deg);
+}
+
+.last10-content {
+    display: none;
+    margin-top: 10px;
+}
+
+.last10-section.open .last10-content {
+    display: block;
+}
+
+.operation-card {
+    padding: 14px 0;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.operation-card:last-child {
+    border-bottom: none;
+}
+
+.operation-card:active {
+    background: #f5f5f5;
+}
+
+.operation-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.operation-category {
+    font-size: 15px;
+    font-weight: bold;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.operation-amount {
+    font-size: 15px;
+    font-weight: bold;
+    text-align: right;
+    white-space: nowrap;
+}
+
+.operation-amount.expense {
+    color: #d93025;
+}
+
+.operation-amount.income {
+    color: #188038;
+}
+
+.operation-info {
+    margin-top: 5px;
+    color: #777;
+    font-size: 13px;
+}
+
+.operation-id {
+    margin-top: 3px;
+    color: #999;
+    font-size: 12px;
+}
+
+.operation-hint {
+    margin-top: 5px;
+    color: #aaa;
+    font-size: 11px;
+}
+
+/* =========================
+   КНОПКА
+========================= */
+
+.add-button {
+    width: 100%;
+    border: none;
+    border-radius: 16px;
+    padding: 16px;
+    font-size: 17px;
+    font-weight: bold;
+    background: #202124;
+    color: white;
+    cursor: pointer;
+}
+
+/* =========================
+   TOAST
+========================= */
+
+.toast {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-20px);
+    background: #202124;
+    color: white;
+    padding: 14px 20px;
+    border-radius: 14px;
+    font-size: 15px;
+    font-weight: bold;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.25s ease;
+    z-index: 2000;
+    white-space: nowrap;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* =========================
+   МОДАЛЬНЫЕ ОКНА
+========================= */
+
+.modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 1000;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.modal-overlay.show {
+    display: flex;
+}
+
+/* ДОБАВЛЕНИЕ */
+
+.add-form {
+    width: 100%;
+    max-width: 500px;
+    background: white;
+    border-radius: 22px 22px 0 0;
+    padding: 22px 18px 24px;
+    transform: translateY(100%);
+    transition: transform 0.25s ease;
+}
+
+.modal-overlay.show .add-form,
+.modal-overlay.show .delete-modal {
+    transform: translateY(0);
+}
+
+.form-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+}
+
+.form-title {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.close-button {
+    width: 34px;
+    height: 34px;
+    border: none;
+    border-radius: 50%;
+    background: #f1f3f4;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.add-form input,
+.add-form select {
+    width: 100%;
+    padding: 14px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    font-size: 16px;
+    background: white;
+}
+
+.submit-button,
+.cancel-button {
+    width: 100%;
+    border: none;
+    border-radius: 12px;
+    padding: 14px;
+    font-size: 16px;
+    margin-top: 6px;
+    cursor: pointer;
+}
+
+.submit-button {
+    background: #202124;
+    color: white;
+}
+
+.cancel-button {
+    background: #f1f3f4;
+    color: #202124;
+}
+
+/* УДАЛЕНИЕ */
+
+.delete-modal {
+    width: 100%;
+    max-width: 500px;
+    background: white;
+    border-radius: 22px 22px 0 0;
+    padding: 24px 18px;
+    transform: translateY(100%);
+    transition: transform 0.25s ease;
+}
+
+.delete-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 16px;
+}
+
+.delete-operation-card {
+    background: #f4f5f7;
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 20px;
+}
+
+.delete-operation-category {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.delete-operation-amount {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.delete-operation-amount.expense {
+    color: #d93025;
+}
+
+.delete-operation-amount.income {
+    color: #188038;
+}
+
+.delete-operation-info {
+    color: #777;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.delete-button {
+    width: 100%;
+    border: none;
+    border-radius: 12px;
+    padding: 14px;
+    font-size: 16px;
+    margin-top: 6px;
+    cursor: pointer;
+    background: #d93025;
+    color: white;
+}
+
+.delete-button:disabled {
+    opacity: 0.6;
+}
+
+/* =========================
+   ОШИБКА
+========================= */
+
+.error {
+    background: #ffe5e5;
+    color: #b00020;
+    padding: 15px;
+    border-radius: 12px;
+    margin-bottom: 16px;
+    display: none;
+}
+
+/* =========================
+   АДАПТИВ
+========================= */
+
+@media (max-width: 420px) {
+
+    .app-header h1 {
+        font-size: 23px;
+    }
+
+    .category {
+        grid-template-columns: minmax(75px, 0.8fr) minmax(0, 2fr);
+        gap: 8px;
+    }
+
+    .category-name,
+    .category-amount {
+        font-size: 14px;
+    }
+
+    .section-total {
+        grid-template-columns: minmax(115px, 0.9fr) minmax(0, 2fr);
+        font-size: 14px;
+    }
+
+    .cat-speech {
+        right: -5px;
+        width: 210px;
+    }
+
+}
+
+</style>
 </head>
 
 <body>
@@ -626,27 +575,9 @@
 
 <div class="app">
 
-    <!-- ШАПКА -->
-
     <div class="app-header">
 
-        <div class="header-left">
-
-            <div class="header-icon">
-                💰
-            </div>
-
-            <div>
-
-                <h1>Мои финансы</h1>
-
-                <div class="header-subtitle">
-                    Контроль денег без лишних сложностей
-                </div>
-
-            </div>
-
-        </div>
+        <h1>💰 Мои финансы</h1>
 
         <div class="cat-wrapper">
 
@@ -663,13 +594,9 @@
 
     </div>
 
-
     <div id="error" class="error">
         Не удалось загрузить данные
     </div>
-
-
-    <!-- БАЛАНС -->
 
     <div class="balance-card">
 
@@ -702,9 +629,6 @@
 
     </div>
 
-
-    <!-- ПЕРИОДЫ -->
-
     <div class="tabs">
 
         <button class="tab active" data-period="today">
@@ -716,9 +640,6 @@
         </button>
 
     </div>
-
-
-    <!-- РАСХОДЫ -->
 
     <div class="section">
 
@@ -732,9 +653,6 @@
 
     </div>
 
-
-    <!-- ДОХОДЫ -->
-
     <div class="section">
 
         <div class="section-title">
@@ -746,9 +664,6 @@
         </div>
 
     </div>
-
-
-    <!-- ПОСЛЕДНИЕ ОПЕРАЦИИ -->
 
     <div class="section last10-section">
 
@@ -767,44 +682,25 @@
 
         </div>
 
-        <div
-            id="last10"
-            class="last10-content"
-        >
+        <div id="last10" class="last10-content">
             Загрузка...
         </div>
 
     </div>
 
-</div>
-
-
-<!-- НИЖНЯЯ ПАНЕЛЬ -->
-
-<div class="bottom-bar">
-
-    <div class="bottom-bar-inner">
-
-        <button
-            class="bottom-button operations-button"
-            onclick="toggleLast10()"
-        >
-            📋 Операции
-        </button>
-
-        <button
-            class="bottom-button add-button"
-            onclick="openAddForm()"
-        >
-            ＋ Добавить
-        </button>
-
-    </div>
+    <button
+        class="add-button"
+        onclick="openAddForm()"
+    >
+        ＋ Добавить операцию
+    </button>
 
 </div>
 
 
-<!-- ФОРМА ДОБАВЛЕНИЯ -->
+<!-- =========================
+     ДОБАВЛЕНИЕ ОПЕРАЦИИ
+========================= -->
 
 <div id="add-modal-overlay" class="modal-overlay">
 
@@ -825,7 +721,6 @@
 
         </div>
 
-
         <select id="operation-type">
 
             <option value="Расход">
@@ -838,13 +733,11 @@
 
         </select>
 
-
         <input
             id="amount"
             type="number"
             placeholder="Сумма"
         >
-
 
         <select id="currency">
 
@@ -862,18 +755,29 @@
 
         </select>
 
+        <select id="category">
 
-        <!-- КАТЕГОРИЯ -->
+            <option value="Продукты">🛒 Продукты</option>
+            <option value="Кафе">☕ Кафе</option>
+            <option value="Транспорт">🚕 Транспорт</option>
+            <option value="Дом">🏠 Дом</option>
+            <option value="Здоровье">💊 Здоровье</option>
+            <option value="Красота">💄 Красота</option>
+            <option value="Одежда">👕 Одежда</option>
+            <option value="Развлечения">🎮 Развлечения</option>
+            <option value="Подарки">🎁 Подарки</option>
+            <option value="Подписки">📺 Подписки</option>
+            <option value="Алкоголь">🍻 Алкоголь</option>
+            <option value="Хобби">🎨 Хобби</option>
+            <option value="Прочее">📦 Прочее</option>
 
-        <select id="category"></select>
-
+        </select>
 
         <input
             id="description"
             type="text"
             placeholder="Описание (необязательно)"
         >
-
 
         <button
             id="submit-button"
@@ -882,7 +786,6 @@
         >
             Добавить
         </button>
-
 
         <button
             class="cancel-button"
@@ -896,7 +799,9 @@
 </div>
 
 
-<!-- МОДАЛЬНОЕ ОКНО УДАЛЕНИЯ -->
+<!-- =========================
+     УДАЛЕНИЕ ОПЕРАЦИИ
+========================= -->
 
 <div id="delete-modal-overlay" class="modal-overlay">
 
@@ -906,11 +811,36 @@
             🗑 Удалить операцию?
         </div>
 
-        <div
-            id="delete-text"
-            class="delete-text"
-        >
-            Вы уверены, что хотите удалить эту операцию?
+        <div class="delete-operation-card">
+
+            <div
+                id="delete-operation-category"
+                class="delete-operation-category"
+            >
+                Операция
+            </div>
+
+            <div
+                id="delete-operation-amount"
+                class="delete-operation-amount"
+            >
+                0 UZS
+            </div>
+
+            <div
+                id="delete-operation-info"
+                class="delete-operation-info"
+            >
+                📅 Дата
+            </div>
+
+            <div
+                id="delete-operation-id"
+                class="delete-operation-info"
+            >
+                🆔 ID
+            </div>
+
         </div>
 
         <button
@@ -918,7 +848,7 @@
             class="delete-button"
             onclick="deleteOperation()"
         >
-            🗑 Удалить
+            🗑 Удалить операцию
         </button>
 
         <button
@@ -939,156 +869,9 @@ const MAKE_WEBHOOK_URL =
 "https://hook.eu1.make.com/rbaqfgqxqlzyvb6s7imcpnhx3k2igjgo";
 
 
-let currentPeriod =
-"today";
+let currentPeriod = "today";
 
-
-let selectedOperationId =
-null;
-
-
-/* =========================
-   КАТЕГОРИИ
-========================= */
-
-const expenseCategories = [
-
-    {
-        value: "Продукты",
-        text: "🛒 Продукты"
-    },
-
-    {
-        value: "Кафе",
-        text: "☕ Кафе"
-    },
-
-    {
-        value: "Транспорт",
-        text: "🚕 Транспорт"
-    },
-
-    {
-        value: "Дом",
-        text: "🏠 Дом"
-    },
-
-    {
-        value: "Здоровье",
-        text: "💊 Здоровье"
-    },
-
-    {
-        value: "Красота",
-        text: "💄 Красота"
-    },
-
-    {
-        value: "Одежда",
-        text: "👕 Одежда"
-    },
-
-    {
-        value: "Развлечения",
-        text: "🎮 Развлечения"
-    },
-
-    {
-        value: "Подарки",
-        text: "🎁 Подарки"
-    },
-
-    {
-        value: "Подписки",
-        text: "📺 Подписки"
-    },
-
-    {
-        value: "Алкоголь",
-        text: "🍻 Алкоголь"
-    },
-
-    {
-        value: "Хобби",
-        text: "🎨 Хобби"
-    },
-
-    {
-        value: "Прочее",
-        text: "📦 Прочее"
-    }
-
-];
-
-
-const incomeCategories = [
-
-    {
-        value: "Зарплата",
-        text: "💼 Зарплата"
-    },
-
-    {
-        value: "Прочее",
-        text: "📦 Прочее"
-    }
-
-];
-
-
-function updateCategories() {
-
-    const type =
-        document.querySelector(
-            "#operation-type"
-        ).value;
-
-
-    const category =
-        document.querySelector(
-            "#category"
-        );
-
-
-    const categories =
-        type === "Доход"
-
-            ? incomeCategories
-
-            : expenseCategories;
-
-
-    category.innerHTML =
-        "";
-
-
-    categories.forEach(
-
-        item => {
-
-            const option =
-                document.createElement(
-                    "option"
-                );
-
-
-            option.value =
-                item.value;
-
-
-            option.textContent =
-                item.text;
-
-
-            category.appendChild(
-                option
-            );
-
-        }
-
-    );
-
-}
+let selectedOperationId = null;
 
 
 /* =========================
@@ -1117,59 +900,34 @@ const catPhrases = [
 
 ];
 
-
 let catSpeechTimer;
 
 
 function catSpeak() {
 
     const speech =
-        document.querySelector(
-            "#cat-speech"
-        );
-
+        document.querySelector("#cat-speech");
 
     const randomPhrase =
         catPhrases[
-
             Math.floor(
-
-                Math.random() *
-                catPhrases.length
-
+                Math.random() * catPhrases.length
             )
-
         ];
-
 
     speech.textContent =
         randomPhrase;
 
+    speech.classList.add("show");
 
-    speech.classList.add(
-        "show"
-    );
-
-
-    clearTimeout(
-        catSpeechTimer
-    );
-
+    clearTimeout(catSpeechTimer);
 
     catSpeechTimer =
-        setTimeout(
+        setTimeout(() => {
 
-            () => {
+            speech.classList.remove("show");
 
-                speech.classList.remove(
-                    "show"
-                );
-
-            },
-
-            3500
-
-        );
+        }, 3500);
 
 }
 
@@ -1181,53 +939,29 @@ function catSpeak() {
 function formatNumber(value) {
 
     if (
-
         value === undefined ||
-
         value === null
-
     ) {
-
         return "";
-
     }
-
 
     const number =
         Number(
-
             String(value)
-
                 .replace(/\s/g, "")
-
                 .replace(",", ".")
-
         );
 
-
-    if (
-
-        isNaN(number)
-
-    ) {
-
+    if (isNaN(number)) {
         return value;
-
     }
 
-
     return number.toLocaleString(
-
         "ru-RU",
-
         {
-
             minimumFractionDigits: 0,
-
             maximumFractionDigits: 2
-
         }
-
     );
 
 }
@@ -1240,33 +974,18 @@ function formatNumber(value) {
 function showToast(message) {
 
     const toast =
-        document.querySelector(
-            "#toast"
-        );
-
+        document.querySelector("#toast");
 
     toast.textContent =
         message;
 
+    toast.classList.add("show");
 
-    toast.classList.add(
-        "show"
-    );
+    setTimeout(() => {
 
+        toast.classList.remove("show");
 
-    setTimeout(
-
-        () => {
-
-            toast.classList.remove(
-                "show"
-            );
-
-        },
-
-        2500
-
-    );
+    }, 2500);
 
 }
 
@@ -1275,19 +994,9 @@ function showToast(message) {
    ПЕРИОД
 ========================= */
 
-function getPeriodData(
+function getPeriodData(data, period) {
 
-    data,
-
-    period
-
-) {
-
-    if (
-
-        period === "today"
-
-    ) {
+    if (period === "today") {
 
         return {
 
@@ -1301,12 +1010,7 @@ function getPeriodData(
 
     }
 
-
-    if (
-
-        period === "month"
-
-    ) {
+    if (period === "month") {
 
         return {
 
@@ -1320,14 +1024,11 @@ function getPeriodData(
 
     }
 
-
     return {
 
-        expenses:
-            "",
+        expenses: "",
 
-        income:
-            ""
+        income: ""
 
     };
 
@@ -1342,50 +1043,32 @@ function parseAmounts(line) {
 
     const matches =
         line.matchAll(
-
             /([\d\s]+(?:[,.]\d+)?)\s*(UZS|RUB|USD)/gi
-
         );
 
+    const amounts = [];
 
-    const amounts =
-        [];
-
-
-    for (
-
-        const match of matches
-
-    ) {
+    for (const match of matches) {
 
         const amount =
             Number(
-
                 match[1]
-
                     .replace(/\s/g, "")
-
                     .replace(",", ".")
-
             );
-
 
         const currency =
             match[2].toUpperCase();
 
-
         amounts.push({
 
-            amount:
-                amount,
+            amount: amount,
 
-            currency:
-                currency
+            currency: currency
 
         });
 
     }
-
 
     return amounts;
 
@@ -1397,310 +1080,161 @@ function parseAmounts(line) {
 ========================= */
 
 function renderText(
-
     elementId,
-
     text,
-
     emptyText,
-
     type
-
 ) {
 
     const container =
-        document.querySelector(
-            "#" + elementId
-        );
-
+        document.querySelector("#" + elementId);
 
     if (
-
         !text ||
-
         text.trim() === ""
-
     ) {
 
         container.innerHTML =
-
             `<div class="empty">${emptyText}</div>`;
 
         return;
 
     }
 
-
     const lines =
         text
-
             .split("\n")
+            .map(line => line.trim())
+            .filter(line => line !== "");
 
-            .map(
+    container.innerHTML = "";
 
-                line =>
-                    line.trim()
+    const totals = {};
 
-            )
+    lines.forEach(line => {
 
-            .filter(
+        const amounts =
+            parseAmounts(line);
 
-                line =>
-                    line !== ""
-
-            );
-
-
-    container.innerHTML =
-        "";
-
-
-    const totals =
-        {};
-
-
-    lines.forEach(
-
-        line => {
-
-            const amounts =
-                parseAmounts(
-                    line
-                );
-
-
-            amounts.forEach(
-
-                amountData => {
-
-                    if (
-
-                        !totals[
-
-                            amountData.currency
-
-                        ]
-
-                    ) {
-
-                        totals[
-
-                            amountData.currency
-
-                        ] =
-                            0;
-
-                    }
-
-
-                    totals[
-
-                        amountData.currency
-
-                    ] +=
-
-                        amountData.amount;
-
-                }
-
-            );
-
-
-            const separatorMatch =
-                line.match(
-
-                    /\s*(—|–|-|•)\s*/
-
-                );
-
-
-            const row =
-                document.createElement(
-                    "div"
-                );
-
-
-            row.className =
-                "category";
-
+        amounts.forEach(amountData => {
 
             if (
-
-                separatorMatch
-
+                !totals[amountData.currency]
             ) {
 
-                const separatorIndex =
-                    separatorMatch.index;
-
-
-                const name =
-                    line
-
-                        .substring(
-
-                            0,
-
-                            separatorIndex
-
-                        )
-
-                        .trim();
-
-
-                const amountText =
-                    line
-
-                        .substring(
-
-                            separatorIndex +
-
-                            separatorMatch[0].length
-
-                        )
-
-                        .trim();
-
-
-                const nameElement =
-                    document.createElement(
-                        "div"
-                    );
-
-
-                nameElement.className =
-                    "category-name";
-
-
-                nameElement.textContent =
-                    name;
-
-
-                const amountElement =
-                    document.createElement(
-                        "div"
-                    );
-
-
-                amountElement.className =
-                    "category-amount";
-
-
-                amountElement.classList.add(
-
-                    type === "expense"
-
-                        ? "expense-amount"
-
-                        : "income-amount"
-
-                );
-
-
-                amountElement.textContent =
-
-                    type === "expense"
-
-                        ? "− " + amountText
-
-                        : "+ " + amountText;
-
-
-                row.appendChild(
-                    nameElement
-                );
-
-
-                row.appendChild(
-                    amountElement
-                );
+                totals[amountData.currency] = 0;
 
             }
 
+            totals[amountData.currency] +=
+                amountData.amount;
 
-            container.appendChild(
-                row
+        });
+
+        const separatorMatch =
+            line.match(/\s*(—|–|-|•)\s*/);
+
+        const row =
+            document.createElement("div");
+
+        row.className = "category";
+
+        if (separatorMatch) {
+
+            const separatorIndex =
+                separatorMatch.index;
+
+            const name =
+                line
+                    .substring(0, separatorIndex)
+                    .trim();
+
+            const amountText =
+                line
+                    .substring(
+                        separatorIndex +
+                        separatorMatch[0].length
+                    )
+                    .trim();
+
+            const nameElement =
+                document.createElement("div");
+
+            nameElement.className =
+                "category-name";
+
+            nameElement.textContent =
+                name;
+
+            const amountElement =
+                document.createElement("div");
+
+            amountElement.className =
+                "category-amount";
+
+            amountElement.classList.add(
+
+                type === "expense"
+                    ? "expense-amount"
+                    : "income-amount"
+
             );
+
+            amountElement.textContent =
+
+                type === "expense"
+                    ? "− " + amountText
+                    : "+ " + amountText;
+
+            row.appendChild(nameElement);
+
+            row.appendChild(amountElement);
+
+        } else {
+
+            row.textContent = line;
 
         }
 
-    );
+        container.appendChild(row);
 
+    });
 
     const totalRow =
-        document.createElement(
-            "div"
-        );
-
+        document.createElement("div");
 
     totalRow.className =
         "section-total";
 
-
     const totalTitle =
-        document.createElement(
-            "span"
-        );
-
+        document.createElement("span");
 
     totalTitle.textContent =
 
         type === "expense"
-
             ? "Итого расходов"
-
             : "Итого доходов";
 
-
     const totalValue =
-        document.createElement(
-            "span"
-        );
-
+        document.createElement("span");
 
     const totalParts =
-        Object.entries(
-            totals
-        )
-
+        Object.entries(totals)
             .map(
-
                 ([currency, amount]) =>
-
-                    formatNumber(
-                        amount
-                    )
-
-                    +
-
-                    " "
-
-                    +
-
+                    formatNumber(amount) +
+                    " " +
                     currency
-
             );
 
-
     totalValue.textContent =
-        totalParts.join(
-            " · "
-        );
+        totalParts.join(" · ");
 
+    totalRow.appendChild(totalTitle);
 
-    totalRow.appendChild(
-        totalTitle
-    );
+    totalRow.appendChild(totalValue);
 
-
-    totalRow.appendChild(
-        totalValue
-    );
-
-
-    container.appendChild(
-        totalRow
-    );
+    container.appendChild(totalRow);
 
 }
 
@@ -1712,45 +1246,9 @@ function renderText(
 function toggleLast10() {
 
     const section =
-        document.querySelector(
-            ".last10-section"
-        );
+        document.querySelector(".last10-section");
 
-
-    section.classList.toggle(
-        "open"
-    );
-
-
-    if (
-
-        section.classList.contains(
-            "open"
-        )
-
-    ) {
-
-        setTimeout(
-
-            () => {
-
-                section.scrollIntoView({
-
-                    behavior:
-                        "smooth",
-
-                    block:
-                        "start"
-
-                });
-
-            },
-
-            100
-
-        );
-
-    }
+    section.classList.toggle("open");
 
 }
 
@@ -1758,283 +1256,157 @@ function toggleLast10() {
 function renderLast10(text) {
 
     const container =
-        document.querySelector(
-            "#last10"
-        );
-
+        document.querySelector("#last10");
 
     if (
-
         !text ||
-
         text.trim() === ""
-
     ) {
 
         container.innerHTML =
-
             `<div class="empty">Операций нет</div>`;
 
         return;
 
     }
 
-
     const blocks =
         text
+            .split("──────── ✦ ────────")
+            .map(block => block.trim())
+            .filter(block => block !== "");
 
-            .split(
-                "──────── ✦ ────────"
-            )
+    container.innerHTML = "";
 
-            .map(
+    blocks.forEach(block => {
 
-                block =>
-                    block.trim()
+        const lines =
+            block
+                .split("\n")
+                .map(line => line.trim())
+                .filter(line => line !== "");
 
-            )
-
-            .filter(
-
-                block =>
-                    block !== ""
-
-            );
-
-
-    container.innerHTML =
-        "";
-
-
-    blocks.forEach(
-
-        block => {
-
-            const lines =
-                block
-
-                    .split("\n")
-
-                    .map(
-
-                        line =>
-                            line.trim()
-
-                    )
-
-                    .filter(
-
-                        line =>
-                            line !== ""
-
-                    );
-
-
-            if (
-
-                lines.length < 4
-
-            ) {
-
-                return;
-
-            }
-
-
-            const dateLine =
-                lines.find(
-
-                    line =>
-                        line.startsWith(
-                            "📅"
-                        )
-
-                );
-
-
-            const moneyLine =
-                lines.find(
-
-                    line =>
-                        line.startsWith(
-                            "💵"
-                        )
-
-                );
-
-
-            const categoryLine =
-                lines.find(
-
-                    line =>
-
-                        !line.startsWith(
-                            "👤"
-                        ) &&
-
-                        !line.startsWith(
-                            "📅"
-                        ) &&
-
-                        !line.startsWith(
-                            "💵"
-                        ) &&
-
-                        !line.startsWith(
-                            "🆔"
-                        )
-
-                );
-
-
-            const idLine =
-                lines.find(
-
-                    line =>
-                        line.startsWith(
-                            "🆔"
-                        )
-
-                );
-
-
-            if (
-
-                !idLine
-
-            ) {
-
-                return;
-
-            }
-
-
-            const operationId =
-                idLine
-
-                    .replace(
-                        "🆔",
-                        ""
-                    )
-
-                    .trim();
-
-
-            const isIncome =
-                moneyLine &&
-
-                moneyLine.includes(
-                    "🟢"
-                );
-
-
-            let amountText =
-                moneyLine || "";
-
-
-            amountText =
-                amountText
-
-                    .replace(
-                        "💵",
-                        ""
-                    )
-
-                    .replace(
-                        "🔴",
-                        ""
-                    )
-
-                    .replace(
-                        "🟢",
-                        ""
-                    )
-
-                    .replace(
-                        "Расход",
-                        ""
-                    )
-
-                    .replace(
-                        "Доход",
-                        ""
-                    )
-
-                    .trim();
-
-
-            const card =
-                document.createElement(
-                    "div"
-                );
-
-
-            card.className =
-                "operation-card";
-
-
-            card.onclick =
-                () => {
-
-                    openDeleteModal(
-
-                        operationId,
-
-                        categoryLine,
-
-                        amountText
-
-                    );
-
-                };
-
-
-            card.innerHTML = `
-
-                <div class="operation-top">
-
-                    <div class="operation-category">
-
-                        ${categoryLine || "Операция"}
-
-                    </div>
-
-                    <div class="operation-amount ${isIncome ? "income" : "expense"}">
-
-                        ${isIncome ? "+ " : "− "}${amountText}
-
-                    </div>
-
-                </div>
-
-                <div class="operation-info">
-
-                    ${dateLine || ""}
-
-                </div>
-
-                <div class="operation-id">
-
-                    ${idLine || ""}
-
-                </div>
-
-                <div class="operation-hint">
-
-                    Нажмите, чтобы удалить
-
-                </div>
-
-            `;
-
-
-            container.appendChild(
-                card
-            );
-
+        if (lines.length < 3) {
+            return;
         }
 
-    );
+        const dateLine =
+            lines.find(line =>
+                line.startsWith("📅")
+            );
+
+        const moneyLine =
+            lines.find(line =>
+                line.startsWith("💵")
+            );
+
+        const categoryLine =
+            lines.find(line =>
+                !line.startsWith("👤") &&
+                !line.startsWith("📅") &&
+                !line.startsWith("💵") &&
+                !line.startsWith("🆔")
+            );
+
+        const idLine =
+            lines.find(line =>
+                line.startsWith("🆔")
+            );
+
+        if (!idLine) {
+            return;
+        }
+
+        const operationId =
+            idLine
+                .replace("🆔", "")
+                .trim();
+
+        const isIncome =
+            moneyLine &&
+            moneyLine.includes("🟢");
+
+        let amountText =
+            moneyLine || "";
+
+        amountText =
+            amountText
+                .replace("💵", "")
+                .replace("🔴", "")
+                .replace("🟢", "")
+                .replace("Расход", "")
+                .replace("Доход", "")
+                .trim();
+
+        const card =
+            document.createElement("div");
+
+        card.className =
+            "operation-card";
+
+        card.onclick = () => {
+
+            openDeleteModal({
+
+                id: operationId,
+
+                category:
+                    categoryLine || "Операция",
+
+                amount:
+                    amountText,
+
+                date:
+                    dateLine || "",
+
+                isIncome:
+                    isIncome
+
+            });
+
+        };
+
+        card.innerHTML = `
+
+            <div class="operation-top">
+
+                <div class="operation-category">
+
+                    ${categoryLine || "Операция"}
+
+                </div>
+
+                <div class="operation-amount ${isIncome ? "income" : "expense"}">
+
+                    ${isIncome ? "+ " : "− "}${amountText}
+
+                </div>
+
+            </div>
+
+            <div class="operation-info">
+
+                ${dateLine || ""}
+
+            </div>
+
+            <div class="operation-id">
+
+                ${idLine || ""}
+
+            </div>
+
+            <div class="operation-hint">
+
+                Нажмите, чтобы удалить
+
+            </div>
+
+        `;
+
+        container.appendChild(card);
+
+    });
 
 }
 
@@ -2043,23 +1415,15 @@ function renderLast10(text) {
    ЗАГРУЗКА ДАННЫХ
 ========================= */
 
-async function loadData(
-
-    period = "today"
-
-) {
+async function loadData(period = "today") {
 
     currentPeriod =
         period;
 
-
     try {
 
-        document.querySelector(
-            "#error"
-        ).style.display =
-            "none";
-
+        document.querySelector("#error")
+            .style.display = "none";
 
         const response =
             await fetch(
@@ -2068,38 +1432,30 @@ async function loadData(
 
                 {
 
-                    method:
-                        "POST",
+                    method: "POST",
 
-                    headers:
-                        {
+                    headers: {
 
-                            "Content-Type":
-                                "application/json"
+                        "Content-Type":
+                            "application/json"
 
-                        },
+                    },
 
-                    body:
-                        JSON.stringify({
+                    body: JSON.stringify({
 
-                            action:
-                                "get_finance_data",
+                        action:
+                            "get_finance_data",
 
-                            period:
-                                period
+                        period:
+                            period
 
-                        })
+                    })
 
                 }
 
             );
 
-
-        if (
-
-            !response.ok
-
-        ) {
+        if (!response.ok) {
 
             throw new Error(
                 "Ошибка HTTP"
@@ -2107,114 +1463,62 @@ async function loadData(
 
         }
 
-
         const data =
             await response.json();
 
+        document.querySelector(".total")
+            .textContent =
 
-        document.querySelector(
-            ".total"
-        ).textContent =
-
-            "≈ "
-
-            +
-
-            formatNumber(
-                data.total_usd
-            )
-
-            +
-
+            "≈ " +
+            formatNumber(data.total_usd) +
             " USD";
 
+        document.querySelector(".usd")
+            .textContent =
+            formatNumber(data.usd);
 
-        document.querySelector(
-            ".usd"
-        ).textContent =
-            formatNumber(
-                data.usd
-            );
+        document.querySelector(".uzs")
+            .textContent =
+            formatNumber(data.uzs);
 
-
-        document.querySelector(
-            ".uzs"
-        ).textContent =
-            formatNumber(
-                data.uzs
-            );
-
-
-        document.querySelector(
-            ".rub"
-        ).textContent =
-            formatNumber(
-                data.rub
-            );
-
+        document.querySelector(".rub")
+            .textContent =
+            formatNumber(data.rub);
 
         const periodData =
             getPeriodData(
-
                 data,
-
                 period
-
             );
 
-
         renderText(
-
             "expenses",
-
             periodData.expenses,
-
             "Расходов нет",
-
             "expense"
-
         );
-
 
         renderText(
-
             "income",
-
             periodData.income,
-
             "Доходов нет",
-
             "income"
-
         );
-
 
         renderLast10(
             data.last10
         );
 
+    } catch (error) {
 
-    } catch (
+        console.error(error);
 
-        error
-
-    ) {
-
-        console.error(
-            error
-        );
-
-
-        document.querySelector(
-            "#error"
-        ).style.display =
+        document.querySelector("#error")
+            .style.display =
             "block";
 
-
-        document.querySelector(
-            "#error"
-        ).textContent =
-
+        document.querySelector("#error")
+            .textContent =
             "❌ Не удалось загрузить данные";
 
     }
@@ -2228,18 +1532,9 @@ async function loadData(
 
 function openAddForm() {
 
-    updateCategories();
-
-
     document
-
-        .querySelector(
-            "#add-modal-overlay"
-        )
-
-        .classList.add(
-            "show"
-        );
+        .querySelector("#add-modal-overlay")
+        .classList.add("show");
 
 }
 
@@ -2247,14 +1542,8 @@ function openAddForm() {
 function closeAddForm() {
 
     document
-
-        .querySelector(
-            "#add-modal-overlay"
-        )
-
-        .classList.remove(
-            "show"
-        );
+        .querySelector("#add-modal-overlay")
+        .classList.remove("show");
 
 }
 
@@ -2262,43 +1551,28 @@ function closeAddForm() {
 async function addOperation() {
 
     const type =
-        document.querySelector(
-            "#operation-type"
-        ).value;
-
+        document.querySelector("#operation-type")
+            .value;
 
     const amount =
-        document.querySelector(
-            "#amount"
-        ).value;
-
+        document.querySelector("#amount")
+            .value;
 
     const currency =
-        document.querySelector(
-            "#currency"
-        ).value;
-
+        document.querySelector("#currency")
+            .value;
 
     const category =
-        document.querySelector(
-            "#category"
-        ).value;
-
+        document.querySelector("#category")
+            .value;
 
     const description =
-        document.querySelector(
-            "#description"
-        ).value;
-
+        document.querySelector("#description")
+            .value;
 
     if (
-
         !amount ||
-
-        Number(
-            amount
-        ) <= 0
-
+        Number(amount) <= 0
     ) {
 
         showToast(
@@ -2309,20 +1583,13 @@ async function addOperation() {
 
     }
 
-
     const button =
-        document.querySelector(
-            "#submit-button"
-        );
+        document.querySelector("#submit-button");
 
-
-    button.disabled =
-        true;
-
+    button.disabled = true;
 
     button.textContent =
         "⏳ Добавляем операцию...";
-
 
     try {
 
@@ -2333,50 +1600,42 @@ async function addOperation() {
 
                 {
 
-                    method:
-                        "POST",
+                    method: "POST",
 
-                    headers:
-                        {
+                    headers: {
 
-                            "Content-Type":
-                                "application/json"
+                        "Content-Type":
+                            "application/json"
 
-                        },
+                    },
 
-                    body:
-                        JSON.stringify({
+                    body: JSON.stringify({
 
-                            action:
-                                "add_operation",
+                        action:
+                            "add_operation",
 
-                            type:
-                                type,
+                        type:
+                            type,
 
-                            amount:
-                                amount,
+                        amount:
+                            amount,
 
-                            currency:
-                                currency,
+                        currency:
+                            currency,
 
-                            category:
-                                category,
+                        category:
+                            category,
 
-                            description:
-                                description
+                        description:
+                            description
 
-                        })
+                    })
 
                 }
 
             );
 
-
-        if (
-
-            !response.ok
-
-        ) {
+        if (!response.ok) {
 
             throw new Error(
                 "Ошибка добавления операции"
@@ -2384,53 +1643,33 @@ async function addOperation() {
 
         }
 
-
         closeAddForm();
 
+        document.querySelector("#amount")
+            .value = "";
 
-        document.querySelector(
-            "#amount"
-        ).value =
-            "";
-
-
-        document.querySelector(
-            "#description"
-        ).value =
-            "";
-
+        document.querySelector("#description")
+            .value = "";
 
         showToast(
             "✅ Операция добавлена"
         );
 
-
         await loadData(
             currentPeriod
         );
 
+    } catch (error) {
 
-    } catch (
-
-        error
-
-    ) {
-
-        console.error(
-            error
-        );
-
+        console.error(error);
 
         showToast(
             "❌ Не удалось добавить операцию"
         );
 
-
     } finally {
 
-        button.disabled =
-            false;
-
+        button.disabled = false;
 
         button.textContent =
             "Добавить";
@@ -2441,39 +1680,61 @@ async function addOperation() {
 
 
 /* =========================
-   УДАЛЕНИЕ
+   КРАСИВОЕ ОКНО УДАЛЕНИЯ
 ========================= */
 
-function openDeleteModal(
-
-    operationId,
-
-    category,
-
-    amount
-
-) {
+function openDeleteModal(operation) {
 
     selectedOperationId =
-        operationId;
+        operation.id;
 
+    const category =
+        document.querySelector(
+            "#delete-operation-category"
+        );
 
-    document.querySelector(
-        "#delete-text"
-    ).textContent =
+    const amount =
+        document.querySelector(
+            "#delete-operation-amount"
+        );
 
-        `Удалить операцию «${category}» на сумму ${amount}?`;
+    const info =
+        document.querySelector(
+            "#delete-operation-info"
+        );
 
+    const id =
+        document.querySelector(
+            "#delete-operation-id"
+        );
+
+    category.textContent =
+        operation.category;
+
+    amount.textContent =
+        (operation.isIncome ? "+ " : "− ") +
+        operation.amount;
+
+    amount.className =
+        "delete-operation-amount " +
+        (
+            operation.isIncome
+                ? "income"
+                : "expense"
+        );
+
+    info.textContent =
+        operation.date;
+
+    id.textContent =
+        "🆔 " +
+        operation.id;
 
     document
-
         .querySelector(
             "#delete-modal-overlay"
         )
-
-        .classList.add(
-            "show"
-        );
+        .classList.add("show");
 
 }
 
@@ -2483,46 +1744,33 @@ function closeDeleteModal() {
     selectedOperationId =
         null;
 
-
     document
-
         .querySelector(
             "#delete-modal-overlay"
         )
-
-        .classList.remove(
-            "show"
-        );
+        .classList.remove("show");
 
 }
 
 
 async function deleteOperation() {
 
-    if (
-
-        !selectedOperationId
-
-    ) {
+    if (!selectedOperationId) {
 
         return;
 
     }
-
 
     const button =
         document.querySelector(
             "#delete-button"
         );
 
-
     button.disabled =
         true;
 
-
     button.textContent =
         "⏳ Удаляем...";
-
 
     try {
 
@@ -2533,38 +1781,30 @@ async function deleteOperation() {
 
                 {
 
-                    method:
-                        "POST",
+                    method: "POST",
 
-                    headers:
-                        {
+                    headers: {
 
-                            "Content-Type":
-                                "application/json"
+                        "Content-Type":
+                            "application/json"
 
-                        },
+                    },
 
-                    body:
-                        JSON.stringify({
+                    body: JSON.stringify({
 
-                            action:
-                                "delete_operation",
+                        action:
+                            "delete_operation",
 
-                            id:
-                                selectedOperationId
+                        id:
+                            selectedOperationId
 
-                        })
+                    })
 
                 }
 
             );
 
-
-        if (
-
-            !response.ok
-
-        ) {
+        if (!response.ok) {
 
             throw new Error(
                 "Ошибка удаления"
@@ -2572,30 +1812,19 @@ async function deleteOperation() {
 
         }
 
-
         closeDeleteModal();
-
 
         showToast(
             "🗑 Операция удалена"
         );
 
-
         await loadData(
             currentPeriod
         );
 
+    } catch (error) {
 
-    } catch (
-
-        error
-
-    ) {
-
-        console.error(
-            error
-        );
-
+        console.error(error);
 
         showToast(
             "❌ Не удалось удалить операцию"
@@ -2606,9 +1835,8 @@ async function deleteOperation() {
         button.disabled =
             false;
 
-
         button.textContent =
-            "🗑 Удалить";
+            "🗑 Удалить операцию";
 
     }
 
@@ -2616,88 +1844,39 @@ async function deleteOperation() {
 
 
 /* =========================
-   ПЕРЕКЛЮЧЕНИЕ КАТЕГОРИЙ
-========================= */
-
-document
-
-    .querySelector(
-        "#operation-type"
-    )
-
-    .addEventListener(
-
-        "change",
-
-        updateCategories
-
-    );
-
-
-/* =========================
    ПЕРЕКЛЮЧЕНИЕ ПЕРИОДОВ
 ========================= */
 
 document
+    .querySelectorAll(".tab")
+    .forEach(button => {
 
-    .querySelectorAll(
-        ".tab"
-    )
+        button.addEventListener(
+            "click",
+            () => {
 
-    .forEach(
+                document
+                    .querySelectorAll(".tab")
+                    .forEach(btn => {
 
-        button => {
-
-            button.addEventListener(
-
-                "click",
-
-                () => {
-
-                    document
-
-                        .querySelectorAll(
-                            ".tab"
-                        )
-
-                        .forEach(
-
-                            btn => {
-
-                                btn.classList
-
-                                    .remove(
-                                        "active"
-                                    );
-
-                            }
-
-                        );
-
-
-                    button.classList
-
-                        .add(
+                        btn.classList.remove(
                             "active"
                         );
 
+                    });
 
-                    const period =
-                        button.dataset
-                            .period;
+                button.classList.add(
+                    "active"
+                );
 
+                loadData(
+                    button.dataset.period
+                );
 
-                    loadData(
-                        period
-                    );
+            }
+        );
 
-                }
-
-            );
-
-        }
-
-    );
+    });
 
 
 /* =========================
@@ -2705,22 +1884,14 @@ document
 ========================= */
 
 document
-
-    .querySelector(
-        "#add-modal-overlay"
-    )
-
+    .querySelector("#add-modal-overlay")
     .addEventListener(
-
         "click",
-
         event => {
 
             if (
-
                 event.target.id ===
                 "add-modal-overlay"
-
             ) {
 
                 closeAddForm();
@@ -2728,27 +1899,18 @@ document
             }
 
         }
-
     );
 
 
 document
-
-    .querySelector(
-        "#delete-modal-overlay"
-    )
-
+    .querySelector("#delete-modal-overlay")
     .addEventListener(
-
         "click",
-
         event => {
 
             if (
-
                 event.target.id ===
                 "delete-modal-overlay"
-
             ) {
 
                 closeDeleteModal();
@@ -2756,7 +1918,6 @@ document
             }
 
         }
-
     );
 
 
@@ -2764,11 +1925,7 @@ document
    ЗАПУСК
 ========================= */
 
-updateCategories();
-
-loadData(
-    "today"
-);
+loadData("today");
 
 </script>
 
