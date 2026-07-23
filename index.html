@@ -268,10 +268,16 @@
         .operation-card {
             padding: 13px 0;
             border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: background 0.15s ease;
         }
 
         .operation-card:last-child {
             border-bottom: none;
+        }
+
+        .operation-card:active {
+            background: #f5f5f5;
         }
 
         .operation-top {
@@ -315,6 +321,12 @@
             margin-top: 3px;
             color: #999;
             font-size: 12px;
+        }
+
+        .operation-hint {
+            margin-top: 5px;
+            color: #aaa;
+            font-size: 11px;
         }
 
         /* КНОПКА */
@@ -456,6 +468,50 @@
             cursor: wait;
         }
 
+        /* МОДАЛЬНОЕ ОКНО УДАЛЕНИЯ */
+
+        .delete-modal {
+            width: 100%;
+            max-width: 500px;
+            background: white;
+            border-radius: 22px 22px 0 0;
+            padding: 24px 18px;
+            transform: translateY(100%);
+            transition: transform 0.25s ease;
+        }
+
+        .modal-overlay.show .delete-modal {
+            transform: translateY(0);
+        }
+
+        .delete-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .delete-text {
+            color: #666;
+            line-height: 1.4;
+            margin-bottom: 20px;
+        }
+
+        .delete-button {
+            width: 100%;
+            border: none;
+            border-radius: 12px;
+            padding: 14px;
+            font-size: 16px;
+            margin-top: 6px;
+            cursor: pointer;
+            background: #d93025;
+            color: white;
+        }
+
+        .delete-button:disabled {
+            opacity: 0.6;
+        }
+
         @media (max-width: 420px) {
 
             .category {
@@ -587,8 +643,6 @@
 
     </div>
 
-    <!-- ПОСЛЕДНИЕ ОПЕРАЦИИ -->
-
     <div class="section last10-section">
 
         <div
@@ -625,9 +679,9 @@
 </div>
 
 
-<!-- МОДАЛЬНАЯ ФОРМА -->
+<!-- ФОРМА ДОБАВЛЕНИЯ -->
 
-<div id="modal-overlay" class="modal-overlay">
+<div id="add-modal-overlay" class="modal-overlay">
 
     <div class="add-form">
 
@@ -724,6 +778,43 @@
 </div>
 
 
+<!-- МОДАЛЬНОЕ ОКНО УДАЛЕНИЯ -->
+
+<div id="delete-modal-overlay" class="modal-overlay">
+
+    <div class="delete-modal">
+
+        <div class="delete-title">
+            🗑 Удалить операцию?
+        </div>
+
+        <div
+            id="delete-text"
+            class="delete-text"
+        >
+            Вы уверены, что хотите удалить эту операцию?
+        </div>
+
+        <button
+            id="delete-button"
+            class="delete-button"
+            onclick="deleteOperation()"
+        >
+            🗑 Удалить
+        </button>
+
+        <button
+            class="cancel-button"
+            onclick="closeDeleteModal()"
+        >
+            Отмена
+        </button>
+
+    </div>
+
+</div>
+
+
 <script>
 
 const MAKE_WEBHOOK_URL =
@@ -732,6 +823,10 @@ const MAKE_WEBHOOK_URL =
 
 let currentPeriod =
 "today";
+
+
+let selectedOperationId =
+null;
 
 
 /* =========================
@@ -814,7 +909,7 @@ function catSpeak() {
 
 
 /* =========================
-   ФОРМАТИРОВАНИЕ ЧИСЕЛ
+   ФОРМАТИРОВАНИЕ
 ========================= */
 
 function formatNumber(value) {
@@ -1087,7 +1182,6 @@ function renderText(
 
         line => {
 
-
             const amounts =
                 parseAmounts(
                     line
@@ -1097,7 +1191,6 @@ function renderText(
             amounts.forEach(
 
                 amountData => {
-
 
                     if (
 
@@ -1148,7 +1241,6 @@ function renderText(
                 separatorMatch
 
             ) {
-
 
                 const separatorIndex =
                     separatorMatch.index;
@@ -1221,13 +1313,9 @@ function renderText(
 
                     type === "expense"
 
-                        ? "− " +
+                        ? "− " + amountText
 
-                          amountText
-
-                        : "+ " +
-
-                          amountText;
+                        : "+ " + amountText;
 
 
                 row.appendChild(
@@ -1239,9 +1327,7 @@ function renderText(
                     amountElement
                 );
 
-
             } else {
-
 
                 row.textContent =
                     line;
@@ -1296,35 +1382,19 @@ function renderText(
 
         .map(
 
-            (
+            ([currency, amount]) =>
 
-                [
-
-                    currency,
-
+                formatNumber(
                     amount
+                )
 
-                ]
+                +
 
-            ) => {
+                " "
 
-                return (
+                +
 
-                    formatNumber(
-                        amount
-                    )
-
-                    +
-
-                    " "
-
-                    +
-
-                    currency
-
-                );
-
-            }
+                currency
 
         );
 
@@ -1353,7 +1423,7 @@ function renderText(
 
 
 /* =========================
-   ПОСЛЕДНИЕ 10 ОПЕРАЦИЙ
+   ПОСЛЕДНИЕ ОПЕРАЦИИ
 ========================= */
 
 function toggleLast10() {
@@ -1424,7 +1494,6 @@ function renderLast10(text) {
     blocks.forEach(
 
         block => {
-
 
             const lines =
                 block
@@ -1506,8 +1575,29 @@ function renderLast10(text) {
                 );
 
 
+            if (
+                !idLine
+            ) {
+
+                return;
+
+            }
+
+
+            const operationId =
+                idLine
+
+                    .replace(
+                        "🆔",
+                        ""
+                    )
+
+                    .trim();
+
+
             const isIncome =
                 moneyLine &&
+
                 moneyLine.includes(
                     "🟢"
                 );
@@ -1558,6 +1648,22 @@ function renderLast10(text) {
                 "operation-card";
 
 
+            card.onclick =
+                () => {
+
+                    openDeleteModal(
+
+                        operationId,
+
+                        categoryLine,
+
+                        amountText
+
+                    );
+
+                };
+
+
             card.innerHTML = `
 
                 <div class="operation-top">
@@ -1585,6 +1691,12 @@ function renderLast10(text) {
                 <div class="operation-id">
 
                     ${idLine || ""}
+
+                </div>
+
+                <div class="operation-hint">
+
+                    Нажмите, чтобы удалить
 
                 </div>
 
@@ -1618,7 +1730,6 @@ async function loadData(
 
     try {
 
-
         document.querySelector(
             "#error"
         ).style.display =
@@ -1644,19 +1755,15 @@ async function loadData(
                         },
 
                     body:
-                        JSON.stringify(
+                        JSON.stringify({
 
-                            {
+                            action:
+                                "get_finance_data",
 
-                                action:
-                                    "get_finance_data",
+                            period:
+                                period
 
-                                period:
-                                    period
-
-                            }
-
-                        )
+                        })
 
                 }
 
@@ -1768,7 +1875,6 @@ async function loadData(
 
     ) {
 
-
         console.error(
             error
         );
@@ -1792,7 +1898,7 @@ async function loadData(
 
 
 /* =========================
-   ФОРМА
+   ДОБАВЛЕНИЕ
 ========================= */
 
 function openAddForm() {
@@ -1800,7 +1906,7 @@ function openAddForm() {
     document
 
         .querySelector(
-            "#modal-overlay"
+            "#add-modal-overlay"
         )
 
         .classList.add(
@@ -1815,7 +1921,7 @@ function closeAddForm() {
     document
 
         .querySelector(
-            "#modal-overlay"
+            "#add-modal-overlay"
         )
 
         .classList.remove(
@@ -1824,10 +1930,6 @@ function closeAddForm() {
 
 }
 
-
-/* =========================
-   ДОБАВЛЕНИЕ ОПЕРАЦИИ
-========================= */
 
 async function addOperation() {
 
@@ -1896,7 +1998,6 @@ async function addOperation() {
 
     try {
 
-
         const response =
             await fetch(
 
@@ -1916,31 +2017,27 @@ async function addOperation() {
                         },
 
                     body:
-                        JSON.stringify(
+                        JSON.stringify({
 
-                            {
+                            action:
+                                "add_operation",
 
-                                action:
-                                    "add_operation",
+                            type:
+                                type,
 
-                                type:
-                                    type,
+                            amount:
+                                amount,
 
-                                amount:
-                                    amount,
+                            currency:
+                                currency,
 
-                                currency:
-                                    currency,
+                            category:
+                                category,
 
-                                category:
-                                    category,
+                            description:
+                                description
 
-                                description:
-                                    description
-
-                            }
-
-                        )
+                        })
 
                 }
 
@@ -1991,7 +2088,6 @@ async function addOperation() {
 
     ) {
 
-
         console.error(
             error
         );
@@ -2004,13 +2100,187 @@ async function addOperation() {
 
     } finally {
 
-
         button.disabled =
             false;
 
 
         button.textContent =
             "Добавить";
+
+    }
+
+}
+
+
+/* =========================
+   УДАЛЕНИЕ
+========================= */
+
+function openDeleteModal(
+
+    operationId,
+
+    category,
+
+    amount
+
+) {
+
+    selectedOperationId =
+        operationId;
+
+
+    document.querySelector(
+        "#delete-text"
+    ).textContent =
+
+        `Удалить операцию «${category}» на сумму ${amount}?`;
+
+
+    document
+
+        .querySelector(
+            "#delete-modal-overlay"
+        )
+
+        .classList.add(
+            "show"
+        );
+
+}
+
+
+function closeDeleteModal() {
+
+    selectedOperationId =
+        null;
+
+
+    document
+
+        .querySelector(
+            "#delete-modal-overlay"
+        )
+
+        .classList.remove(
+            "show"
+        );
+
+}
+
+
+async function deleteOperation() {
+
+    if (
+
+        !selectedOperationId
+
+    ) {
+
+        return;
+
+    }
+
+
+    const button =
+        document.querySelector(
+            "#delete-button"
+        );
+
+
+    button.disabled =
+        true;
+
+
+    button.textContent =
+        "⏳ Удаляем...";
+
+
+    try {
+
+        const response =
+            await fetch(
+
+                MAKE_WEBHOOK_URL,
+
+                {
+
+                    method:
+                        "POST",
+
+                    headers:
+                        {
+
+                            "Content-Type":
+                                "application/json"
+
+                        },
+
+                    body:
+                        JSON.stringify({
+
+                            action:
+                                "delete_operation",
+
+                            id:
+                                selectedOperationId
+
+                        })
+
+                }
+
+            );
+
+
+        if (
+
+            !response.ok
+
+        ) {
+
+            throw new Error(
+                "Ошибка удаления"
+            );
+
+        }
+
+
+        closeDeleteModal();
+
+
+        showToast(
+            "🗑 Операция удалена"
+        );
+
+
+        await loadData(
+            currentPeriod
+        );
+
+
+    } catch (
+
+        error
+
+    ) {
+
+        console.error(
+            error
+        );
+
+
+        showToast(
+            "❌ Не удалось удалить операцию"
+        );
+
+    } finally {
+
+        button.disabled =
+            false;
+
+
+        button.textContent =
+            "🗑 Удалить";
 
     }
 
@@ -2031,13 +2301,11 @@ document
 
         button => {
 
-
             button.addEventListener(
 
                 "click",
 
                 () => {
-
 
                     document
 
@@ -2086,13 +2354,13 @@ document
 
 
 /* =========================
-   ЗАКРЫТИЕ ФОРМЫ
+   ЗАКРЫТИЕ МОДАЛОК
 ========================= */
 
 document
 
     .querySelector(
-        "#modal-overlay"
+        "#add-modal-overlay"
     )
 
     .addEventListener(
@@ -2101,15 +2369,42 @@ document
 
         event => {
 
-
             if (
 
                 event.target.id ===
-                "modal-overlay"
+                "add-modal-overlay"
 
             ) {
 
                 closeAddForm();
+
+            }
+
+        }
+
+    );
+
+
+document
+
+    .querySelector(
+        "#delete-modal-overlay"
+    )
+
+    .addEventListener(
+
+        "click",
+
+        event => {
+
+            if (
+
+                event.target.id ===
+                "delete-modal-overlay"
+
+            ) {
+
+                closeDeleteModal();
 
             }
 
