@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Финансы</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 16px;
+            font-family: Arial, sans-serif;
+            background: #f4f5f7;
+            color: #202124;
+        }
+
+        .app {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            margin: 5px 0 20px;
+            font-size: 26px;
+        }
+
+        .balance-card {
+            background: #202124;
+            color: white;
+            border-radius: 20px;
+            padding: 22px;
+            margin-bottom: 18px;
+        }
+
+        .balance-title {
+            font-size: 14px;
+            opacity: 0.7;
+        }
+
+        .total {
+            font-size: 32px;
+            font-weight: bold;
+            margin: 8px 0 20px;
+        }
+
+        .currencies {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .currency {
+            background: rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 10px;
+        }
+
+        .currency-name {
+            font-size: 13px;
+            opacity: 0.7;
+        }
+
+        .currency-value {
+            margin-top: 5px;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .tabs {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 18px;
+        }
+
+        .tab {
+            border: none;
+            border-radius: 12px;
+            padding: 12px 5px;
+            background: white;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .tab.active {
+            background: #202124;
+            color: white;
+        }
+
+        .section {
+            background: white;
+            border-radius: 18px;
+            padding: 18px;
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 14px;
+        }
+
+        .category {
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+            white-space: pre-line;
+        }
+
+        .category:last-child {
+            border-bottom: none;
+        }
+
+        .empty {
+            color: #777;
+            padding: 10px 0;
+        }
+
+        .add-button {
+            width: 100%;
+            border: none;
+            border-radius: 16px;
+            padding: 16px;
+            font-size: 17px;
+            font-weight: bold;
+            background: #202124;
+            color: white;
+            cursor: pointer;
+        }
+
+        .add-form {
+            display: none;
+            background: white;
+            border-radius: 18px;
+            padding: 18px;
+            margin-top: 16px;
+        }
+
+        .form-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 16px;
+        }
+
+        .add-form input,
+        .add-form select {
+            width: 100%;
+            padding: 14px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            font-size: 16px;
+            background: white;
+        }
+
+        .submit-button,
+        .cancel-button {
+            width: 100%;
+            border: none;
+            border-radius: 12px;
+            padding: 14px;
+            font-size: 16px;
+            margin-top: 6px;
+            cursor: pointer;
+        }
+
+        .submit-button {
+            background: #202124;
+            color: white;
+        }
+
+        .cancel-button {
+            background: #f1f3f4;
+            color: #202124;
+        }
+
+        .submit-button:disabled {
+            opacity: 0.6;
+            cursor: wait;
+        }
+
+        .error {
+            background: #ffe5e5;
+            color: #b00020;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <h1>💰 Мои финансы</h1>
+
+    <div id="error" class="error">
+        Не удалось загрузить данные
+    </div>
+
+    <div class="balance-card">
+
+        <div class="balance-title">
+            Общий баланс
+        </div>
+
+        <div class="total">
+            Загрузка...
+        </div>
+
+        <div class="currencies">
+
+            <div class="currency">
+                <div class="currency-name">🇺🇸 USD</div>
+                <div class="currency-value usd">...</div>
+            </div>
+
+            <div class="currency">
+                <div class="currency-name">🇺🇿 UZS</div>
+                <div class="currency-value uzs">...</div>
+            </div>
+
+            <div class="currency">
+                <div class="currency-name">🇷🇺 RUB</div>
+                <div class="currency-value rub">...</div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="tabs">
+
+        <button class="tab active" data-period="today">
+            Сегодня
+        </button>
+
+        <button class="tab" data-period="month">
+            Месяц
+        </button>
+
+        <button class="tab" data-period="all">
+            Всё время
+        </button>
+
+    </div>
+
+    <div class="section">
+
+        <div class="section-title">
+            💸 Расходы
+        </div>
+
+        <div id="expenses">
+            Загрузка...
+        </div>
+
+    </div>
+
+    <div class="section">
+
+        <div class="section-title">
+            💰 Доходы
+        </div>
+
+        <div id="income">
+            Загрузка...
+        </div>
+
+    </div>
+
+    <button class="add-button" onclick="openAddForm()">
+        ＋ Добавить операцию
+    </button>
+
+    <div id="add-form" class="add-form">
+
+        <div class="form-title">
+            Новая операция
+        </div>
+
+        <select id="operation-type">
+            <option value="Расход">🔴 Расход</option>
+            <option value="Доход">🟢 Доход</option>
+        </select>
+
+        <input
+            id="amount"
+            type="number"
+            placeholder="Сумма"
+        >
+
+        <select id="currency">
+            <option value="UZS">🇺🇿 UZS</option>
+            <option value="RUB">🇷🇺 RUB</option>
+            <option value="USD">🇺🇸 USD</option>
+        </select>
+
+        <select id="category">
+
+            <option value="Продукты">🛒 Продукты</option>
+            <option value="Кафе">☕ Кафе</option>
+            <option value="Транспорт">🚕 Транспорт</option>
+            <option value="Дом">🏠 Дом</option>
+            <option value="Здоровье">💊 Здоровье</option>
+            <option value="Красота">💄 Красота</option>
+            <option value="Одежда">👕 Одежда</option>
+            <option value="Развлечения">🎮 Развлечения</option>
+            <option value="Подарки">🎁 Подарки</option>
+            <option value="Подписки">📺 Подписки</option>
+            <option value="Алкоголь">🍻 Алкоголь</option>
+            <option value="Хобби">🎨 Хобби</option>
+            <option value="Прочее">📦 Прочее</option>
+
+        </select>
+
+        <input
+            id="description"
+            type="text"
+            placeholder="Описание (необязательно)"
+        >
+
+        <button
+            id="submit-button"
+            class="submit-button"
+            onclick="addOperation()"
+        >
+            Добавить
+        </button>
+
+        <button
+            class="cancel-button"
+            onclick="closeAddForm()"
+        >
+            Отмена
+        </button>
+
+    </div>
+
+</div>
+
+
+<script>
+
+const MAKE_WEBHOOK_URL =
+"https://hook.eu1.make.com/rbaqfgqxqlzyvb6s7imcpnhx3k2igjgo";
+
+
+let currentPeriod = "today";
+
+
+function formatNumber(value) {
+
+    if (value === undefined || value === null) {
+        return "";
+    }
+
+    const number = Number(
+        String(value)
+            .replace(/\s/g, "")
+            .replace(",", ".")
+    );
+
+    if (isNaN(number)) {
+        return value;
+    }
+
+    return number.toLocaleString("ru-RU", {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2
+    });
+
+}
+
+
+function getPeriodData(data, period) {
+
+    if (period === "today") {
+
+        return {
+            expenses: data.today_expenses,
+            income: data.today_income
+        };
+
+    }
+
+    if (period === "month") {
+
+        return {
+            expenses: data.month_expenses,
+            income: data.month_income
+        };
+
+    }
+
+    return {
+        expenses: data.all_expenses,
+        income: data.all_income
+    };
+
+}
+
+
+async function loadData(period = "today") {
+
+    currentPeriod = period;
+
+    try {
+
+        document.querySelector("#error").style.display =
+            "none";
+
+
+        const response =
+            await fetch(MAKE_WEBHOOK_URL, {
+
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+
+                    action: "get_finance_data",
+
+                    period: period
+
+                })
+
+            });
+
+
+        if (!response.ok) {
+            throw new Error("Ошибка HTTP");
+        }
+
+
+        const data =
+            await response.json();
+
+
+        document.querySelector(".total").textContent =
+            "≈ " + formatNumber(data.total_usd) + " USD";
+
+
+        document.querySelector(".usd").textContent =
+            formatNumber(data.usd);
+
+
+        document.querySelector(".uzs").textContent =
+            formatNumber(data.uzs);
+
+
+        document.querySelector(".rub").textContent =
+            formatNumber(data.rub);
+
+
+        const periodData =
+            getPeriodData(data, period);
+
+
+        renderText(
+            "expenses",
+            periodData.expenses,
+            "Расходов нет"
+        );
+
+
+        renderText(
+            "income",
+            periodData.income,
+            "Доходов нет"
+        );
+
+
+    } catch (error) {
+
+        console.error(error);
+
+
+        document.querySelector("#error").style.display =
+            "block";
+
+
+        document.querySelector("#error").textContent =
+            "❌ Не удалось загрузить данные";
+
+    }
+
+}
+
+
+function renderText(
+    elementId,
+    text,
+    emptyText
+) {
+
+    const container =
+        document.querySelector("#" + elementId);
+
+
+    if (!text || text.trim() === "") {
+
+        container.innerHTML =
+            `<div class="empty">${emptyText}</div>`;
+
+        return;
+
+    }
+
+
+    const lines =
+        text.split("\\n");
+
+
+    container.innerHTML = "";
+
+
+    lines.forEach(line => {
+
+        if (line.trim() === "") {
+            return;
+        }
+
+
+        const row =
+            document.createElement("div");
+
+
+        row.className =
+            "category";
+
+
+        row.textContent =
+            line;
+
+
+        container.appendChild(row);
+
+    });
+
+}
+
+
+function openAddForm() {
+
+    document.querySelector("#add-form").style.display =
+        "block";
+
+}
+
+
+function closeAddForm() {
+
+    document.querySelector("#add-form").style.display =
+        "none";
+
+}
+
+
+async function addOperation() {
+
+    const type =
+        document.querySelector("#operation-type").value;
+
+
+    const amount =
+        document.querySelector("#amount").value;
+
+
+    const currency =
+        document.querySelector("#currency").value;
+
+
+    const category =
+        document.querySelector("#category").value;
+
+
+    const description =
+        document.querySelector("#description").value;
+
+
+    if (!amount || Number(amount) <= 0) {
+
+        alert("Введите сумму");
+
+        return;
+
+    }
+
+
+    const button =
+        document.querySelector("#submit-button");
+
+
+    button.disabled =
+        true;
+
+
+    button.textContent =
+        "Добавление...";
+
+
+    try {
+
+        const response =
+            await fetch(MAKE_WEBHOOK_URL, {
+
+                method: "POST",
+
+                headers: {
+
+                    "Content-Type":
+                        "application/json"
+
+                },
+
+                body: JSON.stringify({
+
+                    action: "add_operation",
+
+                    type: type,
+
+                    amount: amount,
+
+                    currency: currency,
+
+                    category: category,
+
+                    description: description
+
+                })
+
+            });
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Ошибка добавления операции"
+            );
+
+        }
+
+
+        alert("✅ Операция добавлена");
+
+
+        closeAddForm();
+
+
+        document.querySelector("#amount").value =
+            "";
+
+
+        document.querySelector("#description").value =
+            "";
+
+
+        loadData(currentPeriod);
+
+
+    } catch (error) {
+
+        console.error(error);
+
+
+        alert(
+            "❌ Не удалось добавить операцию"
+        );
+
+
+    } finally {
+
+        button.disabled =
+            false;
+
+
+        button.textContent =
+            "Добавить";
+
+    }
+
+}
+
+
+document
+.querySelectorAll(".tab")
+.forEach(button => {
+
+    button.addEventListener("click", () => {
+
+
+        document
+        .querySelectorAll(".tab")
+        .forEach(btn => {
+
+            btn.classList.remove("active");
+
+        });
+
+
+        button.classList.add("active");
+
+
+        const period =
+            button.dataset.period;
+
+
+        loadData(period);
+
+    });
+
+});
+
+
+loadData("today");
+
+</script>
+
+</body>
+</html>
