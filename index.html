@@ -1,632 +1,647 @@
 <!DOCTYPE html>
+
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Финансы</title>
 
-    <style>
+```
+<style>
+    * {
+        box-sizing: border-box;
+    }
 
-        * {
-            box-sizing: border-box;
-        }
+    body {
+        margin: 0;
+        padding: 16px;
+        padding-bottom: 150px;
+        font-family: Arial, sans-serif;
+        background: #f4f5f7;
+        color: #202124;
+    }
+
+    .app {
+        max-width: 500px;
+        margin: 0 auto;
+    }
+
+    /* =========================
+       ШАПКА
+    ========================= */
+
+    .app-header {
+        background: #202124;
+        color: white;
+        border-radius: 22px;
+        padding: 18px;
+        margin-bottom: 18px;
+    }
+
+    .header-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 18px;
+    }
+
+    .app-header h1 {
+        margin: 0;
+        font-size: 25px;
+    }
+
+    .cat-wrapper {
+        position: relative;
+        flex-shrink: 0;
+    }
+
+    .cat {
+        width: 58px;
+        height: 58px;
+        object-fit: cover;
+        border-radius: 16px;
+        cursor: pointer;
+        transition: transform 0.15s ease;
+    }
+
+    .cat:active {
+        transform: scale(0.9) rotate(-5deg);
+    }
+
+    .cat-speech {
+        position: absolute;
+        right: 0;
+        top: 68px;
+        width: 230px;
+        background: white;
+        color: #202124;
+        padding: 12px 14px;
+        border-radius: 14px;
+        font-size: 14px;
+        line-height: 1.3;
+        box-shadow: 0 4px 18px rgba(0, 0, 0, 0.15);
+        opacity: 0;
+        transform: translateY(-8px) scale(0.95);
+        pointer-events: none;
+        transition: all 0.2s ease;
+        z-index: 100;
+    }
+
+    .cat-speech::before {
+        content: "";
+        position: absolute;
+        top: -8px;
+        right: 20px;
+        width: 16px;
+        height: 16px;
+        background: white;
+        transform: rotate(45deg);
+    }
+
+    .cat-speech.show {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+
+    .balance-title {
+        font-size: 14px;
+        opacity: 0.7;
+    }
+
+    .total {
+        font-size: 32px;
+        font-weight: bold;
+        margin: 7px 0 18px;
+    }
+
+    .currencies {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+    }
+
+    .currency {
+        background: rgba(255,255,255,0.1);
+        border-radius: 12px;
+        padding: 10px;
+    }
+
+    .currency-name {
+        font-size: 13px;
+        opacity: 0.7;
+    }
+
+    .currency-value {
+        margin-top: 5px;
+        font-size: 15px;
+        font-weight: bold;
+    }
+
+    /* =========================
+       ВКЛАДКИ
+    ========================= */
+
+    .tabs {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+        margin-bottom: 18px;
+    }
+
+    .tab {
+        border: none;
+        border-radius: 12px;
+        padding: 12px 5px;
+        background: white;
+        font-size: 14px;
+        cursor: pointer;
+    }
+
+    .tab.active {
+        background: #202124;
+        color: white;
+    }
+
+    /* =========================
+       СЕКЦИИ
+    ========================= */
+
+    .section {
+        background: white;
+        border-radius: 18px;
+        padding: 18px;
+        margin-bottom: 16px;
+        overflow: hidden;
+    }
+
+    .section-title {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 14px;
+    }
+
+    .category {
+        display: grid;
+        grid-template-columns: minmax(90px, 1fr) minmax(0, 2fr);
+        align-items: start;
+        gap: 12px;
+        padding: 13px 0;
+        border-bottom: 1px solid #eee;
+        min-width: 0;
+    }
+
+    .category:last-child {
+        border-bottom: none;
+    }
+
+    .category-name {
+        font-size: 15px;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .category-amount {
+        font-weight: bold;
+        text-align: right;
+        min-width: 0;
+        font-size: 15px;
+        line-height: 1.4;
+        overflow-wrap: anywhere;
+    }
+
+    .expense-amount {
+        color: #d93025;
+    }
+
+    .income-amount {
+        color: #188038;
+    }
+
+    .section-total {
+        display: grid;
+        grid-template-columns: minmax(120px, 1fr) minmax(0, 2fr);
+        align-items: start;
+        gap: 12px;
+        border-top: 1px solid #eee;
+        margin-top: 8px;
+        padding-top: 14px;
+        font-weight: bold;
+    }
+
+    .section-total span:last-child {
+        text-align: right;
+        line-height: 1.4;
+        overflow-wrap: anywhere;
+    }
+
+    .empty {
+        color: #777;
+        padding: 10px 0;
+    }
+
+    /* =========================
+       ПЛАВАЮЩИЕ КНОПКИ
+    ========================= */
+
+    .floating-actions {
+        position: fixed;
+        bottom: 18px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: calc(100% - 32px);
+        max-width: 500px;
+        display: flex;
+        gap: 8px;
+        z-index: 500;
+    }
+
+    .floating-button {
+        flex: 1;
+        border: none;
+        border-radius: 16px;
+        padding: 15px 8px;
+        font-size: 14px;
+        font-weight: bold;
+        cursor: pointer;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.18);
+    }
+
+    .operations-button {
+        background: white;
+        color: #202124;
+    }
+
+    .add-button {
+        background: #202124;
+        color: white;
+    }
+
+    .floating-button:active {
+        transform: scale(0.97);
+    }
+
+    /* =========================
+       ОПЕРАЦИИ
+    ========================= */
+
+    .operations-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.45);
+        z-index: 900;
+        align-items: flex-end;
+        justify-content: center;
+    }
+
+    .operations-overlay.show {
+        display: flex;
+    }
+
+    .operations-panel {
+        width: 100%;
+        max-width: 500px;
+        max-height: 82vh;
+        overflow-y: auto;
+        background: white;
+        border-radius: 22px 22px 0 0;
+        padding: 20px 18px 28px;
+        transform: translateY(100%);
+        transition: transform 0.25s ease;
+    }
+
+    .operations-overlay.show .operations-panel {
+        transform: translateY(0);
+    }
+
+    .operations-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 12px;
+    }
+
+    .operations-title {
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    .close-operations,
+    .close-button {
+        width: 34px;
+        height: 34px;
+        border: none;
+        border-radius: 50%;
+        background: #f1f3f4;
+        font-size: 20px;
+        cursor: pointer;
+    }
+
+    .operation-card {
+        padding: 15px 0;
+        border-bottom: 1px solid #eee;
+        cursor: pointer;
+        transition: all 0.15s ease;
+    }
+
+    .operation-card:active {
+        transform: scale(0.98);
+        background: #f5f5f5;
+    }
+
+    .operation-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .operation-category {
+        font-size: 15px;
+        font-weight: bold;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .operation-amount {
+        font-size: 15px;
+        font-weight: bold;
+        text-align: right;
+        white-space: nowrap;
+    }
+
+    .operation-amount.expense {
+        color: #d93025;
+    }
+
+    .operation-amount.income {
+        color: #188038;
+    }
+
+    .operation-info {
+        margin-top: 5px;
+        color: #777;
+        font-size: 13px;
+    }
+
+    .operation-id {
+        margin-top: 3px;
+        color: #999;
+        font-size: 12px;
+    }
+
+    .operation-hint {
+        margin-top: 5px;
+        color: #aaa;
+        font-size: 11px;
+    }
+
+    /* =========================
+       ОШИБКА
+    ========================= */
+
+    .error {
+        background: #ffe5e5;
+        color: #b00020;
+        padding: 15px;
+        border-radius: 12px;
+        margin-bottom: 16px;
+        display: none;
+    }
+
+    /* =========================
+       TOAST
+    ========================= */
+
+    .toast {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%) translateY(-20px);
+        background: #202124;
+        color: white;
+        padding: 14px 20px;
+        border-radius: 14px;
+        font-size: 15px;
+        font-weight: bold;
+        opacity: 0;
+        pointer-events: none;
+        transition: all 0.25s ease;
+        z-index: 2000;
+        white-space: nowrap;
+    }
+
+    .toast.show {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+
+    /* =========================
+       МОДАЛЬНЫЕ ОКНА
+    ========================= */
+
+    .modal-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.45);
+        z-index: 1000;
+        align-items: flex-end;
+        justify-content: center;
+    }
+
+    .modal-overlay.show {
+        display: flex;
+    }
+
+    .add-form,
+    .delete-modal {
+        width: 100%;
+        max-width: 500px;
+        background: white;
+        border-radius: 22px 22px 0 0;
+        padding: 22px 18px 24px;
+        transform: translateY(100%);
+        transition: transform 0.25s ease;
+    }
+
+    .modal-overlay.show .add-form,
+    .modal-overlay.show .delete-modal {
+        transform: translateY(0);
+    }
+
+    .form-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 18px;
+    }
+
+    .form-title {
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    .add-form input,
+    .add-form select {
+        width: 100%;
+        padding: 14px;
+        margin-bottom: 10px;
+        border: 1px solid #ddd;
+        border-radius: 12px;
+        font-size: 16px;
+        background: white;
+    }
+
+    .submit-button,
+    .cancel-button {
+        width: 100%;
+        border: none;
+        border-radius: 12px;
+        padding: 14px;
+        font-size: 16px;
+        margin-top: 6px;
+        cursor: pointer;
+    }
+
+    .submit-button {
+        background: #202124;
+        color: white;
+    }
+
+    .cancel-button {
+        background: #f1f3f4;
+        color: #202124;
+    }
+
+    .submit-button:disabled {
+        opacity: 0.6;
+        cursor: wait;
+    }
+
+    /* =========================
+       КРАСИВОЕ ОКНО УДАЛЕНИЯ
+    ========================= */
+
+    .delete-title {
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 16px;
+    }
+
+    .delete-operation-card {
+        background: #f4f5f7;
+        border-radius: 16px;
+        padding: 16px;
+        margin-bottom: 18px;
+    }
+
+    .delete-operation-category {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .delete-operation-amount {
+        font-size: 22px;
+        font-weight: bold;
+        margin-bottom: 8px;
+    }
+
+    .delete-operation-amount.expense {
+        color: #d93025;
+    }
+
+    .delete-operation-amount.income {
+        color: #188038;
+    }
+
+    .delete-operation-info {
+        color: #777;
+        font-size: 13px;
+        line-height: 1.6;
+    }
+
+    .delete-question {
+        color: #666;
+        font-size: 14px;
+        margin-bottom: 16px;
+    }
+
+    .delete-button {
+        width: 100%;
+        border: none;
+        border-radius: 12px;
+        padding: 14px;
+        font-size: 16px;
+        margin-top: 6px;
+        cursor: pointer;
+        background: #d93025;
+        color: white;
+    }
+
+    .delete-button:disabled {
+        opacity: 0.6;
+    }
+
+    /* =========================
+       АДАПТИВ
+    ========================= */
+
+    @media (max-width: 420px) {
 
         body {
-            margin: 0;
-            padding: 16px;
-            padding-bottom: 150px;
-            font-family: Arial, sans-serif;
-            background: #f4f5f7;
-            color: #202124;
-        }
-
-        .app {
-            max-width: 500px;
-            margin: 0 auto;
-        }
-
-        /* =========================
-           ШАПКА
-        ========================= */
-
-        .app-header {
-            background: #202124;
-            color: white;
-            border-radius: 22px;
-            padding: 18px;
-            margin-bottom: 18px;
-        }
-
-        .header-top {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-            margin-bottom: 18px;
+            padding-left: 12px;
+            padding-right: 12px;
         }
 
         .app-header h1 {
-            margin: 0;
-            font-size: 25px;
+            font-size: 23px;
         }
-
-        /* КОТИК */
-
-        .cat-wrapper {
-            position: relative;
-            flex-shrink: 0;
-        }
-
-        .cat {
-            width: 58px;
-            height: 58px;
-            object-fit: cover;
-            border-radius: 16px;
-            cursor: pointer;
-            transition: transform 0.15s ease;
-        }
-
-        .cat:active {
-            transform: scale(0.9) rotate(-5deg);
-        }
-
-        .cat-speech {
-            position: absolute;
-            right: 0;
-            top: 68px;
-            width: 230px;
-            background: white;
-            color: #202124;
-            padding: 12px 14px;
-            border-radius: 14px;
-            font-size: 14px;
-            line-height: 1.3;
-            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.15);
-            opacity: 0;
-            transform: translateY(-8px) scale(0.95);
-            pointer-events: none;
-            transition: all 0.2s ease;
-            z-index: 100;
-        }
-
-        .cat-speech::before {
-            content: "";
-            position: absolute;
-            top: -8px;
-            right: 20px;
-            width: 16px;
-            height: 16px;
-            background: white;
-            transform: rotate(45deg);
-        }
-
-        .cat-speech.show {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-        }
-
-        /* БАЛАНС */
-
-        .balance-title {
-            font-size: 14px;
-            opacity: 0.7;
-        }
-
-        .total {
-            font-size: 32px;
-            font-weight: bold;
-            margin: 7px 0 18px;
-        }
-
-        .currencies {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-        }
-
-        .currency {
-            background: rgba(255,255,255,0.1);
-            border-radius: 12px;
-            padding: 10px;
-        }
-
-        .currency-name {
-            font-size: 13px;
-            opacity: 0.7;
-        }
-
-        .currency-value {
-            margin-top: 5px;
-            font-size: 15px;
-            font-weight: bold;
-        }
-
-        /* =========================
-           ВКЛАДКИ
-        ========================= */
-
-        .tabs {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 8px;
-            margin-bottom: 18px;
-        }
-
-        .tab {
-            border: none;
-            border-radius: 12px;
-            padding: 12px 5px;
-            background: white;
-            font-size: 14px;
-            cursor: pointer;
-        }
-
-        .tab.active {
-            background: #202124;
-            color: white;
-        }
-
-        /* =========================
-           СЕКЦИИ
-        ========================= */
-
-        .section {
-            background: white;
-            border-radius: 18px;
-            padding: 18px;
-            margin-bottom: 16px;
-            overflow: hidden;
-        }
-
-        .section-title {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 14px;
-        }
-
-        /* =========================
-           КАТЕГОРИИ
-        ========================= */
 
         .category {
-            display: grid;
-            grid-template-columns: minmax(90px, 1fr) minmax(0, 2fr);
-            align-items: start;
-            gap: 12px;
-            padding: 13px 0;
-            border-bottom: 1px solid #eee;
-            min-width: 0;
+            grid-template-columns: minmax(75px, 0.8fr) minmax(0, 2fr);
+            gap: 8px;
         }
 
-        .category:last-child {
-            border-bottom: none;
-        }
-
-        .category-name {
-            font-size: 15px;
-            min-width: 0;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
+        .category-name,
         .category-amount {
-            font-weight: bold;
-            text-align: right;
-            min-width: 0;
-            font-size: 15px;
-            line-height: 1.4;
-            overflow-wrap: anywhere;
-        }
-
-        .expense-amount {
-            color: #d93025;
-        }
-
-        .income-amount {
-            color: #188038;
+            font-size: 14px;
         }
 
         .section-total {
-            display: grid;
-            grid-template-columns: minmax(120px, 1fr) minmax(0, 2fr);
-            align-items: start;
-            gap: 12px;
-            border-top: 1px solid #eee;
-            margin-top: 8px;
-            padding-top: 14px;
-            font-weight: bold;
+            grid-template-columns: minmax(115px, 0.9fr) minmax(0, 2fr);
+            font-size: 14px;
         }
 
-        .section-total span:last-child {
-            text-align: right;
-            line-height: 1.4;
-            overflow-wrap: anywhere;
+        .cat-speech {
+            right: -5px;
+            width: 210px;
         }
 
-        .empty {
-            color: #777;
-            padding: 10px 0;
+        .operation-category,
+        .operation-amount {
+            font-size: 14px;
         }
-
-        /* =========================
-           ПЛАВАЮЩИЕ КНОПКИ
-        ========================= */
 
         .floating-actions {
-            position: fixed;
-            bottom: 18px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: calc(100% - 32px);
-            max-width: 500px;
-            display: flex;
-            gap: 8px;
-            z-index: 500;
+            width: calc(100% - 24px);
+            bottom: 12px;
         }
 
         .floating-button {
-            flex: 1;
-            border: none;
-            border-radius: 16px;
-            padding: 15px 8px;
-            font-size: 14px;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.18);
-        }
-
-        .operations-button {
-            background: white;
-            color: #202124;
-        }
-
-        .add-button {
-            background: #202124;
-            color: white;
-        }
-
-        .floating-button:active {
-            transform: scale(0.97);
-        }
-
-        /* =========================
-           ПАНЕЛЬ ПОСЛЕДНИХ ОПЕРАЦИЙ
-        ========================= */
-
-        .operations-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.45);
-            z-index: 900;
-            align-items: flex-end;
-            justify-content: center;
-        }
-
-        .operations-overlay.show {
-            display: flex;
-        }
-
-        .operations-panel {
-            width: 100%;
-            max-width: 500px;
-            max-height: 82vh;
-            overflow-y: auto;
-            background: white;
-            border-radius: 22px 22px 0 0;
-            padding: 20px 18px 28px;
-            transform: translateY(100%);
-            transition: transform 0.25s ease;
-        }
-
-        .operations-overlay.show .operations-panel {
-            transform: translateY(0);
-        }
-
-        .operations-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 12px;
-        }
-
-        .operations-title {
-            font-size: 20px;
-            font-weight: bold;
-        }
-
-        .close-operations {
-            width: 34px;
-            height: 34px;
-            border: none;
-            border-radius: 50%;
-            background: #f1f3f4;
-            font-size: 20px;
-            cursor: pointer;
-        }
-
-        .operation-card {
-            padding: 14px 0;
-            border-bottom: 1px solid #eee;
-            cursor: pointer;
-            transition: background 0.15s ease;
-        }
-
-        .operation-card:last-child {
-            border-bottom: none;
-        }
-
-        .operation-card:active {
-            background: #f5f5f5;
-        }
-
-        .operation-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            gap: 10px;
-        }
-
-        .operation-category {
-            font-size: 15px;
-            font-weight: bold;
-            min-width: 0;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .operation-amount {
-            font-size: 15px;
-            font-weight: bold;
-            text-align: right;
-            white-space: nowrap;
-        }
-
-        .operation-amount.expense {
-            color: #d93025;
-        }
-
-        .operation-amount.income {
-            color: #188038;
-        }
-
-        .operation-info {
-            margin-top: 5px;
-            color: #777;
             font-size: 13px;
+            padding: 14px 5px;
         }
+    }
+</style>
+```
 
-        .operation-id {
-            margin-top: 3px;
-            color: #999;
-            font-size: 12px;
-        }
-
-        .operation-hint {
-            margin-top: 5px;
-            color: #aaa;
-            font-size: 11px;
-        }
-
-        /* =========================
-           ОШИБКА
-        ========================= */
-
-        .error {
-            background: #ffe5e5;
-            color: #b00020;
-            padding: 15px;
-            border-radius: 12px;
-            margin-bottom: 16px;
-            display: none;
-        }
-
-        /* =========================
-           TOAST
-        ========================= */
-
-        .toast {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%) translateY(-20px);
-            background: #202124;
-            color: white;
-            padding: 14px 20px;
-            border-radius: 14px;
-            font-size: 15px;
-            font-weight: bold;
-            opacity: 0;
-            pointer-events: none;
-            transition: all 0.25s ease;
-            z-index: 2000;
-            white-space: nowrap;
-        }
-
-        .toast.show {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0);
-        }
-
-        /* =========================
-           МОДАЛЬНЫЕ ОКНА
-        ========================= */
-
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.45);
-            z-index: 1000;
-            align-items: flex-end;
-            justify-content: center;
-        }
-
-        .modal-overlay.show {
-            display: flex;
-        }
-
-        .add-form,
-        .delete-modal {
-            width: 100%;
-            max-width: 500px;
-            background: white;
-            border-radius: 22px 22px 0 0;
-            padding: 22px 18px 24px;
-            transform: translateY(100%);
-            transition: transform 0.25s ease;
-        }
-
-        .modal-overlay.show .add-form,
-        .modal-overlay.show .delete-modal {
-            transform: translateY(0);
-        }
-
-        .form-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 18px;
-        }
-
-        .form-title {
-            font-size: 20px;
-            font-weight: bold;
-        }
-
-        .close-button {
-            width: 34px;
-            height: 34px;
-            border: none;
-            border-radius: 50%;
-            background: #f1f3f4;
-            font-size: 20px;
-            cursor: pointer;
-        }
-
-        .add-form input,
-        .add-form select {
-            width: 100%;
-            padding: 14px;
-            margin-bottom: 10px;
-            border: 1px solid #ddd;
-            border-radius: 12px;
-            font-size: 16px;
-            background: white;
-        }
-
-        .submit-button,
-        .cancel-button {
-            width: 100%;
-            border: none;
-            border-radius: 12px;
-            padding: 14px;
-            font-size: 16px;
-            margin-top: 6px;
-            cursor: pointer;
-        }
-
-        .submit-button {
-            background: #202124;
-            color: white;
-        }
-
-        .cancel-button {
-            background: #f1f3f4;
-            color: #202124;
-        }
-
-        .submit-button:disabled {
-            opacity: 0.6;
-            cursor: wait;
-        }
-
-        .delete-title {
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        .delete-text {
-            color: #666;
-            line-height: 1.4;
-            margin-bottom: 20px;
-        }
-
-        .delete-button {
-            width: 100%;
-            border: none;
-            border-radius: 12px;
-            padding: 14px;
-            font-size: 16px;
-            margin-top: 6px;
-            cursor: pointer;
-            background: #d93025;
-            color: white;
-        }
-
-        .delete-button:disabled {
-            opacity: 0.6;
-        }
-
-        /* =========================
-           АДАПТИВ
-        ========================= */
-
-        @media (max-width: 420px) {
-
-            body {
-                padding-left: 12px;
-                padding-right: 12px;
-            }
-
-            .app-header h1 {
-                font-size: 23px;
-            }
-
-            .category {
-                grid-template-columns: minmax(75px, 0.8fr) minmax(0, 2fr);
-                gap: 8px;
-            }
-
-            .category-name {
-                font-size: 14px;
-            }
-
-            .category-amount {
-                font-size: 14px;
-            }
-
-            .section-total {
-                grid-template-columns: minmax(115px, 0.9fr) minmax(0, 2fr);
-                font-size: 14px;
-            }
-
-            .cat-speech {
-                right: -5px;
-                width: 210px;
-            }
-
-            .operation-category,
-            .operation-amount {
-                font-size: 14px;
-            }
-
-            .floating-actions {
-                width: calc(100% - 24px);
-                bottom: 12px;
-            }
-
-            .floating-button {
-                font-size: 13px;
-                padding: 14px 5px;
-            }
-
-        }
-
-    </style>
 </head>
 
 <body>
@@ -635,302 +650,295 @@
 
 <div class="app">
 
-    <!-- ШАПКА -->
+```
+<div class="app-header">
 
-    <div class="app-header">
+    <div class="header-top">
 
-        <div class="header-top">
+        <h1>Мои финансы</h1>
 
-            <h1>Мои финансы</h1>
+        <div class="cat-wrapper">
 
-            <div class="cat-wrapper">
+            <div id="cat-speech" class="cat-speech"></div>
 
-                <div id="cat-speech" class="cat-speech"></div>
-
-                <img
-                    class="cat"
-                    src="https://raw.githubusercontent.com/yteleev-cmd/qwerty/main/photo_2026-07-09_15-28-02.jpg"
-                    alt="Котик"
-                    onclick="catSpeak()"
-                >
-
-            </div>
-
-        </div>
-
-        <div class="balance-title">
-            Мой баланс
-        </div>
-
-        <div class="total">
-            Загрузка...
-        </div>
-
-        <div class="currencies">
-
-            <div class="currency">
-                <div class="currency-name">🇺🇸 USD</div>
-                <div class="currency-value usd">...</div>
-            </div>
-
-            <div class="currency">
-                <div class="currency-name">🇺🇿 UZS</div>
-                <div class="currency-value uzs">...</div>
-            </div>
-
-            <div class="currency">
-                <div class="currency-name">🇷🇺 RUB</div>
-                <div class="currency-value rub">...</div>
-            </div>
+            <img
+                class="cat"
+                src="https://raw.githubusercontent.com/yteleev-cmd/qwerty/main/photo_2026-07-09_15-28-02.jpg"
+                alt="Котик"
+                onclick="catSpeak()"
+            >
 
         </div>
 
     </div>
 
-    <div id="error" class="error">
-        Не удалось загрузить данные
+    <div class="balance-title">
+        Мой баланс
     </div>
 
-    <!-- ПЕРИОДЫ -->
-
-    <div class="tabs">
-
-        <button class="tab active" data-period="today">
-            Сегодня
-        </button>
-
-        <button class="tab" data-period="month">
-            Месяц
-        </button>
-
+    <div class="total">
+        Загрузка...
     </div>
 
-    <!-- РАСХОДЫ -->
+    <div class="currencies">
 
-    <div class="section">
-
-        <div class="section-title">
-            💸 Расходы
+        <div class="currency">
+            <div class="currency-name">🇺🇸 USD</div>
+            <div class="currency-value usd">...</div>
         </div>
 
-        <div id="expenses">
-            Загрузка...
+        <div class="currency">
+            <div class="currency-name">🇺🇿 UZS</div>
+            <div class="currency-value uzs">...</div>
         </div>
 
-    </div>
-
-    <!-- ДОХОДЫ -->
-
-    <div class="section">
-
-        <div class="section-title">
-            💰 Доходы
-        </div>
-
-        <div id="income">
-            Загрузка...
+        <div class="currency">
+            <div class="currency-name">🇷🇺 RUB</div>
+            <div class="currency-value rub">...</div>
         </div>
 
     </div>
 
 </div>
 
+<div id="error" class="error">
+    Не удалось загрузить данные
+</div>
+
+<div class="tabs">
+
+    <button class="tab active" data-period="today">
+        Сегодня
+    </button>
+
+    <button class="tab" data-period="month">
+        Месяц
+    </button>
+
+</div>
+
+<div class="section">
+
+    <div class="section-title">
+        💸 Расходы
+    </div>
+
+    <div id="expenses">
+        Загрузка...
+    </div>
+
+</div>
+
+<div class="section">
+
+    <div class="section-title">
+        💰 Доходы
+    </div>
+
+    <div id="income">
+        Загрузка...
+    </div>
+
+</div>
+```
+
+</div>
 
 <!-- ПЛАВАЮЩИЕ КНОПКИ -->
 
 <div class="floating-actions">
 
-    <button
-        class="floating-button operations-button"
-        onclick="openOperations()"
-    >
-        📋 Последние операции
-    </button>
+```
+<button
+    class="floating-button operations-button"
+    onclick="openOperations()"
+>
+    📋 Последние операции
+</button>
 
-    <button
-        class="floating-button add-button"
-        onclick="openAddForm()"
-    >
-        ＋ Добавить
-    </button>
+<button
+    class="floating-button add-button"
+    onclick="openAddForm()"
+>
+    ＋ Добавить
+</button>
+```
 
 </div>
 
+<!-- ПОСЛЕДНИЕ ОПЕРАЦИИ -->
 
-<!-- ПАНЕЛЬ ПОСЛЕДНИХ ОПЕРАЦИЙ -->
+<div id="operations-overlay" class="operations-overlay">
 
-<div
-    id="operations-overlay"
-    class="operations-overlay"
->
+```
+<div class="operations-panel">
 
-    <div class="operations-panel">
+    <div class="operations-header">
 
-        <div class="operations-header">
-
-            <div class="operations-title">
-                📋 Последние операции
-            </div>
-
-            <button
-                class="close-operations"
-                onclick="closeOperations()"
-            >
-                ×
-            </button>
-
+        <div class="operations-title">
+            📋 Последние операции
         </div>
 
-        <div id="last10">
-            Загрузка...
-        </div>
+        <button
+            class="close-operations"
+            onclick="closeOperations()"
+        >
+            ×
+        </button>
 
     </div>
 
+    <div id="last10">
+        Загрузка...
+    </div>
+
+</div>
+```
+
 </div>
 
+<!-- ДОБАВЛЕНИЕ -->
 
-<!-- ФОРМА ДОБАВЛЕНИЯ -->
+<div id="add-modal-overlay" class="modal-overlay">
 
-<div
-    id="add-modal-overlay"
-    class="modal-overlay"
->
+```
+<div class="add-form">
 
-    <div class="add-form">
+    <div class="form-header">
 
-        <div class="form-header">
-
-            <div class="form-title">
-                Новая операция
-            </div>
-
-            <button
-                class="close-button"
-                onclick="closeAddForm()"
-            >
-                ×
-            </button>
-
+        <div class="form-title">
+            Новая операция
         </div>
 
-        <select id="operation-type">
-
-            <option value="Расход">
-                🔴 Расход
-            </option>
-
-            <option value="Доход">
-                🟢 Доход
-            </option>
-
-        </select>
-
-        <input
-            id="amount"
-            type="number"
-            placeholder="Сумма"
-        >
-
-        <select id="currency">
-
-            <option value="UZS">
-                🇺🇿 UZS
-            </option>
-
-            <option value="RUB">
-                🇷🇺 RUB
-            </option>
-
-            <option value="USD">
-                🇺🇸 USD
-            </option>
-
-        </select>
-
-        <select id="category">
-
-            <option value="Продукты">🛒 Продукты</option>
-            <option value="Кафе">☕ Кафе</option>
-            <option value="Транспорт">🚕 Транспорт</option>
-            <option value="Дом">🏠 Дом</option>
-            <option value="Здоровье">💊 Здоровье</option>
-            <option value="Красота">💄 Красота</option>
-            <option value="Одежда">👕 Одежда</option>
-            <option value="Развлечения">🎮 Развлечения</option>
-            <option value="Подарки">🎁 Подарки</option>
-            <option value="Подписки">📺 Подписки</option>
-            <option value="Алкоголь">🍻 Алкоголь</option>
-            <option value="Хобби">🎨 Хобби</option>
-            <option value="Прочее">📦 Прочее</option>
-
-        </select>
-
-        <input
-            id="description"
-            type="text"
-            placeholder="Описание (необязательно)"
-        >
-
         <button
-            id="submit-button"
-            class="submit-button"
-            onclick="addOperation()"
-        >
-            Добавить
-        </button>
-
-        <button
-            class="cancel-button"
+            class="close-button"
             onclick="closeAddForm()"
         >
-            Отмена
+            ×
         </button>
 
     </div>
 
+    <select id="operation-type" onchange="updateCategories()">
+
+        <option value="Расход">
+            🔴 Расход
+        </option>
+
+        <option value="Доход">
+            🟢 Доход
+        </option>
+
+    </select>
+
+    <input
+        id="amount"
+        type="number"
+        placeholder="Сумма"
+    >
+
+    <select id="currency">
+
+        <option value="UZS">
+            🇺🇿 UZS
+        </option>
+
+        <option value="RUB">
+            🇷🇺 RUB
+        </option>
+
+        <option value="USD">
+            🇺🇸 USD
+        </option>
+
+    </select>
+
+    <select id="category"></select>
+
+    <input
+        id="description"
+        type="text"
+        placeholder="Описание (необязательно)"
+    >
+
+    <button
+        id="submit-button"
+        class="submit-button"
+        onclick="addOperation()"
+    >
+        Добавить
+    </button>
+
+    <button
+        class="cancel-button"
+        onclick="closeAddForm()"
+    >
+        Отмена
+    </button>
+
+</div>
+```
+
 </div>
 
+<!-- УДАЛЕНИЕ -->
 
-<!-- МОДАЛЬНОЕ ОКНО УДАЛЕНИЯ -->
+<div id="delete-modal-overlay" class="modal-overlay">
 
-<div
-    id="delete-modal-overlay"
-    class="modal-overlay"
->
+```
+<div class="delete-modal">
 
-    <div class="delete-modal">
+    <div class="delete-title">
+        🗑 Удалить операцию?
+    </div>
 
-        <div class="delete-title">
-            🗑 Удалить операцию?
+    <div class="delete-operation-card">
+
+        <div
+            id="delete-category"
+            class="delete-operation-category"
+        >
+            Операция
         </div>
 
         <div
-            id="delete-text"
-            class="delete-text"
+            id="delete-amount"
+            class="delete-operation-amount"
         >
-            Вы уверены, что хотите удалить эту операцию?
+            0
         </div>
 
-        <button
-            id="delete-button"
-            class="delete-button"
-            onclick="deleteOperation()"
+        <div
+            id="delete-info"
+            class="delete-operation-info"
         >
-            🗑 Удалить
-        </button>
-
-        <button
-            class="cancel-button"
-            onclick="closeDeleteModal()"
-        >
-            Отмена
-        </button>
+        </div>
 
     </div>
 
-</div>
+    <div class="delete-question">
+        Вы действительно хотите удалить эту операцию?
+    </div>
 
+    <button
+        id="delete-button"
+        class="delete-button"
+        onclick="deleteOperation()"
+    >
+        🗑 Удалить операцию
+    </button>
+
+    <button
+        class="cancel-button"
+        onclick="closeDeleteModal()"
+    >
+        Отмена
+    </button>
+
+</div>
+```
+
+</div>
 
 <script>
 
@@ -938,12 +946,153 @@ const MAKE_WEBHOOK_URL =
 "https://hook.eu1.make.com/rbaqfgqxqlzyvb6s7imcpnhx3k2igjgo";
 
 
-let currentPeriod =
-"today";
+let currentPeriod = "today";
+
+let selectedOperationId = null;
 
 
-let selectedOperationId =
-null;
+/* =========================
+   КАТЕГОРИИ
+========================= */
+
+const expenseCategories = [
+
+    {
+        value: "Продукты",
+        label: "🛒 Продукты"
+    },
+
+    {
+        value: "Кафе",
+        label: "☕ Кафе"
+    },
+
+    {
+        value: "Транспорт",
+        label: "🚕 Транспорт"
+    },
+
+    {
+        value: "Дом",
+        label: "🏠 Дом"
+    },
+
+    {
+        value: "Здоровье",
+        label: "💊 Здоровье"
+    },
+
+    {
+        value: "Красота",
+        label: "💄 Красота"
+    },
+
+    {
+        value: "Одежда",
+        label: "👕 Одежда"
+    },
+
+    {
+        value: "Развлечения",
+        label: "🎮 Развлечения"
+    },
+
+    {
+        value: "Подарки",
+        label: "🎁 Подарки"
+    },
+
+    {
+        value: "Подписки",
+        label: "📺 Подписки"
+    },
+
+    {
+        value: "Алкоголь",
+        label: "🍻 Алкоголь"
+    },
+
+    {
+        value: "Хобби",
+        label: "🎨 Хобби"
+    },
+
+    {
+        value: "Прочее",
+        label: "📦 Прочее"
+    }
+
+];
+
+
+const incomeCategories = [
+
+    {
+        value: "Зарплата",
+        label: "💼 Зарплата"
+    },
+
+    {
+        value: "Прочее",
+        label: "📦 Прочее"
+    }
+
+];
+
+
+function updateCategories() {
+
+    const type =
+        document.querySelector(
+            "#operation-type"
+        ).value;
+
+
+    const categorySelect =
+        document.querySelector(
+            "#category"
+        );
+
+
+    const categories =
+        type === "Доход"
+
+            ? incomeCategories
+
+            : expenseCategories;
+
+
+    categorySelect.innerHTML =
+        "";
+
+
+    categories.forEach(
+
+        category => {
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+
+            option.value =
+                category.value;
+
+
+            option.textContent =
+                category.label;
+
+
+            categorySelect.appendChild(
+                option
+            );
+
+        }
+
+    );
+
+}
 
 
 /* =========================
@@ -1043,9 +1192,13 @@ function formatNumber(value) {
 
     const number =
         Number(
+
             String(value)
+
                 .replace(/\s/g, "")
+
                 .replace(",", ".")
+
         );
 
 
@@ -1059,7 +1212,9 @@ function formatNumber(value) {
 
 
     return number.toLocaleString(
+
         "ru-RU",
+
         {
 
             minimumFractionDigits: 0,
@@ -1115,13 +1270,7 @@ function showToast(message) {
    ПЕРИОД
 ========================= */
 
-function getPeriodData(
-
-    data,
-
-    period
-
-) {
+function getPeriodData(data, period) {
 
     if (
         period === "today"
@@ -1159,11 +1308,9 @@ function getPeriodData(
 
     return {
 
-        expenses:
-            "",
+        expenses: "",
 
-        income:
-            ""
+        income: ""
 
     };
 
@@ -1184,14 +1331,11 @@ function parseAmounts(line) {
         );
 
 
-    const amounts =
-        [];
+    const amounts = [];
 
 
     for (
-
         const match of matches
-
     ) {
 
         const amount =
@@ -1212,11 +1356,9 @@ function parseAmounts(line) {
 
         amounts.push({
 
-            amount:
-                amount,
+            amount,
 
-            currency:
-                currency
+            currency
 
         });
 
@@ -1291,8 +1433,7 @@ function renderText(
         "";
 
 
-    const totals =
-        {};
+    const totals = {};
 
 
     lines.forEach(
@@ -1540,7 +1681,7 @@ function renderText(
 
 
 /* =========================
-   ПОСЛЕДНИЕ ОПЕРАЦИИ
+   ОПЕРАЦИИ
 ========================= */
 
 function openOperations() {
@@ -1645,17 +1786,6 @@ function renderLast10(text) {
                             line !== ""
 
                     );
-
-
-            if (
-
-                lines.length < 4
-
-            ) {
-
-                return;
-
-            }
 
 
             const dateLine =
@@ -1789,7 +1919,11 @@ function renderLast10(text) {
 
                         categoryLine,
 
-                        amountText
+                        amountText,
+
+                        dateLine,
+
+                        isIncome
 
                     );
 
@@ -1850,11 +1984,7 @@ function renderLast10(text) {
    ЗАГРУЗКА ДАННЫХ
 ========================= */
 
-async function loadData(
-
-    period = "today"
-
-) {
+async function loadData(period = "today") {
 
     currentPeriod =
         period;
@@ -1903,9 +2033,7 @@ async function loadData(
 
 
         if (
-
             !response.ok
-
         ) {
 
             throw new Error(
@@ -2001,11 +2129,7 @@ async function loadData(
         );
 
 
-    } catch (
-
-        error
-
-    ) {
+    } catch (error) {
 
         console.error(
             error
@@ -2034,6 +2158,9 @@ async function loadData(
 ========================= */
 
 function openAddForm() {
+
+    updateCategories();
+
 
     document
 
@@ -2154,20 +2281,15 @@ async function addOperation() {
                             action:
                                 "add_operation",
 
-                            type:
-                                type,
+                            type,
 
-                            amount:
-                                amount,
+                            amount,
 
-                            currency:
-                                currency,
+                            currency,
 
-                            category:
-                                category,
+                            category,
 
-                            description:
-                                description
+                            description
 
                         })
 
@@ -2177,9 +2299,7 @@ async function addOperation() {
 
 
         if (
-
             !response.ok
-
         ) {
 
             throw new Error(
@@ -2214,11 +2334,7 @@ async function addOperation() {
         );
 
 
-    } catch (
-
-        error
-
-    ) {
+    } catch (error) {
 
         console.error(
             error
@@ -2254,7 +2370,11 @@ function openDeleteModal(
 
     category,
 
-    amount
+    amount,
+
+    date,
+
+    isIncome
 
 ) {
 
@@ -2263,10 +2383,41 @@ function openDeleteModal(
 
 
     document.querySelector(
-        "#delete-text"
+        "#delete-category"
     ).textContent =
 
-        `Удалить операцию «${category}» на сумму ${amount}?`;
+        category || "Операция";
+
+
+    const amountElement =
+        document.querySelector(
+            "#delete-amount"
+        );
+
+
+    amountElement.textContent =
+
+        (isIncome ? "+ " : "− ") +
+
+        amount;
+
+
+    amountElement.className =
+
+        "delete-operation-amount " +
+
+        (isIncome ? "income" : "expense");
+
+
+    document.querySelector(
+        "#delete-info"
+    ).innerHTML =
+
+        (date || "") +
+
+        "<br>🆔 ID: " +
+
+        operationId;
 
 
     document
@@ -2304,9 +2455,7 @@ function closeDeleteModal() {
 async function deleteOperation() {
 
     if (
-
         !selectedOperationId
-
     ) {
 
         return;
@@ -2365,9 +2514,7 @@ async function deleteOperation() {
 
 
         if (
-
             !response.ok
-
         ) {
 
             throw new Error(
@@ -2390,11 +2537,7 @@ async function deleteOperation() {
         );
 
 
-    } catch (
-
-        error
-
-    ) {
+    } catch (error) {
 
         console.error(
             error
@@ -2412,7 +2555,7 @@ async function deleteOperation() {
 
 
         button.textContent =
-            "🗑 Удалить";
+            "🗑 Удалить операцию";
 
     }
 
@@ -2467,13 +2610,10 @@ document
                         );
 
 
-                    const period =
-                        button.dataset
-                            .period;
-
-
                     loadData(
-                        period
+
+                        button.dataset.period
+
                     );
 
                 }
@@ -2486,7 +2626,7 @@ document
 
 
 /* =========================
-   ЗАКРЫТИЕ ПАНЕЛИ ОПЕРАЦИЙ
+   ЗАКРЫТИЕ ОКОН
 ========================= */
 
 document
@@ -2516,10 +2656,6 @@ document
 
     );
 
-
-/* =========================
-   ЗАКРЫТИЕ МОДАЛОК
-========================= */
 
 document
 
@@ -2581,9 +2717,9 @@ document
    ЗАПУСК
 ========================= */
 
-loadData(
-    "today"
-);
+updateCategories();
+
+loadData("today");
 
 </script>
 
