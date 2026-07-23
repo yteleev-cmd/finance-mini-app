@@ -42,6 +42,7 @@
             object-fit: cover;
             border-radius: 16px;
             flex-shrink: 0;
+            cursor: pointer;
         }
 
         .balance-card {
@@ -124,7 +125,7 @@
         .category {
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: flex-start;
             gap: 12px;
             padding: 13px 0;
             border-bottom: 1px solid #eee;
@@ -137,7 +138,7 @@
 
         .category-name {
             font-size: 15px;
-            flex: 1;
+            flex: 0 1 auto;
             min-width: 0;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -145,10 +146,12 @@
 
         .category-amount {
             font-weight: bold;
-            white-space: nowrap;
+            white-space: normal;
             text-align: right;
-            flex-shrink: 0;
+            flex: 1 1 auto;
+            min-width: 0;
             font-size: 15px;
+            line-height: 1.35;
         }
 
         .expense-amount {
@@ -176,7 +179,7 @@
 
         .section-total span:last-child {
             text-align: right;
-            line-height: 1.25;
+            line-height: 1.35;
         }
 
         .empty {
@@ -849,9 +852,19 @@ function renderText(
             );
 
 
-            const separatorIndex =
-                line.indexOf(
-                    "—"
+            /*
+             * ИСПРАВЛЕНИЕ:
+             * теперь понимаем:
+             *
+             * Зарплата — + 100 USD
+             * Зарплата – + 100 USD
+             * Зарплата - + 100 USD
+             * Зарплата • + 100 USD
+             */
+
+            const separatorMatch =
+                line.match(
+                    /\s*(—|–|-|•)\s*/
                 );
 
 
@@ -866,8 +879,12 @@ function renderText(
 
 
             if (
-                separatorIndex !== -1
+                separatorMatch
             ) {
+
+
+                const separatorIndex =
+                    separatorMatch.index;
 
 
                 const name =
@@ -882,7 +899,8 @@ function renderText(
                 const amountText =
                     line
                         .substring(
-                            separatorIndex + 1
+                            separatorIndex +
+                            separatorMatch[0].length
                         )
                         .trim();
 
