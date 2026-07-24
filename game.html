@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="ru">
-
 <head>
 
 <meta charset="UTF-8">
@@ -13,24 +12,13 @@
 
 <title>Котик против расходов</title>
 
-
 <style>
 
-
-/* =========================
-   RESET
-========================= */
-
 * {
-
     box-sizing: border-box;
-
     -webkit-tap-highlight-color: transparent;
-
     -webkit-touch-callout: none;
-
 }
-
 
 html,
 body {
@@ -38,7 +26,6 @@ body {
     margin: 0;
 
     width: 100%;
-
     height: 100%;
 
     overflow: hidden;
@@ -48,24 +35,20 @@ body {
     background: #f4f5f7;
 
     user-select: none;
-
     -webkit-user-select: none;
 
 }
-
 
 body {
 
     display: flex;
 
     justify-content: center;
-
     align-items: center;
 
     padding: 8px;
 
 }
-
 
 button,
 .game-area {
@@ -73,7 +56,6 @@ button,
     outline: none;
 
 }
-
 
 button:focus,
 button:active,
@@ -84,19 +66,15 @@ button:active,
 
 }
 
-
-/* =========================
-   GAME CONTAINER
-========================= */
-
 .game {
 
     width: min(100%, 520px);
 
-    height: min(
-        calc(100svh - 16px),
-        850px
-    );
+    height:
+        min(
+            calc(100svh - 16px),
+            850px
+        );
 
     display: flex;
 
@@ -105,9 +83,7 @@ button:active,
 }
 
 
-/* =========================
-   HEADER
-========================= */
+/* HEADER */
 
 .header {
 
@@ -116,7 +92,6 @@ button:active,
     display: flex;
 
     align-items: center;
-
     justify-content: space-between;
 
     gap: 8px;
@@ -131,7 +106,6 @@ button:active,
 
 }
 
-
 .title {
 
     white-space: nowrap;
@@ -141,7 +115,6 @@ button:active,
     text-overflow: ellipsis;
 
 }
-
 
 .header-right {
 
@@ -155,7 +128,6 @@ button:active,
 
 }
 
-
 .score {
 
     color: #555;
@@ -165,7 +137,6 @@ button:active,
     white-space: nowrap;
 
 }
-
 
 .exit-button {
 
@@ -188,9 +159,7 @@ button:active,
 }
 
 
-/* =========================
-   GAME AREA
-========================= */
+/* GAME */
 
 .game-area {
 
@@ -222,7 +191,6 @@ button:active,
 
 }
 
-
 .game-area.night {
 
     background:
@@ -234,7 +202,6 @@ button:active,
     border-color: #263653;
 
 }
-
 
 .game-area.demon {
 
@@ -251,16 +218,13 @@ button:active,
 }
 
 
-/* =========================
-   ACTIVE BONUSES
-========================= */
+/* ACTIVE BONUSES */
 
 .active-bonuses {
 
     position: absolute;
 
     top: 12px;
-
     left: 12px;
 
     z-index: 50;
@@ -275,7 +239,6 @@ button:active,
 
 }
 
-
 .active-bonus {
 
     min-width: 46px;
@@ -287,19 +250,19 @@ button:active,
     display: flex;
 
     align-items: center;
-
     justify-content: center;
 
     gap: 4px;
 
     border-radius: 12px;
 
-    background: rgba(
-        255,
-        255,
-        255,
-        .9
-    );
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            .9
+        );
 
     box-shadow:
         0 3px 10px
@@ -316,9 +279,7 @@ button:active,
 
 }
 
-
-.game-area.night
-.active-bonus {
+.game-area.night .active-bonus {
 
     background:
         rgba(
@@ -330,9 +291,7 @@ button:active,
 
 }
 
-
-.game-area.demon
-.active-bonus {
+.game-area.demon .active-bonus {
 
     background:
         rgba(
@@ -344,7 +303,6 @@ button:active,
 
 }
 
-
 .active-bonus span {
 
     font-size: 12px;
@@ -352,7 +310,6 @@ button:active,
     font-weight: bold;
 
 }
-
 
 .active-bonus.expiring {
 
@@ -363,7 +320,6 @@ button:active,
         alternate;
 
 }
-
 
 @keyframes bonusBlink {
 
@@ -388,9 +344,7 @@ button:active,
 }
 
 
-/* =========================
-   SKY
-========================= */
+/* SKY */
 
 .sky {
 
@@ -405,7 +359,6 @@ button:active,
     z-index: 0;
 
 }
-
 
 .cloud {
 
@@ -424,22 +377,18 @@ button:active,
 
 }
 
-
 .cloud-1 {
 
     top: 10%;
-
     left: 100%;
 
     animation-duration: 32s;
 
 }
 
-
 .cloud-2 {
 
     top: 27%;
-
     left: 130%;
 
     font-size: 34px;
@@ -452,11 +401,9 @@ button:active,
 
 }
 
-
 .cloud-3 {
 
     top: 18%;
-
     left: 170%;
 
     font-size: 58px;
@@ -468,7 +415,6 @@ button:active,
     animation-delay: -28s;
 
 }
-
 
 @keyframes cloudMove {
 
@@ -488,26 +434,20 @@ button:active,
 
 }
 
-
-.game-area.night
-.cloud {
+.game-area.night .cloud {
 
     opacity: .08;
 
 }
 
-
-.game-area.demon
-.cloud {
+.game-area.demon .cloud {
 
     opacity: .03;
 
 }
 
 
-/* =========================
-   HILLS
-========================= */
+/* HILLS */
 
 .background-hill {
 
@@ -556,9 +496,7 @@ button:active,
 
 }
 
-
-.game-area.night
-.background-hill {
+.game-area.night .background-hill {
 
     opacity: .12;
 
@@ -567,9 +505,7 @@ button:active,
 
 }
 
-
-.game-area.demon
-.background-hill {
+.game-area.demon .background-hill {
 
     opacity: .22;
 
@@ -578,7 +514,6 @@ button:active,
         brightness(.35);
 
 }
-
 
 @keyframes hillsMove {
 
@@ -599,9 +534,7 @@ button:active,
 }
 
 
-/* =========================
-   MOON
-========================= */
+/* MOON */
 
 .moon {
 
@@ -621,9 +554,7 @@ button:active,
 
 }
 
-
-.game-area.night
-.moon {
+.game-area.night .moon {
 
     animation:
         moonSlowMove
@@ -632,7 +563,6 @@ button:active,
         infinite;
 
 }
-
 
 @keyframes moonSlowMove {
 
@@ -652,22 +582,16 @@ button:active,
 
 }
 
-
 .moon.enter {
 
     animation:
+
         moonEnter
         1.1s
-        cubic-bezier(
-            .2,
-            .8,
-            .3,
-            1
-        )
+        cubic-bezier(.2,.8,.3,1)
         forwards !important;
 
 }
-
 
 @keyframes moonEnter {
 
@@ -705,22 +629,16 @@ button:active,
 
 }
 
-
 .moon.leave {
 
     animation:
+
         moonLeave
         1.1s
-        cubic-bezier(
-            .6,
-            .1,
-            .8,
-            .2
-        )
+        cubic-bezier(.6,.1,.8,.2)
         forwards !important;
 
 }
-
 
 @keyframes moonLeave {
 
@@ -752,9 +670,7 @@ button:active,
 }
 
 
-/* =========================
-   DEMON SKY
-========================= */
+/* DEMON SKY */
 
 .demon-sky {
 
@@ -769,8 +685,11 @@ button:active,
     background:
 
         repeating-linear-gradient(
+
             135deg,
+
             transparent 0 20px,
+
             rgba(
                 255,
                 0,
@@ -778,22 +697,19 @@ button:active,
                 .04
             )
             21px 22px
+
         );
 
 }
 
-
-.game-area.demon
-.demon-sky {
+.game-area.demon .demon-sky {
 
     opacity: 1;
 
 }
 
 
-/* =========================
-   GROUND
-========================= */
+/* GROUND */
 
 .ground {
 
@@ -816,14 +732,13 @@ button:active,
     z-index: 2;
 
     transition:
+
         background 1s ease,
         border-color 1s ease;
 
 }
 
-
-.game-area.night
-.ground {
+.game-area.night .ground {
 
     background: #29452d;
 
@@ -831,16 +746,13 @@ button:active,
 
 }
 
-
-.game-area.demon
-.ground {
+.game-area.demon .ground {
 
     background: #280d13;
 
     border-color: #5e151d;
 
 }
-
 
 .ground-lines {
 
@@ -857,9 +769,13 @@ button:active,
     background:
 
         repeating-linear-gradient(
+
             90deg,
+
             transparent 0,
+
             transparent 35px,
+
             rgba(
                 92,
                 150,
@@ -867,11 +783,15 @@ button:active,
                 .25
             )
             35px 75px,
+
             transparent 75px,
+
             transparent 120px
+
         );
 
     animation:
+
         groundMove
         1.2s
         linear
@@ -879,16 +799,18 @@ button:active,
 
 }
 
-
-.game-area.demon
-.ground-lines {
+.game-area.demon .ground-lines {
 
     background:
 
         repeating-linear-gradient(
+
             90deg,
+
             transparent 0,
+
             transparent 35px,
+
             rgba(
                 255,
                 50,
@@ -896,12 +818,14 @@ button:active,
                 .35
             )
             35px 75px,
+
             transparent 75px,
+
             transparent 120px
+
         );
 
 }
-
 
 @keyframes groundMove {
 
@@ -922,9 +846,7 @@ button:active,
 }
 
 
-/* =========================
-   CAT
-========================= */
+/* CAT */
 
 .cat {
 
@@ -968,22 +890,19 @@ button:active,
 }
 
 
-/* =========================
-   CAT BONUS ITEMS
-========================= */
+/* BONUS ITEMS */
 
 .cat-item {
 
     position: absolute;
 
-    width: 12%;
+    width: 24%;
 
-    height: 12%;
+    height: 24%;
 
     display: flex;
 
     align-items: center;
-
     justify-content: center;
 
     pointer-events: none;
@@ -996,11 +915,13 @@ button:active,
         transform,
         opacity;
 
+    /* Уменьшено примерно в 2 раза */
+
     font-size:
         clamp(
-            11px,
+            12px,
             3vw,
-            15px
+            16px
         );
 
     line-height: 1;
@@ -1009,6 +930,7 @@ button:active,
         center center;
 
     filter:
+
         drop-shadow(
             0 1px 1px
             rgba(
@@ -1021,7 +943,6 @@ button:active,
 
 }
 
-
 .cat-shield,
 .cat-magnet {
 
@@ -1032,9 +953,7 @@ button:active,
 }
 
 
-/* =========================
-   EXPENSES
-========================= */
+/* EXPENSE */
 
 .expense {
 
@@ -1047,7 +966,6 @@ button:active,
     display: flex;
 
     align-items: center;
-
     justify-content: center;
 
     line-height: 1;
@@ -1057,6 +975,7 @@ button:active,
     z-index: 4;
 
     filter:
+
         drop-shadow(
             0 4px 2px
             rgba(
@@ -1069,7 +988,6 @@ button:active,
 
 }
 
-
 .expense.small {
 
     font-size:
@@ -1081,7 +999,6 @@ button:active,
 
 }
 
-
 .expense.normal {
 
     font-size:
@@ -1092,7 +1009,6 @@ button:active,
         );
 
 }
-
 
 .expense.wide {
 
@@ -1106,9 +1022,7 @@ button:active,
 }
 
 
-/* =========================
-   COINS
-========================= */
+/* COINS */
 
 .coin {
 
@@ -1123,7 +1037,6 @@ button:active,
     display: flex;
 
     align-items: center;
-
     justify-content: center;
 
     font-size:
@@ -1136,6 +1049,7 @@ button:active,
     z-index: 3;
 
     filter:
+
         drop-shadow(
             0 4px 2px
             rgba(
@@ -1151,6 +1065,7 @@ button:active,
         bottom;
 
     animation:
+
         moneyFloat
         1.2s
         ease-in-out
@@ -1159,13 +1074,11 @@ button:active,
 
 }
 
-
 .coin.magnet-active {
 
     animation: none;
 
 }
-
 
 @keyframes moneyFloat {
 
@@ -1188,9 +1101,7 @@ button:active,
 }
 
 
-/* =========================
-   BONUS
-========================= */
+/* BONUS */
 
 .bonus {
 
@@ -1205,7 +1116,6 @@ button:active,
     display: flex;
 
     align-items: center;
-
     justify-content: center;
 
     font-size: 44px;
@@ -1213,6 +1123,7 @@ button:active,
     z-index: 4;
 
     animation:
+
         bonusFloat
         1s
         ease-in-out
@@ -1220,6 +1131,7 @@ button:active,
         alternate;
 
     filter:
+
         drop-shadow(
             0 4px 4px
             rgba(
@@ -1231,7 +1143,6 @@ button:active,
         );
 
 }
-
 
 @keyframes bonusFloat {
 
@@ -1254,20 +1165,18 @@ button:active,
 }
 
 
-/* =========================
-   CRASH
-========================= */
+/* CRASH */
 
 .crash-fall {
 
     animation:
+
         crashFall
         .65s
         ease-in
         forwards !important;
 
 }
-
 
 @keyframes crashFall {
 
@@ -1300,9 +1209,7 @@ button:active,
 }
 
 
-/* =========================
-   MODE MESSAGE
-========================= */
+/* MODE MESSAGE */
 
 .mode-message {
 
@@ -1313,6 +1220,7 @@ button:active,
     left: 50%;
 
     transform:
+
         translate(
             -50%,
             -50%
@@ -1342,10 +1250,10 @@ button:active,
 
 }
 
-
 .mode-message.show {
 
     animation:
+
         modeMessage
         2.2s
         ease
@@ -1353,13 +1261,11 @@ button:active,
 
 }
 
-
 .night-message {
 
     color: #fff;
 
 }
-
 
 .demon-message {
 
@@ -1375,7 +1281,6 @@ button:active,
 
 }
 
-
 @keyframes modeMessage {
 
     0% {
@@ -1383,6 +1288,7 @@ button:active,
         opacity: 0;
 
         transform:
+
             translate(
                 -50%,
                 -50%
@@ -1396,6 +1302,7 @@ button:active,
         opacity: 1;
 
         transform:
+
             translate(
                 -50%,
                 -50%
@@ -1407,6 +1314,7 @@ button:active,
     35% {
 
         transform:
+
             translate(
                 -50%,
                 -50%
@@ -1426,6 +1334,7 @@ button:active,
         opacity: 0;
 
         transform:
+
             translate(
                 -50%,
                 -50%
@@ -1437,9 +1346,7 @@ button:active,
 }
 
 
-/* =========================
-   START / GAME OVER
-========================= */
+/* START / GAME OVER */
 
 .start-screen,
 .game-over {
@@ -1455,12 +1362,12 @@ button:active,
     flex-direction: column;
 
     justify-content: center;
-
     align-items: center;
 
     padding: 20px;
 
     background:
+
         rgba(
             255,
             255,
@@ -1472,13 +1379,11 @@ button:active,
 
 }
 
-
-.game-area.night
-.start-screen,
-.game-area.night
-.game-over {
+.game-area.night .start-screen,
+.game-area.night .game-over {
 
     background:
+
         rgba(
             20,
             30,
@@ -1490,13 +1395,11 @@ button:active,
 
 }
 
-
-.game-area.demon
-.start-screen,
-.game-area.demon
-.game-over {
+.game-area.demon .start-screen,
+.game-area.demon .game-over {
 
     background:
+
         rgba(
             20,
             0,
@@ -1508,7 +1411,6 @@ button:active,
 
 }
 
-
 .start-screen h2,
 .game-over h2 {
 
@@ -1518,7 +1420,6 @@ button:active,
     font-size: 22px;
 
 }
-
 
 .start-screen p,
 .game-over p {
@@ -1530,20 +1431,14 @@ button:active,
 
 }
 
-
-.game-area.night
-.start-screen p,
-.game-area.night
-.game-over p,
-.game-area.demon
-.start-screen p,
-.game-area.demon
-.game-over p {
+.game-area.night .start-screen p,
+.game-area.night .game-over p,
+.game-area.demon .start-screen p,
+.game-area.demon .game-over p {
 
     color: #bbb;
 
 }
-
 
 button {
 
@@ -1566,6 +1461,13 @@ button {
 
 }
 
+button:disabled {
+
+    opacity: .5;
+
+    cursor: default;
+
+}
 
 .hidden {
 
@@ -1574,9 +1476,7 @@ button {
 }
 
 
-/* =========================
-   HINT
-========================= */
+/* HINT */
 
 .hint {
 
@@ -1585,7 +1485,6 @@ button {
     display: flex;
 
     justify-content: center;
-
     align-items: center;
 
     color: #888;
@@ -1595,7 +1494,6 @@ button {
     flex-shrink: 0;
 
 }
-
 
 @media (max-height: 600px) {
 
@@ -1644,19 +1542,85 @@ button {
 }
 
 
+/* LOADING */
+
+.loading-screen {
+
+    position: absolute;
+
+    inset: 0;
+
+    z-index: 100;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+    align-items: center;
+
+    gap: 12px;
+
+    background:
+        rgba(
+            255,
+            255,
+            255,
+            .96
+        );
+
+    color: #333;
+
+    font-size: 16px;
+
+}
+
+.loading-cat {
+
+    font-size: 42px;
+
+    animation:
+
+        loadingBounce
+        .8s
+        ease-in-out
+        infinite
+        alternate;
+
+}
+
+@keyframes loadingBounce {
+
+    from {
+
+        transform:
+            translateY(0);
+
+    }
+
+    to {
+
+        transform:
+            translateY(-10px);
+
+    }
+
+}
+
+.loading-screen.hidden {
+
+    display: none;
+
+}
+
 </style>
-
 </head>
-
 
 <body>
 
-
 <div class="game">
 
-
     <div class="header">
-
 
         <div class="title">
 
@@ -1664,18 +1628,19 @@ button {
 
         </div>
 
-
         <div class="header-right">
-
 
             <div class="score">
 
                 Счёт:
 
-                <span id="score">0</span>
+                <span id="score">
+
+                    0
+
+                </span>
 
             </div>
-
 
             <button
                 class="exit-button"
@@ -1685,9 +1650,7 @@ button {
 
             </button>
 
-
         </div>
-
 
     </div>
 
@@ -1698,33 +1661,53 @@ button {
 
 
         <div
+            class="loading-screen"
+            id="loadingScreen">
+
+            <div
+                class="loading-cat">
+
+                🐱
+
+            </div>
+
+            <div>
+
+                Загружаем котика...
+
+            </div>
+
+        </div>
+
+
+        <div
             class="active-bonuses"
             id="activeBonuses">
+
         </div>
 
 
         <div class="sky">
 
-
             <div class="cloud cloud-1">
-                ☁️
-            </div>
 
+                ☁️
+
+            </div>
 
             <div class="cloud cloud-2">
-                ☁️
-            </div>
 
+                ☁️
+
+            </div>
 
             <div class="cloud cloud-3">
+
                 ☁️
+
             </div>
 
-
-            <div
-                class="background-hill">
-            </div>
-
+            <div class="background-hill"></div>
 
             <div
                 class="moon"
@@ -1734,11 +1717,7 @@ button {
 
             </div>
 
-
-            <div
-                class="demon-sky">
-            </div>
-
+            <div class="demon-sky"></div>
 
         </div>
 
@@ -1746,6 +1725,7 @@ button {
         <div
             class="mode-message"
             id="modeMessage">
+
         </div>
 
 
@@ -1753,29 +1733,25 @@ button {
             class="start-screen"
             id="startScreen">
 
-
             <h2>
 
                 🐱 Спаси котика от расходов!
 
             </h2>
 
-
             <p>
 
-                Собирай деньги.
-                Избегай трат.
+                Собирай деньги. Избегай трат.
 
             </p>
 
-
             <button
-                id="startButton">
+                id="startButton"
+                disabled>
 
-                Начать игру
+                Загрузка...
 
             </button>
-
 
         </div>
 
@@ -1784,24 +1760,23 @@ button {
             class="game-over hidden"
             id="gameOver">
 
-
             <h2>
 
                 😿 Котик потратился
 
             </h2>
 
-
             <p>
 
                 Твой счёт:
 
                 <b id="finalScore">
+
                     0
+
                 </b>
 
             </p>
-
 
             <button
                 id="restartButton">
@@ -1810,16 +1785,12 @@ button {
 
             </button>
 
-
         </div>
 
-
-        <!-- КОТИК -->
 
         <div
             class="cat"
             id="cat">
-
 
             <div
                 class="cat-item cat-shield"
@@ -1829,7 +1800,6 @@ button {
 
             </div>
 
-
             <div
                 class="cat-item cat-magnet"
                 id="catMagnet">
@@ -1838,20 +1808,14 @@ button {
 
             </div>
 
-
         </div>
 
 
         <div class="ground">
 
-
-            <div
-                class="ground-lines">
-            </div>
-
+            <div class="ground-lines"></div>
 
         </div>
-
 
     </div>
 
@@ -1863,16 +1827,13 @@ button {
 
     </div>
 
-
 </div>
 
 
 <script>
 
 
-/* =========================
-   DOM
-========================= */
+/* DOM */
 
 const gameArea =
     document.getElementById(
@@ -1944,28 +1905,168 @@ const activeBonuses =
         "activeBonuses"
     );
 
+const loadingScreen =
+    document.getElementById(
+        "loadingScreen"
+    );
 
-/* =========================
-   SPRITES
-========================= */
 
-const SPRITE_FRAMES = 4;
+/* SPRITES */
 
-const runFrameDuration = 105;
+const SPRITES = {
 
-const rollFrameDuration = 120;
+    run:
+        "cat_run.png",
 
-let runFrameTimer = 0;
+    jump:
+        "cat_jump.png",
 
-let rollFrameTimer = 0;
+    roll:
+        "cat_roll.png"
 
-let rollFrame = 0;
+};
+
+
+const loadedSprites = {};
+
+let spritesReady =
+    false;
+
+
+function preloadImage(src) {
+
+    return new Promise(
+        (
+            resolve,
+            reject
+        ) => {
+
+            const image =
+                new Image();
+
+            image.onload =
+                () => {
+
+                    loadedSprites[src] =
+                        image;
+
+                    resolve(image);
+
+                };
+
+            image.onerror =
+                () => {
+
+                    reject(
+                        new Error(
+                            "Не удалось загрузить " +
+                            src
+                        )
+                    );
+
+                };
+
+            image.src =
+                src;
+
+        }
+    );
+
+}
+
+
+async function preloadSprites() {
+
+    try {
+
+        await Promise.all([
+
+            preloadImage(
+                SPRITES.run
+            ),
+
+            preloadImage(
+                SPRITES.jump
+            ),
+
+            preloadImage(
+                SPRITES.roll
+            )
+
+        ]);
+
+        spritesReady =
+            true;
+
+        loadingScreen.classList.add(
+            "hidden"
+        );
+
+        startButton.disabled =
+            false;
+
+        startButton.textContent =
+            "Начать игру";
+
+        setSpriteFrame(
+            SPRITES.run,
+            0
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Ошибка загрузки спрайтов:",
+            error
+        );
+
+        loadingScreen.innerHTML =
+
+            "Ошибка загрузки котика.<br>" +
+
+            "Обновите страницу.";
+
+    }
+
+}
+
+
+/* SPRITE ANIMATION */
+
+const SPRITE_FRAMES =
+    4;
+
+let runFrameTimer =
+    0;
+
+const runFrameDuration =
+    105;
+
+let rollFrameTimer =
+    0;
+
+const rollFrameDuration =
+    120;
+
+let rollFrame =
+    0;
 
 
 function setSpriteFrame(
     image,
     frame
 ) {
+
+    if (
+        !spritesReady &&
+        !loadedSprites[image]
+    ) {
+
+        return;
+
+    }
 
     frame =
         Math.max(
@@ -1986,91 +2087,120 @@ function setSpriteFrame(
 
 
     const position =
+
         frame === 0
+
             ? 0
-            : (
-                frame /
-                (SPRITE_FRAMES - 1)
-            ) * 100;
+
+            :
+
+        (
+            frame /
+            (
+                SPRITE_FRAMES - 1
+            )
+        ) *
+        100;
 
 
     cat.style.backgroundPosition =
+
         `${position}% 0%`;
 
 }
 
 
-/* =========================
-   STATE
-========================= */
+/* STATE */
 
-let gameStarted = false;
+let gameStarted =
+    false;
 
-let gameOver = false;
+let gameOver =
+    false;
 
-let score = 0;
+let score =
+    0;
 
-let obstacles = [];
+let obstacles =
+    [];
 
-let coins = [];
+let coins =
+    [];
 
-let bonuses = [];
+let bonuses =
+    [];
 
-let isJumping = false;
+let isJumping =
+    false;
 
-let jumpStartTime = null;
+let jumpStartTime =
+    null;
 
-let lastTime = 0;
+let lastTime =
+    0;
 
-let obstacleTimer = 0;
+let obstacleTimer =
+    0;
 
-let coinTimer = 0;
+let coinTimer =
+    0;
 
-let bonusTimer = 0;
+let bonusTimer =
+    0;
 
-let scoreTimer = 0;
+let scoreTimer =
+    0;
 
-let nextObstacleTime = 1600;
+let nextObstacleTime =
+    1600;
 
-let nextCoinTime = 1200;
+let nextCoinTime =
+    1200;
 
-let nextBonusTime = 8000;
+let nextBonusTime =
+    8000;
 
-let lastObstacle = null;
+let lastObstacle =
+    null;
 
-let nightMode = false;
+let nightMode =
+    false;
 
-let demonMode = false;
+let demonMode =
+    false;
 
-let shieldActive = false;
+let shieldActive =
+    false;
 
-let magnetActive = false;
+let magnetActive =
+    false;
 
-let salaryActive = false;
+let salaryActive =
+    false;
 
-let magnetTimer = 0;
+let magnetTimer =
+    0;
 
-let salaryTimer = 0;
+let salaryTimer =
+    0;
 
-let crashInProgress = false;
+let crashInProgress =
+    false;
 
-let rolling = false;
-
-let animationFrameId = null;
-
-
-/* =========================
-   SETTINGS
-========================= */
-
-const jumpDuration = 1800;
-
-const jumpHeight = 155;
+let rolling =
+    false;
 
 
-/* =========================
-   ITEM PHYSICS
-========================= */
+/* SETTINGS */
+
+const jumpDuration =
+    1800;
+
+const jumpHeight =
+    155;
+
+
+/* ITEM PHYSICS */
 
 const ITEM_SLOTS = {
 
@@ -2095,9 +2225,11 @@ const ITEM_SLOTS = {
 
 let shieldItemPosition = {
 
-    x: ITEM_SLOTS.near.x,
+    x:
+        ITEM_SLOTS.near.x,
 
-    y: ITEM_SLOTS.near.y,
+    y:
+        ITEM_SLOTS.near.y,
 
     velocityX: 0,
 
@@ -2108,9 +2240,11 @@ let shieldItemPosition = {
 
 let magnetItemPosition = {
 
-    x: ITEM_SLOTS.far.x,
+    x:
+        ITEM_SLOTS.far.x,
 
-    y: ITEM_SLOTS.far.y,
+    y:
+        ITEM_SLOTS.far.y,
 
     velocityX: 0,
 
@@ -2119,40 +2253,32 @@ let magnetItemPosition = {
 };
 
 
-let itemOrder = [];
+let itemOrder =
+    [];
 
 
 let catMotion = {
 
+    x: 0,
+
     y: 0,
+
+    previousY: 0,
 
     previousJumpY: 0
 
 };
 
 
-/* =========================
-   COLLISION CACHE
-========================= */
-
-let cachedCatRect = null;
-
-
-function updateCatRect() {
-
-    cachedCatRect =
-        cat.getBoundingClientRect();
-
-}
-
-
 function getActiveItemOrder() {
 
     return itemOrder.filter(
+
         item => {
 
             if (
-                item === "shield"
+                item ===
+                "shield"
             ) {
 
                 return shieldActive;
@@ -2160,7 +2286,8 @@ function getActiveItemOrder() {
             }
 
             if (
-                item === "magnet"
+                item ===
+                "magnet"
             ) {
 
                 return magnetActive;
@@ -2170,30 +2297,42 @@ function getActiveItemOrder() {
             return false;
 
         }
+
     );
 
 }
 
 
-function registerItem(item) {
+function registerItem(
+    item
+) {
 
     if (
-        !itemOrder.includes(item)
+        !itemOrder.includes(
+            item
+        )
     ) {
 
-        itemOrder.push(item);
+        itemOrder.push(
+            item
+        );
 
     }
 
 }
 
 
-function removeItemFromOrder(item) {
+function removeItemFromOrder(
+    item
+) {
 
     itemOrder =
         itemOrder.filter(
+
             current =>
-                current !== item
+                current !==
+                item
+
         );
 
 }
@@ -2214,18 +2353,22 @@ function updateInertialPosition(
 ) {
 
     const deltaSeconds =
+
         Math.min(
             deltaTime / 1000,
             .05
         );
 
 
-    const stiffness = 5.8;
+    const stiffness =
+        5.8;
 
-    const damping = 4.4;
+    const damping =
+        4.4;
 
 
     const forceX =
+
         (
             target.x +
             extraX -
@@ -2235,6 +2378,7 @@ function updateInertialPosition(
 
 
     const forceY =
+
         (
             target.y +
             extraY -
@@ -2244,16 +2388,19 @@ function updateInertialPosition(
 
 
     position.velocityX +=
+
         forceX *
         deltaSeconds;
 
 
     position.velocityY +=
+
         forceY *
         deltaSeconds;
 
 
     const dampingFactor =
+
         Math.exp(
             -damping *
             deltaSeconds
@@ -2263,17 +2410,18 @@ function updateInertialPosition(
     position.velocityX *=
         dampingFactor;
 
-
     position.velocityY *=
         dampingFactor;
 
 
     position.x +=
+
         position.velocityX *
         deltaSeconds;
 
 
     position.y +=
+
         position.velocityY *
         deltaSeconds;
 
@@ -2369,14 +2517,20 @@ function updateCatItems(
 
         deltaTime,
 
+        catMotion.x *
+        .08 +
+
         Math.sin(
             time / 420
-        ) * 2.5,
+        ) *
+        2.5,
 
         jumpLag +
+
         Math.sin(
             time / 280
-        ) * 2.5
+        ) *
+        2.5
 
     );
 
@@ -2389,55 +2543,64 @@ function updateCatItems(
 
         deltaTime,
 
+        catMotion.x *
+        .14 +
+
         Math.sin(
-            time / 510 + 1.5
-        ) * 3.5,
+            time / 510 +
+            1.5
+        ) *
+        3.5,
 
         jumpLag +
+
         Math.sin(
-            time / 340 + 1.5
-        ) * 3.5
+            time / 340 +
+            1.5
+        ) *
+        3.5
 
     );
 
 
     const shieldRotate =
+
         Math.sin(
             time / 330
-        ) * 7;
+        ) *
+        7;
 
 
     const magnetRotate =
+
         Math.sin(
-            time / 410 + 1
-        ) * 10;
+            time / 410 +
+            1
+        ) *
+        10;
 
 
     catShield.style.transform =
+
         `translate(
             ${shieldItemPosition.x}px,
             ${shieldItemPosition.y}px
         )
-        rotate(
-            ${shieldRotate}deg
-        )`;
+        rotate(${shieldRotate}deg)`;
 
 
     catMagnet.style.transform =
+
         `translate(
             ${magnetItemPosition.x}px,
             ${magnetItemPosition.y}px
         )
-        rotate(
-            ${magnetRotate}deg
-        )`;
+        rotate(${magnetRotate}deg)`;
 
 }
 
 
-/* =========================
-   RUN ANIMATION
-========================= */
+/* RUN */
 
 function updateRunAnimation(
     deltaTime
@@ -2446,11 +2609,8 @@ function updateRunAnimation(
     if (
 
         isJumping ||
-
         rolling ||
-
         !gameStarted ||
-
         gameOver
 
     ) {
@@ -2469,10 +2629,12 @@ function updateRunAnimation(
         runFrameDuration
     ) {
 
-        runFrameTimer = 0;
+        runFrameTimer =
+            0;
 
 
         const currentFrame =
+
             Number(
                 cat.dataset.frame ||
                 0
@@ -2480,10 +2642,12 @@ function updateRunAnimation(
 
 
         const nextFrame =
+
             (
                 currentFrame +
                 1
-            ) %
+            )
+            %
             SPRITE_FRAMES;
 
 
@@ -2492,8 +2656,11 @@ function updateRunAnimation(
 
 
         setSpriteFrame(
-            "cat_run.png",
+
+            SPRITES.run,
+
             nextFrame
+
         );
 
     }
@@ -2501,9 +2668,7 @@ function updateRunAnimation(
 }
 
 
-/* =========================
-   ROLL ANIMATION
-========================= */
+/* ROLL */
 
 function updateRollAnimation(
     deltaTime
@@ -2523,30 +2688,39 @@ function updateRollAnimation(
 
 
     if (
+
         rollFrameTimer >=
         rollFrameDuration
+
     ) {
 
-        rollFrameTimer = 0;
+        rollFrameTimer =
+            0;
 
 
         rollFrame++;
 
 
         if (
+
             rollFrame >=
             SPRITE_FRAMES
+
         ) {
 
             rollFrame =
-                SPRITE_FRAMES - 1;
+                SPRITE_FRAMES -
+                1;
 
         }
 
 
         setSpriteFrame(
-            "cat_roll.png",
+
+            SPRITES.roll,
+
             rollFrame
+
         );
 
     }
@@ -2566,14 +2740,19 @@ function setCatRolling(
         state
     ) {
 
-        rollFrame = 0;
+        rollFrame =
+            0;
 
-        rollFrameTimer = 0;
+        rollFrameTimer =
+            0;
 
 
         setSpriteFrame(
-            "cat_roll.png",
+
+            SPRITES.roll,
+
             0
+
         );
 
     }
@@ -2585,21 +2764,23 @@ function setCatRolling(
 
 
         setSpriteFrame(
-            "cat_run.png",
+
+            SPRITES.run,
+
             0
+
         );
 
 
-        runFrameTimer = 0;
+        runFrameTimer =
+            0;
 
     }
 
 }
 
 
-/* =========================
-   BONUS UI
-========================= */
+/* BONUS UI */
 
 function updateBonusUI() {
 
@@ -2654,7 +2835,7 @@ function updateBonusUI() {
             "activeShield";
 
 
-        item.textContent =
+        item.innerHTML =
             "🛡️";
 
 
@@ -2718,16 +2899,24 @@ function updateBonusUIState() {
 
 
         span.textContent =
+
             Math.ceil(
-                magnetTimer / 1000
+                magnetTimer /
+                1000
             ) +
             "с";
 
 
-        magnetUI.classList.toggle(
-            "expiring",
-            magnetTimer <= 3000
-        );
+        if (
+            magnetTimer <=
+            3000
+        ) {
+
+            magnetUI.classList.add(
+                "expiring"
+            );
+
+        }
 
     }
 
@@ -2749,28 +2938,36 @@ function updateBonusUIState() {
 
 
         span.textContent =
+
             Math.ceil(
-                salaryTimer / 1000
+                salaryTimer /
+                1000
             ) +
             "с";
 
 
-        salaryUI.classList.toggle(
-            "expiring",
-            salaryTimer <= 3000
-        );
+        if (
+            salaryTimer <=
+            3000
+        ) {
+
+            salaryUI.classList.add(
+                "expiring"
+            );
+
+        }
 
     }
 
 }
 
 
-/* =========================
-   EXIT
-========================= */
+/* EXIT */
 
 exitButton.addEventListener(
+
     "click",
+
     event => {
 
         event.preventDefault();
@@ -2778,40 +2975,24 @@ exitButton.addEventListener(
         event.stopPropagation();
 
 
-        if (
-            animationFrameId
-        ) {
-
-            cancelAnimationFrame(
-                animationFrameId
-            );
-
-        }
-
-
         window.location.href =
             "index.html";
 
     }
+
 );
 
 
-/* =========================
-   JUMP
-========================= */
+/* JUMP */
 
 function jump() {
 
     if (
 
         !gameStarted ||
-
         gameOver ||
-
         isJumping ||
-
         crashInProgress ||
-
         rolling
 
     ) {
@@ -2821,7 +3002,8 @@ function jump() {
     }
 
 
-    isJumping = true;
+    isJumping =
+        true;
 
 
     jumpStartTime =
@@ -2833,16 +3015,17 @@ function jump() {
 
 
     setSpriteFrame(
-        "cat_jump.png",
+
+        SPRITES.jump,
+
         0
+
     );
 
 }
 
 
-/* =========================
-   JUMP UPDATE
-========================= */
+/* JUMP UPDATE */
 
 function updateJump(
     currentTime
@@ -2858,11 +3041,13 @@ function updateJump(
 
 
     const elapsed =
+
         currentTime -
         jumpStartTime;
 
 
     const progress =
+
         elapsed /
         jumpDuration;
 
@@ -2884,8 +3069,11 @@ function updateJump(
 
 
         setSpriteFrame(
-            "cat_run.png",
+
+            SPRITES.run,
+
             0
+
         );
 
 
@@ -2942,23 +3130,26 @@ function updateJump(
 
 
     setSpriteFrame(
-        "cat_jump.png",
+
+        SPRITES.jump,
+
         jumpFrame
+
     );
 
 
     return Math.sin(
+
         Math.PI *
         progress
+
     ) *
     jumpHeight;
 
 }
 
 
-/* =========================
-   RANDOM
-========================= */
+/* RANDOM */
 
 function getRandomObstacleSize() {
 
@@ -2989,9 +3180,7 @@ function getRandomObstacleSize() {
 }
 
 
-/* =========================
-   CREATE EXPENSE
-========================= */
+/* CREATE EXPENSE */
 
 function createExpense() {
 
@@ -3011,17 +3200,25 @@ function createExpense() {
 
 
     const list =
+
         demonMode
+
             ? demonExpenses
+
             : normalExpenses;
 
 
     expense.textContent =
+
         list[
+
             Math.floor(
+
                 Math.random() *
                 list.length
+
             )
+
         ];
 
 
@@ -3032,12 +3229,14 @@ function createExpense() {
 
     const obstacle = {
 
-        element: expense,
+        element:
+            expense,
 
         x:
             gameArea.offsetWidth,
 
-        size
+        size:
+            size
 
     };
 
@@ -3053,9 +3252,7 @@ function createExpense() {
 }
 
 
-/* =========================
-   CREATE COIN
-========================= */
+/* CREATE COIN */
 
 function createCoin() {
 
@@ -3070,21 +3267,30 @@ function createCoin() {
 
 
     const list =
+
         demonMode
+
             ? demonMoney
+
             : normalMoney;
 
 
     coin.textContent =
+
         list[
+
             Math.floor(
+
                 Math.random() *
                 list.length
+
             )
+
         ];
 
 
     const bottom =
+
         100 +
         Math.random() *
         140;
@@ -3102,7 +3308,8 @@ function createCoin() {
 
     coins.push({
 
-        element: coin,
+        element:
+            coin,
 
         x:
             gameArea.offsetWidth,
@@ -3118,9 +3325,7 @@ function createCoin() {
 }
 
 
-/* =========================
-   CREATE BONUS
-========================= */
+/* CREATE BONUS */
 
 function createBonus() {
 
@@ -3135,17 +3340,25 @@ function createBonus() {
 
 
     const list =
+
         demonMode
+
             ? demonBonuses
+
             : normalBonuses;
 
 
     const type =
+
         list[
+
             Math.floor(
+
                 Math.random() *
                 list.length
+
             )
+
         ];
 
 
@@ -3158,6 +3371,7 @@ function createBonus() {
 
 
     bonus.style.bottom =
+
         130 +
         Math.random() *
         150 +
@@ -3171,12 +3385,14 @@ function createBonus() {
 
     bonuses.push({
 
-        element: bonus,
+        element:
+            bonus,
 
         x:
             gameArea.offsetWidth,
 
-        type,
+        type:
+            type,
 
         collected:
             false
@@ -3186,13 +3402,15 @@ function createBonus() {
 }
 
 
-/* =========================
-   COLLISIONS
-========================= */
+/* COLLISIONS */
 
 function checkObstacleCollision(
     obstacle
 ) {
+
+    const catRect =
+        cat.getBoundingClientRect();
+
 
     const obstacleRect =
         obstacle.element
@@ -3201,25 +3419,32 @@ function checkObstacleCollision(
 
     const horizontal =
 
-        cachedCatRect.right >
-            obstacleRect.left +
-            12 &&
+        catRect.right >
 
-        cachedCatRect.left <
+            obstacleRect.left +
+            12
+
+        &&
+
+        catRect.left <
+
             obstacleRect.right -
             12;
 
 
     const vertical =
 
-        cachedCatRect.bottom >
+        catRect.bottom >
+
             obstacleRect.top +
             10;
 
 
     return (
+
         horizontal &&
         vertical
+
     );
 
 }
@@ -3229,6 +3454,10 @@ function checkCoinCollision(
     coin
 ) {
 
+    const catRect =
+        cat.getBoundingClientRect();
+
+
     const coinRect =
         coin.element
             .getBoundingClientRect();
@@ -3236,16 +3465,16 @@ function checkCoinCollision(
 
     return (
 
-        cachedCatRect.right >
+        catRect.right >
             coinRect.left &&
 
-        cachedCatRect.left <
+        catRect.left <
             coinRect.right &&
 
-        cachedCatRect.bottom >
+        catRect.bottom >
             coinRect.top &&
 
-        cachedCatRect.top <
+        catRect.top <
             coinRect.bottom
 
     );
@@ -3257,6 +3486,10 @@ function checkBonusCollision(
     bonus
 ) {
 
+    const catRect =
+        cat.getBoundingClientRect();
+
+
     const bonusRect =
         bonus.element
             .getBoundingClientRect();
@@ -3264,16 +3497,16 @@ function checkBonusCollision(
 
     return (
 
-        cachedCatRect.right >
+        catRect.right >
             bonusRect.left &&
 
-        cachedCatRect.left <
+        catRect.left <
             bonusRect.right &&
 
-        cachedCatRect.bottom >
+        catRect.bottom >
             bonusRect.top &&
 
-        cachedCatRect.top <
+        catRect.top <
             bonusRect.bottom
 
     );
@@ -3281,14 +3514,13 @@ function checkBonusCollision(
 }
 
 
-/* =========================
-   OBSTACLE SPACING
-========================= */
+/* OBSTACLE SPACING */
 
 function canCreateObstacle() {
 
     if (
-        lastObstacle === null
+        lastObstacle ===
+        null
     ) {
 
         return true;
@@ -3297,17 +3529,20 @@ function canCreateObstacle() {
 
 
     const rect =
+
         lastObstacle.element
             .getBoundingClientRect();
 
 
     const gameRect =
+
         gameArea.getBoundingClientRect();
 
 
     return (
 
         rect.right <
+
         gameRect.right -
         360
 
@@ -3316,9 +3551,7 @@ function canCreateObstacle() {
 }
 
 
-/* =========================
-   BONUSES
-========================= */
+/* BONUSES */
 
 function applyMagnet() {
 
@@ -3376,7 +3609,8 @@ function activateBonus(
 ) {
 
     if (
-        type === "🧲"
+        type ===
+        "🧲"
     ) {
 
         applyMagnet();
@@ -3385,7 +3619,8 @@ function activateBonus(
 
 
     if (
-        type === "🛡️"
+        type ===
+        "🛡️"
     ) {
 
         applyShield();
@@ -3394,7 +3629,8 @@ function activateBonus(
 
 
     if (
-        type === "⚡"
+        type ===
+        "⚡"
     ) {
 
         applySalary();
@@ -3404,9 +3640,7 @@ function activateBonus(
 }
 
 
-/* =========================
-   MODES
-========================= */
+/* MODES */
 
 function showModeMessage(
     text,
@@ -3418,6 +3652,7 @@ function showModeMessage(
 
 
     modeMessage.className =
+
         "mode-message " +
         className;
 
@@ -3524,7 +3759,6 @@ function checkMode() {
     if (
 
         score >= 100 &&
-
         !nightMode
 
     ) {
@@ -3537,7 +3771,6 @@ function checkMode() {
     if (
 
         score >= 200 &&
-
         !demonMode
 
     ) {
@@ -3549,9 +3782,7 @@ function checkMode() {
 }
 
 
-/* =========================
-   SHIELD CRASH
-========================= */
+/* SHIELD CRASH */
 
 function shieldCrash(
     obstacle
@@ -3593,6 +3824,7 @@ function shieldCrash(
 
 
     setTimeout(
+
         () => {
 
             setCatRolling(
@@ -3604,15 +3836,15 @@ function shieldCrash(
                 false;
 
         },
+
         650
+
     );
 
 }
 
 
-/* =========================
-   END GAME
-========================= */
+/* END GAME */
 
 function endGame() {
 
@@ -3637,8 +3869,11 @@ function endGame() {
 
 
     setSpriteFrame(
-        "cat_jump.png",
+
+        SPRITES.jump,
+
         0
+
     );
 
 
@@ -3653,14 +3888,16 @@ function endGame() {
 }
 
 
-/* =========================
-   MAGNET
-========================= */
+/* MAGNET */
 
 function applyMagnetForce(
     coin,
     deltaTime
 ) {
+
+    const catRect =
+        cat.getBoundingClientRect();
+
 
     const coinRect =
         coin.element
@@ -3668,49 +3905,60 @@ function applyMagnetForce(
 
 
     const catCenterX =
-        cachedCatRect.left +
-        cachedCatRect.width /
+
+        catRect.left +
+        catRect.width /
         2;
 
 
     const catCenterY =
-        cachedCatRect.top +
-        cachedCatRect.height /
+
+        catRect.top +
+        catRect.height /
         2;
 
 
     const coinCenterX =
+
         coinRect.left +
         coinRect.width /
         2;
 
 
     const coinCenterY =
+
         coinRect.top +
         coinRect.height /
         2;
 
 
     const dx =
+
         catCenterX -
         coinCenterX;
 
 
     const dy =
+
         catCenterY -
         coinCenterY;
 
 
     const distance =
+
         Math.sqrt(
+
             dx * dx +
             dy * dy
+
         );
 
 
     if (
+
         distance >
         MAGNET_RADIUS
+
     ) {
 
         coin.element.classList.remove(
@@ -3729,17 +3977,26 @@ function applyMagnetForce(
 
 
     const deltaSeconds =
+
         Math.min(
-            deltaTime / 1000,
+
+            deltaTime /
+            1000,
+
             .05
+
         );
 
 
     const factor =
+
         1 -
+
         Math.exp(
+
             -MAGNET_PULL_SPEED *
             deltaSeconds
+
         );
 
 
@@ -3755,9 +4012,7 @@ function applyMagnetForce(
 }
 
 
-/* =========================
-   GAME LOOP
-========================= */
+/* GAME LOOP */
 
 function gameLoop(
     currentTime
@@ -3766,13 +4021,9 @@ function gameLoop(
     if (
 
         !gameStarted ||
-
         gameOver
 
     ) {
-
-        animationFrameId =
-            null;
 
         return;
 
@@ -3780,11 +4031,9 @@ function gameLoop(
 
 
     const deltaTime =
-        Math.min(
-            currentTime -
-            lastTime,
-            50
-        );
+
+        currentTime -
+        lastTime;
 
 
     lastTime =
@@ -3798,6 +4047,7 @@ function gameLoop(
 
 
     catMotion.y =
+
         catY -
         catMotion.previousJumpY;
 
@@ -3817,6 +4067,7 @@ function gameLoop(
 
 
     cat.style.transform =
+
         `translateY(
             ${-catY}px
         )`;
@@ -3834,13 +4085,16 @@ function gameLoop(
             .20 +
 
             Math.min(
+
                 score *
                 .001,
 
                 .10
+
             )
 
         ) *
+
         deltaTime;
 
 
@@ -3865,7 +4119,8 @@ function gameLoop(
 
 
         if (
-            magnetTimer <= 0
+            magnetTimer <=
+            0
         ) {
 
             magnetActive =
@@ -3893,7 +4148,8 @@ function gameLoop(
 
 
         if (
-            salaryTimer <= 0
+            salaryTimer <=
+            0
         ) {
 
             salaryActive =
@@ -3910,14 +4166,10 @@ function gameLoop(
     updateBonusUIState();
 
 
-    /* CACHE CAT RECT */
-
-    updateCatRect();
-
-
     /* OBSTACLES */
 
     obstacles.forEach(
+
         obstacle => {
 
             obstacle.x -=
@@ -3958,12 +4210,14 @@ function gameLoop(
             }
 
         }
+
     );
 
 
     /* COINS */
 
     coins.forEach(
+
         coin => {
 
             coin.x -=
@@ -3975,8 +4229,11 @@ function gameLoop(
             ) {
 
                 applyMagnetForce(
+
                     coin,
+
                     deltaTime
+
                 );
 
             }
@@ -4007,8 +4264,11 @@ function gameLoop(
 
 
                 score +=
+
                     salaryActive
+
                         ? 20
+
                         : 10;
 
 
@@ -4024,12 +4284,14 @@ function gameLoop(
             }
 
         }
+
     );
 
 
     /* BONUSES */
 
     bonuses.forEach(
+
         bonus => {
 
             bonus.x -=
@@ -4065,26 +4327,32 @@ function gameLoop(
             }
 
         }
+
     );
 
 
-    /* REMOVE OBSTACLES */
+    /* REMOVE */
 
     obstacles =
         obstacles.filter(
+
             obstacle => {
 
                 if (
+
                     obstacle.x <
                     -160
+
                 ) {
 
                     obstacle.element.remove();
 
 
                     if (
+
                         lastObstacle ===
                         obstacle
+
                     ) {
 
                         lastObstacle =
@@ -4101,13 +4369,13 @@ function gameLoop(
                 return true;
 
             }
+
         );
 
 
-    /* REMOVE COINS */
-
     coins =
         coins.filter(
+
             coin => {
 
                 if (
@@ -4120,8 +4388,10 @@ function gameLoop(
                 ) {
 
                     if (
+
                         coin.element
                             .parentElement
+
                     ) {
 
                         coin.element.remove();
@@ -4137,13 +4407,13 @@ function gameLoop(
                 return true;
 
             }
+
         );
 
 
-    /* REMOVE BONUSES */
-
     bonuses =
         bonuses.filter(
+
             bonus => {
 
                 if (
@@ -4156,8 +4426,10 @@ function gameLoop(
                 ) {
 
                     if (
+
                         bonus.element
                             .parentElement
+
                     ) {
 
                         bonus.element.remove();
@@ -4173,6 +4445,7 @@ function gameLoop(
                 return true;
 
             }
+
         );
 
 
@@ -4215,8 +4488,10 @@ function gameLoop(
 
 
     if (
+
         coinTimer >=
         nextCoinTime
+
     ) {
 
         createCoin();
@@ -4273,13 +4548,18 @@ function gameLoop(
 
 
     if (
+
         scoreTimer >=
         1000
+
     ) {
 
         score +=
+
             salaryActive
+
                 ? 2
+
                 : 1;
 
 
@@ -4296,27 +4576,22 @@ function gameLoop(
     }
 
 
-    animationFrameId =
-        requestAnimationFrame(
-            gameLoop
-        );
+    requestAnimationFrame(
+        gameLoop
+    );
 
 }
 
 
-/* =========================
-   START GAME
-========================= */
+/* START */
 
 function startGame() {
 
     if (
-        animationFrameId
+        !spritesReady
     ) {
 
-        cancelAnimationFrame(
-            animationFrameId
-        );
+        return;
 
     }
 
@@ -4433,24 +4708,32 @@ function startGame() {
 
     catMotion = {
 
-        y:
-            0,
+        x: 0,
 
-        previousJumpY:
-            0
+        y: 0,
+
+        previousY: 0,
+
+        previousJumpY: 0
 
     };
 
 
     gameArea.classList.remove(
+
         "night",
+
         "demon"
+
     );
 
 
     moon.classList.remove(
+
         "enter",
+
         "leave"
+
     );
 
 
@@ -4475,8 +4758,11 @@ function startGame() {
 
 
     setSpriteFrame(
-        "cat_run.png",
+
+        SPRITES.run,
+
         0
+
     );
 
 
@@ -4494,20 +4780,35 @@ function startGame() {
 
 
     obstacles.forEach(
-        obstacle =>
-            obstacle.element.remove()
+
+        obstacle => {
+
+            obstacle.element.remove();
+
+        }
+
     );
 
 
     coins.forEach(
-        coin =>
-            coin.element.remove()
+
+        coin => {
+
+            coin.element.remove();
+
+        }
+
     );
 
 
     bonuses.forEach(
-        bonus =>
-            bonus.element.remove()
+
+        bonus => {
+
+            bonus.element.remove();
+
+        }
+
     );
 
 
@@ -4555,52 +4856,57 @@ function startGame() {
         performance.now();
 
 
-    animationFrameId =
-        requestAnimationFrame(
-            gameLoop
-        );
+    requestAnimationFrame(
+        gameLoop
+    );
 
 }
 
 
-/* =========================
-   BUTTONS
-========================= */
+/* BUTTONS */
 
 startButton.addEventListener(
+
     "click",
+
     event => {
 
         event.preventDefault();
 
         event.stopPropagation();
 
+
         startGame();
 
     }
+
 );
 
 
 restartButton.addEventListener(
+
     "click",
+
     event => {
 
         event.preventDefault();
 
         event.stopPropagation();
 
+
         startGame();
 
     }
+
 );
 
 
-/* =========================
-   TOUCH / MOUSE
-========================= */
+/* TOUCH / MOUSE */
 
 gameArea.addEventListener(
+
     "pointerdown",
+
     event => {
 
         event.preventDefault();
@@ -4624,18 +4930,23 @@ gameArea.addEventListener(
         jump();
 
     },
+
     {
-        passive: false
+
+        passive:
+            false
+
     }
+
 );
 
 
-/* =========================
-   KEYBOARD
-========================= */
+/* KEYBOARD */
 
 document.addEventListener(
+
     "keydown",
+
     event => {
 
         if (
@@ -4653,12 +4964,11 @@ document.addEventListener(
         }
 
     }
+
 );
 
 
-/* =========================
-   ARRAYS
-========================= */
+/* ARRAYS */
 
 const normalExpenses = [
 
@@ -4742,10 +5052,6 @@ const demonBonuses = [
 ];
 
 
-/* =========================
-   CONSTANTS
-========================= */
-
 const MAGNET_DURATION =
     20000;
 
@@ -4758,9 +5064,11 @@ const MAGNET_PULL_SPEED =
     8;
 
 
+/* PRELOAD */
+
+preloadSprites();
+
 </script>
 
-
 </body>
-
 </html>
