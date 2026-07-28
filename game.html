@@ -2410,16 +2410,16 @@ function checkObstacleCollision(obstacle){
     const horizontal =
 
         catRect.right >
-        obstacleRect.left + 40 &&
+        obstacleRect.left + 60 &&
 
         catRect.left <
-        obstacleRect.right - 40;
+        obstacleRect.right - 60;
 
 
     const vertical =
 
         catRect.bottom >
-        obstacleRect.top + 40;
+        obstacleRect.top + 60;
 
 
     return horizontal &&
