@@ -8,6 +8,8 @@
 
 <title>Финансы</title>
 
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+
 <style>
 
 * {
@@ -1157,11 +1159,100 @@ button:active {
     }
 }
 
+
+/* =========================
+   ОГРАНИЧЕНИЕ ДОСТУПА
+========================= */
+
+.access-denied {
+
+    position: fixed;
+
+    inset: 0;
+
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 24px;
+
+    background: #f4f5f7;
+
+    z-index: 10000;
+
+    text-align: center;
+}
+
+.access-denied.show {
+
+    display: flex;
+}
+
+.access-denied-card {
+
+    width: 100%;
+    max-width: 360px;
+
+    padding: 30px 24px;
+
+    background: white;
+
+    border-radius: 22px;
+
+    box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+}
+
+.access-denied-icon {
+
+    font-size: 48px;
+
+    margin-bottom: 14px;
+}
+
+.access-denied-title {
+
+    font-size: 22px;
+    font-weight: bold;
+
+    margin-bottom: 10px;
+}
+
+.access-denied-text {
+
+    color: #777;
+
+    font-size: 15px;
+    line-height: 1.5;
+}
+
 </style>
 
 </head>
 
 <body>
+
+
+<div id="access-denied" class="access-denied">
+
+<div class="access-denied-card">
+
+    <div class="access-denied-icon">
+        🔒
+    </div>
+
+    <div class="access-denied-title">
+        Доступ ограничен
+    </div>
+
+    <div class="access-denied-text">
+        Это личное семейное приложение.
+    </div>
+
+</div>
+
+</div>
+
 
 <div id="toast" class="toast"></div>
 
@@ -2761,9 +2852,49 @@ enableSwipeToClose(
 
 );
 
-updateCategories();
+const ALLOWED_TELEGRAM_USER_IDS = [
 
-loadData("today");
+    264483752,
+    220470850
+
+];
+
+function checkAccess() {
+
+    const telegram =
+        window.Telegram &&
+        window.Telegram.WebApp;
+
+    const userId =
+        telegram &&
+        telegram.initDataUnsafe &&
+        telegram.initDataUnsafe.user
+            ? telegram.initDataUnsafe.user.id
+            : null;
+
+    if (!ALLOWED_TELEGRAM_USER_IDS.includes(userId)) {
+
+        document
+            .querySelector("#access-denied")
+            .classList.add("show");
+
+        return false;
+
+    }
+
+    telegram.ready();
+
+    return true;
+
+}
+
+if (checkAccess()) {
+
+    updateCategories();
+
+    loadData("today");
+
+}
 
 </script>
 
